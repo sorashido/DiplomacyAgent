@@ -1,9 +1,0 @@
-[0] Program running at Daichis-MacBook-Pro.local/192.168.11.126
-[1] Connecting to host Daichis-MacBook-Pro.local/192.168.11.126 port 16713...
-[2] Connected.
-[3] ===> NME ( 'D-BraneExampleBot 3' ) ( '0' )
-[4] <=== REJ ( NME ( 'D-BraneExampleBot 3' ) ( '0' ) )
-[5] ERROR: REJ ( NME ( 'D-BraneExampleBot 3' ) ( '0' ) )
-[6] <=== ADM ( 'Server' ) ( 'AUS (6013), ENG (964), FRA (6345), GER (1495), ITA (7197), RUS (1227), and TUR (3107) have been disconnected.' )
-[7] Negotiation:
-[8] ADM ( 'Server' ) ( 'AUS (6013), ENG (964), FRA (6345), GER (1495), ITA (7197), RUS (1227), and TUR (3107) have been disconnected.' )
