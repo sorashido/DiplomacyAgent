@@ -42,7 +42,7 @@ public class GameResult {
 	/**
 	 * 
 	 * @param smrMessage
-	 * @param markedPlayers a list of names or powers of that are to be marked in the monitor and in the log files.
+	 * //@param markedPlayers a list of names or powers of that are to be marked in the monitor and in the log files.
 	 */
 	public GameResult(String[] smrMessage){
 		
@@ -236,7 +236,7 @@ public class GameResult {
 	 * 
 	 * If DumbBot_1 and another player together finished in a shared 5 place, then calling getRank("DumbBot_1") will return 5.5.
 	 * 
-	 * @param playerName
+	 * @param name
 	 * @return
 	 */
 	public double getRank(String name){

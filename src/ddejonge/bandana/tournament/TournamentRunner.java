@@ -17,7 +17,7 @@ public class TournamentRunner {
 	final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", "log", "-name", "DumbBot", "-fy", "1905"};
 	final static String[] dbrane_1_1_Command = {"java", "-jar", "agents/D-Brane-1.1.jar", "-log", "log", "-name", "D-Brane", "-fy", "1905"};
 	final static String[] dbraneExampleBotCommand = {"java", "-jar", "agents/D-BraneExampleBot.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", "1905"};
-	final static String[] anacExampleBotCommand = {"java", "-jar", "agents/AnacExampleNegotiator.jar", "-log", "log", "-name", "AnacExampleNegotiator", "-fy", "1905"};
+	final static String[] anacExampleBotCommand = {"java", "-jar", "agents/ANACExampleNegotiator.jar", "-log", "log", "-name", "AnacExampleNegotiator", "-fy", "1905"};
 
 	//Main folder where all the logs are stored. For each tournament a new folder will be created inside this folder
 	// where the results of the tournament will be logged.
@@ -120,10 +120,10 @@ public class TournamentRunner {
 						name = "DumbBot " + i;
 						command = dumbBot_1_4_Command;
 						break;
-					case 6:
-						name = "DumbBot " + i;
-						command = dumbBot_1_4_Command;
-						break;
+//					case 6:
+//						name = "DumbBot " + i;
+//						command = dumbBot_1_4_Command;
+//						break;
 					default:
 						name = "AnacExampleBotCommand " + i;
 						command = anacExampleBotCommand;
