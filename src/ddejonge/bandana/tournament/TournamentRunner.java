@@ -13,11 +13,12 @@ public class TournamentRunner {
 
 	//Command lines to start the various agents provided with the Bandana framework.
 	// Add your own line here to run your own bot.
-	final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", "log", "-name", "RandomNegotiator", "-fy", "1905"};
-	final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", "log", "-name", "DumbBot", "-fy", "1905"};
-	final static String[] dbrane_1_1_Command = {"java", "-jar", "agents/D-Brane-1.1.jar", "-log", "log", "-name", "D-Brane", "-fy", "1905"};
-	final static String[] dbraneExampleBotCommand = {"java", "-jar", "agents/D-BraneExampleBot.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", "1905"};
-	final static String[] anacExampleBotCommand = {"java", "-jar", "agents/ANACExampleNegotiator.jar", "-log", "log", "-name", "AnacExampleNegotiator", "-fy", "1905"};
+	final static String[] randomNegotiatorCommand = {"java", "-jar", "agents/RandomNegotiator.jar", "-log", "log", "-name", "RandomNegotiator", "-fy", "1920"};
+	final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", "log", "-name", "DumbBot", "-fy", "1920"};
+	final static String[] dbrane_1_1_Command = {"java", "-jar", "agents/D-Brane-1.1.jar", "-log", "log", "-name", "D-Brane", "-fy", "1920"};
+	final static String[] dbraneExampleBotCommand = {"java", "-jar", "agents/D-BraneExampleBot.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", "1920"};
+	final static String[] anacExampleBotCommand = {"java", "-jar", "out/artifacts/ANACExampleNegotiator/ANACExampleNegotiator.jar", "-log", "log", "-name", "AnacExampleNegotiator", "-fy", "1920"};
+	final static String[] DDAgent_Command = {"java", "-jar", "out/artifacts/DDAgent/DDAgent.jar", "-log", "log", "-name", "DDAgent", "-fy", "1920"};
 
 	//Main folder where all the logs are stored. For each tournament a new folder will be created inside this folder
 	// where the results of the tournament will be logged.
@@ -26,24 +27,19 @@ public class TournamentRunner {
 	
 	public static void main(String[] args) throws IOException {
 		
-		int numberOfGames = 3;				//The number of games this tournament consists of.
+		int numberOfGames = 5;				//The number of games this tournament consists of.
 		
 		int deadlineForMovePhases = 60; 	//60 seconds for each SPR and FAL phases
 		int deadlineForRetreatPhases = 30;  //30 seconds for each SUM and AUT phases
 		int deadlineForBuildPhases = 30;  	//30 seconds for each WIN phase
 		
-		int finalYear = 1905; 	//The year after which the agents in each game are supposed to propose a draw to each other. 
-		// (It depends on the implementation of the players whether this will indeed happen or not, so this may not always work.) 
-		
-		run(numberOfGames, deadlineForMovePhases, deadlineForRetreatPhases, deadlineForBuildPhases, finalYear);
-		
-		
-		
-		Runtime.getRuntime().addShutdownHook(new Thread() {
+		int finalYear = 1920; 	//The year after which the agents in each game are supposed to propose a draw to each other.
+		// (It depends on the implementation of the players whether this will indeed happen or not, so this may not always work.)
 
+		run(numberOfGames, deadlineForMovePhases, deadlineForRetreatPhases, deadlineForBuildPhases, finalYear);
+		Runtime.getRuntime().addShutdownHook(new Thread() {
 			//NOTE: unfortunately, Shutdownhooks don't work on windows if the program was started in eclipse and
 			// you stop it by clicking the red button (on MAC it seems to work fine).
-			
 			@Override
 			public void run() {
 				NegoServerRunner.stop();
@@ -104,17 +100,25 @@ public class TournamentRunner {
 						name = "D-Brane " + i;
 						command = dbrane_1_1_Command;
 						break;
+//					case 2:
+//						name = "AnacExampleBotCommand " + i;
+//						command = anacExampleBotCommand;
+//						break;
+//					case 3:
+//						name = "D-BraneExampleBot " + i;
+//						command = dbraneExampleBotCommand;
+//						break;
 					case 2:
-						name = "D-BraneExampleBot " + i;
-						command = dbraneExampleBotCommand;
-						break;
-					case 3:
-						name = "D-BraneExampleBot " + i;
-						command = dbraneExampleBotCommand;
-						break;
-					case 4:
 						name = "RandomNegotiator " + i;
 						command = randomNegotiatorCommand;
+						break;
+					case 3:
+						name = "RandomNegotiator " + i;
+						command = randomNegotiatorCommand;
+						break;
+					case 4:
+						name = "DumbBot " + i;
+						command = dumbBot_1_4_Command;
 						break;
 					case 5:
 						name = "DumbBot " + i;
@@ -128,6 +132,10 @@ public class TournamentRunner {
 						name = "AnacExampleBotCommand " + i;
 						command = anacExampleBotCommand;
 						break;
+//					default:
+//						name = "DDAgent " + i;
+//						command = DDAgent_Command;
+//						break;
 				}
 				
 				//set the log folder for this agent to be a subfolder of the tournament log folder.
