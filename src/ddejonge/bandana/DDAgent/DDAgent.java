@@ -1,11 +1,13 @@
 package ddejonge.bandana.DDAgent;
 
+import com.sun.tools.javac.util.Pair;
 import ddejonge.bandana.anac.ANACNegotiator;
 import ddejonge.bandana.dbraneTactics.DBraneTactics;
 import ddejonge.bandana.dbraneTactics.Plan;
 import ddejonge.bandana.exampleAgents.ANACExampleNegotiator;
 import ddejonge.bandana.negoProtocol.*;
 import ddejonge.bandana.tools.Utilities;
+import ddejonge.bandana.tournament.TournamentRunner;
 import ddejonge.negoServer.Message;
 import es.csic.iiia.fabregues.dip.board.Power;
 import es.csic.iiia.fabregues.dip.board.Province;
@@ -16,6 +18,7 @@ import es.csic.iiia.fabregues.dip.orders.Order;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -83,22 +86,36 @@ public class DDAgent extends ANACNegotiator{
         this.getLogger().logln("game is starting!", printToConsole);
     }
 
+
     @Override
     public void negotiate(long negotiationDeadline) {
-        List<BasicDeal> newDealToProposes = null; //提案候補
+        Map<String, List<BasicDeal>> newDealToProposes = null; //各国に対する提案候補
 
-        System.out.println();
+//        Map<String, Pair<Integer,Integer>> powerParam = null;
+//        Pair pair = new Pair(0.6, 0.4);
+
+        //me.getName()
 
         //交渉の間, ループし続ける
         while(System.currentTimeMillis() < negotiationDeadline){
-            long restTime = negotiationDeadline - System.currentTimeMillis(); //残り時間 ms
-            double threshold = 0.8; //効用値 想定() 統計的に表すことが可能?
+//          double restTime = (negotiationDeadline - System.currentTimeMillis())/1000; //残り時間s
+//          myParam, opParamの値を変えることで閾値の制御
 
             //1. 自分が相手に提案
             //1.1 各国それぞれへの提案の候補を個別に探索 (自分と相手の効用値に基づいて探索, (効用値は線形に妥協しても良い = \alpha \betaの値))
+            for(Power power :this.getNegotiatingPowers()) {
+                if(this.getNegotiatingPowers().size() < 2){
+                    break;
+                }
+                List<BasicDeal> newDealToPropose = searchForNewDealToPropose(power, 0.65, 0.35);
 
+                if(!newDealToPropose.isEmpty()){
+                    newDealToProposes.put(power.getName(), newDealToPropose);
+                }
+            }
 
             //1.2 それぞれの候補で矛盾がない組み合わせ最適化!!
+
 
 
 
@@ -114,229 +131,68 @@ public class DDAgent extends ANACNegotiator{
         }
     }
 
-    List<BasicDeal> searchForNewDealToPropose(Power opponent, int m, double threshold, double myParam, double opParam) {
-        List<BasicDeal> bestDeals = null;
-        Plan bestPlan = null;
+    List<BasicDeal> searchForNewDealToPropose(Power opponent, double myParam, double opParam) {
 
+        List<OrderCommitment> goodOrder = null;
+        List<DMZ> goodDMZ = null;
+
+        Plan basePlan = null;
         List<BasicDeal> commitments = this.getConfirmedDeals(); //現在の取り決め
-        bestPlan = this.dBraneTactics.determineBestPlan(game, me, commitments); //取引なしの場合のbestPlan
+        basePlan = this.dBraneTactics.determineBestPlan(game, me, commitments); //取引なしの場合のbestPlan
 
-        if (bestPlan == null) { //取り決めのために行動できない -> 交渉する必要なし
+        if (basePlan == null) { //取り決めのために行動できない -> 交渉する必要なし
             return null;
         }
 
-        //opponent, army毎にどこに移動するのが一番かを計算
-        //List<BasicDeal> baseDeal = generateOrderDeal(opponent, army, myParam, opParam);
+        //army毎に計算 効用値が最も高くなるものを追加
+        List<Region> unitsOfOpponent = opponent.getControlledRegions();
+        for(Region unit: unitsOfOpponent){
+            OrderCommitment goodOrder = generateOrderDeal(unit, basePlan.getValue(), myParam, opParam);
+            if(goodOrder != null){
+                goodOrder.add(goodOrder);
+            }
+        }
 
         //opponent毎にどんな条約を結びたいかを計算
-        //List<BasicDeal> baseDeal = generateDMZ(opponent, army, myParam, opParam);
+//        List<BasicDeal> DMZDeals = generateDMZ(opponent, myParam, opParam);
+
+
+        //Orderのリスト, DMZのリストから組み合わせを最適化
+        //個々の提案よりも高くなる場合にBasicDealに入れる
+        //組み合わせても良くならない場合,
+
 
         //Listに合わせてreturn
-
-
-
-//      1.2 関係に合わせて相手の効用値を考える(関係が強いほど足し合わせた効用値が大事)
-//      Plan plan1 = this.dBraneTactics.determineBestPlan(game, opponent, commitments);
-//      a = plan1.getValue() * myParam
-//      Plan plan2 = this.dBraneTactics.determineBestPlan(game, me, commitments);
-//      b= plan.getValue() * opParam
-//      if(a+b > threshold) add bestDeals(deal)
-
-        // plan.getMyOrders() では planのもとでdbraneが選択するオーダーを求めることが可能.
-        // このオーダーをもとに効用値を自分で定義することが可能!
-        //Get a copy of our list of current commitments.
-
-//        //First, let's see what happens if we do not make any new commitments.
-//        bestPlan = this.dBraneTactics.determineBestPlan(game, me, commitments);
-//
-//        //If our current commitments are already inconsistent then we certainly
-//        // shouldn't make any more commitments.
-//        if(bestPlan == null){
-//            return null;
-//        }
-//
-//        //let's generate 10 random deals and pick the best one.
-//        for(int i=0; i<10; i++){
-//
-//            //generate a random deal.
-//            BasicDeal randomDeal = generateRandomDeal();
-//
-//            if(randomDeal == null){
-//                continue;
-//            }
-//
-//
-//            //add it to the list containing our existing commitments so that dBraneTactics can determine a plan.
-//            commitments.add(randomDeal);
-//
-//
-//            //Ask the D-Brane Tactical Module what it would do under these commitments.
-//            Plan plan = this.dBraneTactics.determineBestPlan(game, me, commitments);
-//
-//            //Check if the returned plan is better than the best plan found so far.
-//            if(plan != null && plan.getValue() > bestPlan.getValue()){
-//                bestPlan = plan;
-//                bestDeal = randomDeal;
-//            }
-//
-//
-//            //Remove the randomDeal from the list, for the next iteration.
-//            commitments.remove(commitments.size()-1);
-//
-//
-//            //NOTE: the value returned by plan.getValue() represents the number of Supply Centers that the D-Brane Tactical Module
-//            // expects to conquer in the current round under the given commitments.
-//            //
-//            // Of course, this is only a rough indication of which plan is truly the "best". After all, sometimes it is better
-//            // not to try to conquer as many Supply Centers as you can directly, but rather organize your armies and only attack in a later
-//            // stage.
-//            // Therefore, you may want to implement your own algorithm to determine which plan is the best.
-//            // You can call plan.getMyOrders() to retrieve the complete list of orders that D-Brane has chosen for you under the given commitments.
-//
-//
-
-        return bestDeals;
+        List<BasicDeal> goodDeals = null;
+        return goodDeals;
     }
 
-//    public BasicDeal generateRandomDeal(Power opponent){
-//
-//
-//        //Get the names of all the powers that are connected to the negotiation server and which have not been eliminated.
-//        List<Power> aliveNegotiatingPowers = this.getNegotiatingPowers();
-//        if(!aliveNegotiatingPowers.contains(opponent)){
-//            return null;
-//        }
-//
-//        //if there are less than 2 negotiating powers left alive (only me), then it makes no sense to negotiate.
-//        int numAliveNegoPowers = aliveNegotiatingPowers.size();
-//        if(numAliveNegoPowers < 2){
-//            return null;
-//        }
-//
-//        //Let's generate 3 random demilitarized zones.
-//        List<DMZ> demilitarizedZones = new ArrayList<DMZ>(3);
-//        for(int i=0; i<3; i++){
-//
-//            //1. Create a list of powers
-//            ArrayList<Power> powers = new ArrayList<Power>(2);
-//
-//            //1a. add myself to the list
-//            powers.add(me);
-//
-//            //1b. add a random other power to the list.
-//            Power randomPower = me;
-//            while(randomPower.equals(me)){
-//
-//                int numNegoPowers = aliveNegotiatingPowers.size();
-//                randomPower = aliveNegotiatingPowers.get(random.nextInt(numNegoPowers));
-//            }
-//            powers.add(randomPower);
-//
-//            //2. Create a list containing 3 random provinces.
-//            ArrayList<Province> provinces = new ArrayList<Province>();
-//            for(int j=0; j<3; j++){
-//                int numProvinces = this.game.getProvinces().size();
-//                Province randomProvince = this.game.getProvinces().get(random.nextInt(numProvinces));
-//                provinces.add(randomProvince);
-//            }
-//
-//
-//            //This agent only generates deals for the current year and phase.
-//            // However, you can pick any year and phase here, as long as they do not lie in the past.
-//            // (actually, you can also propose deals for rounds in the past, but it doesn't make any sense
-//            //  since you obviously cannot obey such deals).
-//            demilitarizedZones.add(new DMZ( game.getYear(), game.getPhase(), powers, provinces));
-//
-//            //let's generate 3 random OrderCommitments
-//            List<OrderCommitment> randomOrderCommitments = new ArrayList<OrderCommitment>();
-//
-//
-//            //get all units of the negotiating powers.
-//            List<Region> units = new ArrayList<Region>();
-//            for(Power power : aliveNegotiatingPowers){
-//                units.addAll(power.getControlledRegions());
-//            }
-//
-//
-//            for(int i=0; i<3; i++){
-//
-//                //Pick a random unit and remove it from the list
-//                if(units.size() == 0){
-//                    break;
-//                }
-//                Region randomUnit = units.remove(random.nextInt(units.size()));
-//
-//                //Get the corresponding power
-//                Power power = game.getController(randomUnit);
-//
-//                //Determine a list of potential destinations for the unit.
-//                // a Region is a potential destination for a unit if it is adjacent to that unit (or it is the current location of the unit)
-//                //  and the Province is not demilitarized for the Power controlling that unit.
-//                List<Region> potentialDestinations = new ArrayList<Region>();
-//
-//                //Create a list of adjacent regions, including the current location of the unit.
-//                List<Region> adjacentRegions = new ArrayList<>(randomUnit.getAdjacentRegions());
-//                adjacentRegions.add(randomUnit);
-//
-//                for(Region adjacentRegion : adjacentRegions){
-//
-//                    Province adjacentProvince = adjacentRegion.getProvince();
-//
-//                    //Check that the adjacent Region is not demilitarized for the power controlling the unit.
-//                    boolean isDemilitarized = false;
-//                    for(DMZ dmz : demilitarizedZones){
-//                        if(dmz.getPowers().contains(power) && dmz.getProvinces().contains(adjacentProvince)){
-//                            isDemilitarized = true;
-//                            break;
-//                        }
-//
-//                    }
-//
-//                    //If it is not demilitarized, then we can add the region to the list of potential destinations.
-//                    if(!isDemilitarized){
-//                        potentialDestinations.add(adjacentRegion);
-//                    }
-//                }
-//
-//
-//                int numPotentialDestinations = potentialDestinations.size();
-//                if(numPotentialDestinations > 0){
-//
-//                    Region randomDestination = potentialDestinations.get(random.nextInt(numPotentialDestinations));
-//
-//                    Order randomOrder;
-//                    if(randomDestination.equals(randomUnit)){
-//                        randomOrder = new HLDOrder(power, randomUnit);
-//                    }else{
-//                        randomOrder = new MTOOrder(power, randomUnit, randomDestination);
-//                    }
-//                    // Of course we could also propose random support orders, but we don't do that here.
-//
-//
-//                    //We only generate deals for the current year and phase.
-//                    // However, you can pick any year and phase here, as long as they do not lie in the past.
-//                    // (actually, you can also propose deals for rounds in the past, but it doesn't make any sense
-//                    //  since you obviously cannot obey such deals).
-//                    randomOrderCommitments.add(new OrderCommitment(game.getYear(), game.getPhase(), randomOrder));
-//                }
-//
-//            }
-//
-//            BasicDeal deal = new BasicDeal(randomOrderCommitments, demilitarizedZones);
-//
-//
-//            return deal;
-//        }
+    //unit がどう動くのが最も良いのかを探索 (なにもない場合と変わらない場合はnullを返す)
+    private OrderCommitment generateOrderDeal(Region unit, double baseLine, double myParam, double opParam){
+        OrderCommitment goodOrder = null;
 
 
 
-        /**
-         * Each round, after each power has submitted its orders, this method is called several times:
-         * once for each order submitted by any other power.
-         *
-         *
-         * @param arg0 An order submitted by any of the other powers.
-         */
+
+
+
+
+        return goodOrder;
+    }
+
+    private Double CalcPlanValue(List<BasicDeal> commitments, Power opponent, double myParam, double opParam){
+        Plan myPlan = this.dBraneTactics.determineBestPlan(game, me, commitments);
+        Plan opPlan = this.dBraneTactics.determineBestPlan(game, opponent, commitments);
+        return  (myPlan.getValue() * myParam + opPlan.getValue() * opParam);
+    }
+
+    /**
+     * Each round, after each power has submitted its orders, this method is called several times:
+     * once for each order submitted by any other power.
+     *
+     *
+     * @param arg0 An order submitted by any of the other powers.
+     */
     @Override
     public void receivedOrder(Order arg0) {
         // TODO Auto-generated method stub
