@@ -90,6 +90,7 @@ public class DDAgent extends ANACNegotiator{
     @Override
     public void negotiate(long negotiationDeadline) {
         Map<String, List<BasicDeal>> newDealToProposes = null; //各国に対する提案候補
+        List<Order> Orders = null;//
 
 //        Map<String, Pair<Integer,Integer>> powerParam = null;
 //        Pair pair = new Pair(0.6, 0.4);
@@ -114,14 +115,14 @@ public class DDAgent extends ANACNegotiator{
                 }
             }
 
-            //1.2 それぞれの候補で矛盾がない組み合わせ最適化!!
+            //1.2 国ごとの交渉に矛盾がない組み合わせを自らの利益で最適化!!
 
 
 
 
             //2. 送られてきたメッセージを処理
             while(hasMessage()){
-                //2.1 効用値を計算し, ある一定以上であれば許可
+                //2.1 効用値を計算し自身の利益がある一定以上であれば許可
 
 
             }
@@ -133,37 +134,34 @@ public class DDAgent extends ANACNegotiator{
 
     List<BasicDeal> searchForNewDealToPropose(Power opponent, double myParam, double opParam) {
 
-        List<OrderCommitment> goodOrder = null;
-        List<DMZ> goodDMZ = null;
+        List<OrderCommitment> goodOrderCommitments = null;
 
-        Plan basePlan = null;
         List<BasicDeal> commitments = this.getConfirmedDeals(); //現在の取り決め
-        basePlan = this.dBraneTactics.determineBestPlan(game, me, commitments); //取引なしの場合のbestPlan
-
-        if (basePlan == null) { //取り決めのために行動できない -> 交渉する必要なし
+        Double baseLine = calcPlanValue(commitments, opponent, myParam, opParam);
+        if (baseLine == null) { //取り決めのために行動できない -> 交渉する必要なし
             return null;
         }
 
         //army毎に計算 効用値が最も高くなるものを追加
         List<Region> unitsOfOpponent = opponent.getControlledRegions();
         for(Region unit: unitsOfOpponent){
-            OrderCommitment goodOrder = generateOrderDeal(unit, basePlan.getValue(), myParam, opParam);
+            OrderCommitment goodOrder = generateOrderDeal(unit, baseLine, myParam, opParam);
             if(goodOrder != null){
-                goodOrder.add(goodOrder);
+                goodOrderCommitments.add(goodOrder);
             }
         }
 
-        //opponent毎にどんな条約を結びたいかを計算
-//        List<BasicDeal> DMZDeals = generateDMZ(opponent, myParam, opParam);
+        //opponent毎にどんな不可侵条約を結びたいかを計算
+        List<DMZ> goodDMZDeals = generateDMZ(opponent, myParam, opParam);
 
+//      OrderCommitmentのリスト, DMZのリストから組み合わせを最適化しdealとする(矛盾するものを取り除く)
+//      解の候補を
 
-        //Orderのリスト, DMZのリストから組み合わせを最適化
-        //個々の提案よりも高くなる場合にBasicDealに入れる
-        //組み合わせても良くならない場合,
-
-
-        //Listに合わせてreturn
         List<BasicDeal> goodDeals = null;
+        BasicDeal deal = new BasicDeal(goodOrderCommitments, goodDMZDeals);
+        goodDeals.add(deal);
+//		List<OrderCommitment> randomOrderCommitments = new ArrayList<OrderCommitment>();
+
         return goodDeals;
     }
 
@@ -171,20 +169,86 @@ public class DDAgent extends ANACNegotiator{
     private OrderCommitment generateOrderDeal(Region unit, double baseLine, double myParam, double opParam){
         OrderCommitment goodOrder = null;
 
+        Power power = game.getController(unit);
 
+        //unitの移動可能なところ
+        List<Region> adjacentRegions = new ArrayList<>(unit.getAdjacentRegions());
+        adjacentRegions.add(unit);
+        //
 
-
-
-
-
-        return goodOrder;
+        OrderCommitment maxOrderCommitment = null;
+        Double maxValue = 0.0;
+        for(Region adjascentRegion : adjacentRegions){
+            Order order;
+            if(adjascentRegion.equals(unit)){
+                order = new HLDOrder(power, unit);
+            }else{
+                order = new MTOOrder(power, unit, adjascentRegion);
+            }
+            OrderCommitment commitment = new OrderCommitment(game.getYear(), game.getPhase(), order);
+            double value = calcPlanValue(commitment, power, myParam, opParam);
+            if(value > baseLine && value > maxValue){
+                maxValue = value;
+                maxOrderCommitment = commitment;
+            }
+        }
+        //baseLineと同じであればnull
+        return maxOrderCommitment;
     }
 
-    private Double CalcPlanValue(List<BasicDeal> commitments, Power opponent, double myParam, double opParam){
+    private List<DMZ> generateDMZ(Power power, double myParam, double opParam){
+        List<DMZ> goodDMZs = null;
+
+//        double value = calcPlanValue();
+        return goodDMZs;
+    }
+
+    private Double calcPlanValue(List<BasicDeal> commitments, Power opponent, double myParam, double opParam){
         Plan myPlan = this.dBraneTactics.determineBestPlan(game, me, commitments);
         Plan opPlan = this.dBraneTactics.determineBestPlan(game, opponent, commitments);
+
+        if (myPlan == null || opPlan == null) { //取り決めのために行動できない -> 交渉する必要なし
+            return null;
+        }
         return  (myPlan.getValue() * myParam + opPlan.getValue() * opParam);
     }
+
+    private Double calcPlanValue(OrderCommitment commitment, Power opponent, double myParam, double opParam){
+
+        List<OrderCommitment> orderCommitments = new ArrayList<OrderCommitment>();
+        orderCommitments.add(commitment);
+        List<DMZ> demilitarizedZones = new ArrayList<DMZ>(3);
+        BasicDeal deal = new BasicDeal(orderCommitments, demilitarizedZones);
+
+        List<BasicDeal> commitments = this.getConfirmedDeals();
+        commitments.add(deal);
+
+        Plan myPlan = this.dBraneTactics.determineBestPlan(game, me, commitments);
+        Plan opPlan = this.dBraneTactics.determineBestPlan(game, opponent, commitments);
+        if (myPlan == null || opPlan == null) { //取り決めのために行動できない -> 交渉する必要なし
+            return 0.0;
+        }
+        return  (myPlan.getValue() * myParam + opPlan.getValue() * opParam);
+    }
+
+    private Double calcPlanValue(DMZ commitment, Power opponent, double myParam, double opParam){
+
+        List<OrderCommitment> orderCommitments = new ArrayList<OrderCommitment>();
+        List<DMZ> demilitarizedZones = new ArrayList<DMZ>(3);
+        demilitarizedZones.add(commitment);
+        BasicDeal deal = new BasicDeal(orderCommitments, demilitarizedZones);
+
+        List<BasicDeal> commitments = this.getConfirmedDeals();
+        commitments.add(deal);
+
+        Plan myPlan = this.dBraneTactics.determineBestPlan(game, me, commitments);
+        Plan opPlan = this.dBraneTactics.determineBestPlan(game, opponent, commitments);
+        if (myPlan == null || opPlan == null) { //取り決めのために行動できない -> 交渉する必要なし
+            return 0.0;
+        }
+        return  (myPlan.getValue() * myParam + opPlan.getValue() * opParam);
+    }
+
 
     /**
      * Each round, after each power has submitted its orders, this method is called several times:
