@@ -102,164 +102,120 @@ public class DDAgent extends ANACNegotiator{
 //          double restTime = (negotiationDeadline - System.currentTimeMillis())/1000; //残り時間s
 //          myParam, opParamの値を変えることで閾値の制御
 
-            //1. 自分が相手に提案
-            //1.1 各国それぞれへの提案の候補を個別に探索 (自分と相手の効用値に基づいて探索, (効用値は線形に妥協しても良い = \alpha \betaの値))
-            for(Power power :this.getNegotiatingPowers()) {
+            //1. 送られてきたメッセージを処理
+            while(hasMessage()){
+                manageMessage();
+            }
+
+            //2. 自分が相手に提案
+            //2.1 各国それぞれへの提案の候補を個別に探索 (自分と相手の効用値に基づいて探索, (効用値は線形に妥協しても良いかも = \alpha \betaの値))
+            // \alpha + \beta の値を線形に落としていく感じ
+            for(Power power :this.getNegotiatingPowers()){
                 if(this.getNegotiatingPowers().size() < 2){
                     break;
                 }
                 BasicDeal newDealToPropose = searchForNewDealToPropose(power, 0.65, 0.35);
 
-                //矛盾するか調べる
+                // これまでの取引と矛盾するか調べる
+
+
                 if(newDealToPropose != null){
-                    this.getLogger().logln("ANACExampleNegotiator.negotiate() Proposing: " + newDealToPropose, true);
+                    this.getLogger().logln("DDBrane.negotiate() Proposing: " + newDealToPropose, true);
                     this.proposeDeal(newDealToPropose);
                 }
             }
 
-            //2. 送られてきたメッセージを処理
-            while(hasMessage()){
-                //2.1 効用値を計算し自身の利益がある一定以上であれば許可
-                //Warning: you may want to add some extra code to break out of this loop,
-                // just in case the other agents send so many proposals that your agent can't get
-                // the chance to make any proposals itself.
+            //3. 引き分けを提案
+        }
+    }
 
-                //if yes, remove it from the message queue.
-                Message receivedMessage = removeMessageFromQueue();
+    void manageMessage(){
+        Message receivedMessage = removeMessageFromQueue();
 
-                if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.ACCEPT)){
-
-                    DiplomacyProposal acceptedProposal = (DiplomacyProposal)receivedMessage.getContent();
-
-                    this.getLogger().logln("ANACExampleNegotiator.negotiate() Received acceptance from " + receivedMessage.getSender() + ": " + acceptedProposal, true);
-
-                    // Here we can handle any incoming acceptances.
-                    // This random negotiator doesn't do anything with such messages however.
-
-                    // Note: if a certain proposal has been accepted by all players it is still not considered
-                    // officially binding until the protocol manager has sent a CONFIRM message.
-
-                    // Note: if all agents involved in a proposal have accepted the proposal, then you will not receive an ACCEPT
-                    // message from the last agent that accepted it. Instead, you will directly receive a CONFIRM message from the
-                    // Protocol Manager.
-
-                }else if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.PROPOSE)){
-
-                    DiplomacyProposal receivedProposal = (DiplomacyProposal)receivedMessage.getContent();
-
-                    this.getLogger().logln("ANACExampleNegotiator.negotiate() Received proposal: " + receivedProposal, true);
-
-                    BasicDeal deal = (BasicDeal)receivedProposal.getProposedDeal();
-
-                    boolean outDated = false;
-
-                    for(DMZ dmz : deal.getDemilitarizedZones()){
-
-                        // Sometimes we may receive messages too late, so we check if the proposal does not
-                        // refer to some round of the game that has already passed.
-                        if( isHistory(dmz.getPhase(), dmz.getYear())){
-                            outDated = true;
-                            break;
-                        }
-
-                        //TODO: decide whether this DMZ is acceptable or not (in combination with the rest of the proposed deal).
+        //accept
+        if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.ACCEPT)){
+            DiplomacyProposal acceptedProposal = (DiplomacyProposal)receivedMessage.getContent();
+            this.getLogger().logln("DDBrane.negotiate() Received acceptance from " + receivedMessage.getSender() + ": " + acceptedProposal, true);
+        }//propose
+        else if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.PROPOSE)){
+            DiplomacyProposal receivedProposal = (DiplomacyProposal)receivedMessage.getContent();
+            this.getLogger().logln("DDBrane.negotiate() Received proposal: " + receivedProposal, true);
+            BasicDeal deal = (BasicDeal)receivedProposal.getProposedDeal();
+            boolean outDated = false;
+            for(DMZ dmz : deal.getDemilitarizedZones()){
+                // Sometimes we may receive messages too late, so we check if the proposal does not
+                // refer to some round of the game that has already passed.
+                if( isHistory(dmz.getPhase(), dmz.getYear())){
+                    outDated = true;
+                    break;
+                }
+                //TODO: decide whether this DMZ is acceptable or not (in combination with the rest of the proposed deal).
 						/*
 						List<Power> powers = dmz.getPowers();
 						List<Province> provinces = dmz.getProvinces();
 						*/
-
-                    }
-                    for(OrderCommitment orderCommitment : deal.getOrderCommitments()){
-
-
-                        // Sometimes we may receive messages too late, so we check if the proposal does not
-                        // refer to some round of the game that has already passed.
-                        if( isHistory(orderCommitment.getPhase(), orderCommitment.getYear())){
-                            outDated = true;
-                            break;
-                        }
-
-                        //TODO: decide whether this order commitment is acceptable or not (in combination with the rest of the proposed deal).
+            }
+            for(OrderCommitment orderCommitment : deal.getOrderCommitments()){
+                // Sometimes we may receive messages too late, so we check if the proposal does not
+                // refer to some round of the game that has already passed.
+                if( isHistory(orderCommitment.getPhase(), orderCommitment.getYear())){
+                    outDated = true;
+                    break;
+                }
+                //TODO: decide whether this order commitment is acceptable or not (in combination with the rest of the proposed deal).
 						/*Order order = orderCommitment.getOrder();*/
-                    }
-
-                    //If the deal is not outdated, then check that it is consistent with the deals we are already committed to.
-                    String consistencyReport = null;
-                    if(!outDated){
-
-                        List<BasicDeal> commitments = new ArrayList<BasicDeal>();
-                        commitments.addAll(this.getConfirmedDeals());
-                        commitments.add(deal);
-                        consistencyReport = Utilities.testConsistency(game, commitments);
-
-
-                    }
-
-                    if(!outDated && consistencyReport == null){
-
-                        // This agent simply flips a coin to determine whether to accept the proposal or not.
-                        if(random.nextInt(2) == 0){ // accept with 50% probability.
-                            this.acceptProposal(receivedProposal.getId());
-                            this.getLogger().logln("ANACExampleNegotiator.negotiate()  Accepting: " + receivedProposal, true);
-                        }
-                    }
-
-
-                }else if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.CONFIRM)){
-
-                    // The protocol manager confirms that a certain proposal has been accepted by all players involved in it.
-                    // From now on we consider the deal as a binding agreement.
-
-                    DiplomacyProposal confirmedProposal = (DiplomacyProposal)receivedMessage.getContent();
-
-                    this.getLogger().logln("ANACExampleNegotiator.negotiate() RECEIVED CONFIRMATION OF: " + confirmedProposal, true);
-
-                    BasicDeal confirmedDeal = (BasicDeal)confirmedProposal.getProposedDeal();
-
-
-
-                    //Reject any proposal that has not yet been confirmed and that is inconsistent with the confirmed deal.
-                    // NOTE that normally this is not really necessary because the Notary will already check that
-                    // any deal is consistent with earlier confirmed deals before it becomes confirmed.
-                    List<BasicDeal> deals = new ArrayList<BasicDeal>(2);
-                    deals.add(confirmedDeal);
-                    for(DiplomacyProposal standingProposal : this.getUnconfirmedProposals()){
-
-                        //add this proposal to the list of deals.
-                        deals.add((BasicDeal)standingProposal.getProposedDeal());
-
-                        if(Utilities.testConsistency(game, deals) != null){
-                            this.rejectProposal(standingProposal.getId());
-                        }
-
-                        //remove the deal again from the list, so that we can add the next standing deal to the list in the next iteration.
-                        deals.remove(1);
-                    }
-
-
-
-                }else if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.REJECT)){
-
-                    DiplomacyProposal rejectedProposal = (DiplomacyProposal)receivedMessage.getContent();
-
-                    // Some player has rejected a certain proposal.
-                    // This example agent doesn't do anything with such messages however.
-
-                    //If a player first accepts a proposal and then rejects the same proposal the reject message cancels
-                    // his earlier accept proposal.
-                    // However, this is not true if the reject message is sent after the Notary has already sent a confirm
-                    // message for that proposal. Once a proposal is confirmed it cannot be undone anymore.
-                }else{
-
-                    //We have received any other kind of message.
-
-                    this.getLogger().logln("Received a message of unhandled type: " + receivedMessage.getPerformative() + ". Message content: " + receivedMessage.getContent().toString(), true);
-
+            }
+            //If the deal is not outdated, then check that it is consistent with the deals we are already committed to.
+            String consistencyReport = null;
+            if(!outDated){
+                List<BasicDeal> commitments = new ArrayList<BasicDeal>();
+                commitments.addAll(this.getConfirmedDeals());
+                commitments.add(deal);
+                consistencyReport = Utilities.testConsistency(game, commitments);
+            }
+            if(!outDated && consistencyReport == null){
+                // This agent simply flips a coin to determine whether to accept the proposal or not.
+                if(random.nextInt(2) == 0){ // accept with 50% probability.
+                    this.acceptProposal(receivedProposal.getId());
+                    this.getLogger().logln("DDBrane.negotiate()  Accepting: " + receivedProposal, true);
                 }
             }
+        }//confirm
+        else if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.CONFIRM)){
 
+            // The protocol manager confirms that a certain proposal has been accepted by all players involved in it.
+            // From now on we consider the deal as a binding agreement.
 
-            //3. 引き分けを提案
+            DiplomacyProposal confirmedProposal = (DiplomacyProposal)receivedMessage.getContent();
+
+            this.getLogger().logln("DDBrane.negotiate() RECEIVED CONFIRMATION OF: " + confirmedProposal, true);
+
+            BasicDeal confirmedDeal = (BasicDeal)confirmedProposal.getProposedDeal();
+
+            //Reject any proposal that has not yet been confirmed and that is inconsistent with the confirmed deal.
+            // NOTE that normally this is not really necessary because the Notary will already check that
+            // any deal is consistent with earlier confirmed deals before it becomes confirmed.
+            List<BasicDeal> deals = new ArrayList<BasicDeal>(2);
+            deals.add(confirmedDeal);
+            for(DiplomacyProposal standingProposal : this.getUnconfirmedProposals()){
+
+                //add this proposal to the list of deals.
+                deals.add((BasicDeal)standingProposal.getProposedDeal());
+
+                if(Utilities.testConsistency(game, deals) != null){
+                    this.rejectProposal(standingProposal.getId());
+                }
+
+                //remove the deal again from the list, so that we can add the next standing deal to the list in the next iteration.
+                deals.remove(1);
+            }
+        }//reject
+        else if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.REJECT)){
+
+            DiplomacyProposal rejectedProposal = (DiplomacyProposal)receivedMessage.getContent();
+        }else{
+            //We have received any other kind of message.
+            this.getLogger().logln("Received a message of unhandled type: " + receivedMessage.getPerformative() + ". Message content: " + receivedMessage.getContent().toString(), true);
         }
     }
 
@@ -275,6 +231,9 @@ public class DDAgent extends ANACNegotiator{
 
 //      army毎に計算 効用値が最も高くなるものを追加
         List<Region> unitsOfOpponent = opponent.getControlledRegions();
+        if(unitsOfOpponent.size()==0){
+            return null;
+        }
         for(Region unit: unitsOfOpponent){
             OrderCommitment goodOrder = generateOrderDeal(unit, baseLine, myParam, opParam);
             if(goodOrder != null){
@@ -294,8 +253,6 @@ public class DDAgent extends ANACNegotiator{
 
     //unit がどう動くのが最も良いのかを探索 (なにもない場合と変わらない場合はnullを返す)
     private OrderCommitment generateOrderDeal(Region unit, double baseLine, double myParam, double opParam){
-        OrderCommitment goodOrder = null;
-
         Power power = game.getController(unit);
 
         //unitの移動可能なところ

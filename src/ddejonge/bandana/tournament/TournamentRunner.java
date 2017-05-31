@@ -128,14 +128,14 @@ public class TournamentRunner {
 //						name = "DumbBot " + i;
 //						command = dumbBot_1_4_Command;
 //						break;
-					default:
-						name = "AnacExampleBotCommand " + i;
-						command = anacExampleBotCommand;
-						break;
 //					default:
-//						name = "DDAgent " + i;
-//						command = DDAgent_Command;
+//						name = "AnacExampleBotCommand " + i;
+//						command = anacExampleBotCommand;
 //						break;
+					default:
+						name = "DDAgent " + i;
+						command = DDAgent_Command;
+						break;
 				}
 				
 				//set the log folder for this agent to be a subfolder of the tournament log folder.
