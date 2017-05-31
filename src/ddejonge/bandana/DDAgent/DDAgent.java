@@ -118,7 +118,6 @@ public class DDAgent extends ANACNegotiator{
 
                 // これまでの取引と矛盾するか調べる
 
-
                 if(newDealToPropose != null){
                     this.getLogger().logln("DDBrane.negotiate() Proposing: " + newDealToPropose, true);
                     this.proposeDeal(newDealToPropose);
@@ -143,27 +142,16 @@ public class DDAgent extends ANACNegotiator{
             BasicDeal deal = (BasicDeal)receivedProposal.getProposedDeal();
             boolean outDated = false;
             for(DMZ dmz : deal.getDemilitarizedZones()){
-                // Sometimes we may receive messages too late, so we check if the proposal does not
-                // refer to some round of the game that has already passed.
                 if( isHistory(dmz.getPhase(), dmz.getYear())){
                     outDated = true;
                     break;
                 }
-                //TODO: decide whether this DMZ is acceptable or not (in combination with the rest of the proposed deal).
-						/*
-						List<Power> powers = dmz.getPowers();
-						List<Province> provinces = dmz.getProvinces();
-						*/
             }
             for(OrderCommitment orderCommitment : deal.getOrderCommitments()){
-                // Sometimes we may receive messages too late, so we check if the proposal does not
-                // refer to some round of the game that has already passed.
                 if( isHistory(orderCommitment.getPhase(), orderCommitment.getYear())){
                     outDated = true;
                     break;
                 }
-                //TODO: decide whether this order commitment is acceptable or not (in combination with the rest of the proposed deal).
-						/*Order order = orderCommitment.getOrder();*/
             }
             //If the deal is not outdated, then check that it is consistent with the deals we are already committed to.
             String consistencyReport = null;
@@ -172,12 +160,13 @@ public class DDAgent extends ANACNegotiator{
                 commitments.addAll(this.getConfirmedDeals());
                 commitments.add(deal);
                 consistencyReport = Utilities.testConsistency(game, commitments);
-            }
-            if(!outDated && consistencyReport == null){
-                // This agent simply flips a coin to determine whether to accept the proposal or not.
-                if(random.nextInt(2) == 0){ // accept with 50% probability.
-                    this.acceptProposal(receivedProposal.getId());
-                    this.getLogger().logln("DDBrane.negotiate()  Accepting: " + receivedProposal, true);
+
+                if(consistencyReport == null){
+                    //TODO:相手との相関を求め考慮する
+                    if(this.dBraneTactics.determineBestPlan(game, me, commitments).getValue() > 0){
+                        this.acceptProposal(receivedProposal.getId());
+                        this.getLogger().logln("DDBrane.negotiate()  Accepting: " + receivedProposal, true);
+                    }
                 }
             }
         }//confirm
@@ -220,9 +209,10 @@ public class DDAgent extends ANACNegotiator{
     }
 
     BasicDeal searchForNewDealToPropose(Power opponent, double myParam, double opParam) {
+        //提案
+        BasicDeal goodDeal = null;
 
-        List<OrderCommitment> goodOrderCommitments = null;
-
+        List<OrderCommitment> goodOrderCommitments = new ArrayList<OrderCommitment>();;
         List<BasicDeal> commitments = this.getConfirmedDeals(); //現在の取り決め
         Double baseLine = calcPlanValue(commitments, opponent, myParam, opParam);
         if (baseLine == null) { //取り決めのために行動できない -> 交渉する必要なし
@@ -242,12 +232,13 @@ public class DDAgent extends ANACNegotiator{
         }
 
 //      opponent毎にどんな不可侵条約を結びたいかを計算(自分の行けるところのみを探索)
-        List<DMZ> goodDMZDeals = generateDMZ(opponent, baseLine ,myParam, opParam);
+        List<DMZ> goodDMZDeals = new ArrayList<DMZ>();
+        //goodDMZDeals = generateDMZ(opponent, baseLine ,myParam, opParam);
 
 //      OrderCommitmentのリストとDMZのリストから組み合わせを最適化しdealとする(矛盾するものを取り除く)
-
-//      提案する
-        BasicDeal goodDeal = new BasicDeal(goodOrderCommitments, goodDMZDeals);
+        if(!goodOrderCommitments.isEmpty() || !goodDMZDeals.isEmpty()){
+            goodDeal = new BasicDeal(goodOrderCommitments, goodDMZDeals);
+        }
         return goodDeal;
     }
 
