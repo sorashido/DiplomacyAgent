@@ -1,4 +1,8 @@
 .idea/
+agents/
+lib/
+src/ddejonge/bandana/exampleAgents/
+src/ddejonge/bandana/tournament/
 out/
 log/
 data/
