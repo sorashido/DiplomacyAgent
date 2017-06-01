@@ -29,7 +29,7 @@ public class TournamentRunner {
 		
 		int numberOfGames = 5;				//The number of games this tournament consists of.
 		
-		int deadlineForMovePhases = 60;//60; 	//60 seconds for each SPR and FAL phases
+		int deadlineForMovePhases = 30;//60; 	//60 seconds for each SPR and FAL phases
 		int deadlineForRetreatPhases = 30;  //30 seconds for each SUM and AUT phases
 		int deadlineForBuildPhases = 30;  	//30 seconds for each WIN phase
 		
@@ -112,14 +112,14 @@ public class TournamentRunner {
 //						name = "RandomNegotiator " + i;
 //						command = randomNegotiatorCommand;
 //						break;
-//					case 3:
-//						name = "RandomNegotiator " + i;
-//						command = randomNegotiatorCommand;
-//						break;
 					case 4:
-						name = "DumbBot " + i;
-						command = dumbBot_1_4_Command;
+						name = "RandomNegotiator " + i;
+						command = randomNegotiatorCommand;
 						break;
+//					case 4:
+//						name = "DumbBot " + i;
+//						command = dumbBot_1_4_Command;
+//						break;
 					case 5:
 						name = "DumbBot " + i;
 						command = dumbBot_1_4_Command;

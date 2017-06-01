@@ -264,8 +264,6 @@ public class ANACExampleNegotiator extends ANACNegotiator{
 				Thread.sleep(250);
 			} catch (InterruptedException e) {
 			}
-
-
 		}
 
 

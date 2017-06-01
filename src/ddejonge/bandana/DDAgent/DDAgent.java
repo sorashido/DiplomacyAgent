@@ -51,7 +51,8 @@ public class DDAgent extends ANACNegotiator{
         myPlayer.run();
     }
 
-    public Random random = new Random();
+//    public Random random = new Random();
+    Boolean print = true; //printするか否か
     DBraneTactics dBraneTactics = new DBraneTactics();
 
     //Constructor
@@ -82,20 +83,15 @@ public class DDAgent extends ANACNegotiator{
         //The location of the log file can be set through the command line option -log.
         // it is not necessary to call getLogger().enable() because this is already automatically done by the ANACNegotiator class.
 
-        boolean printToConsole = true; //if set to true the text will be written to file, as well as printed to the standard output stream. If set to false it will only be written to file.
+        boolean printToConsole = false; //if set to true the text will be written to file, as well as printed to the standard output stream. If set to false it will only be written to file.
         this.getLogger().logln("game is starting!", printToConsole);
     }
 
 
     @Override
     public void negotiate(long negotiationDeadline) {
-        Map<String, List<BasicDeal>> newDealToProposes = null; //各国に対する提案候補
-        List<Order> Orders = null;//
-
-//        Map<String, Pair<Integer,Integer>> powerParam = null;
-//        Pair pair = new Pair(0.6, 0.4);
-
-        //me.getName()
+//        Map<String, List<BasicDeal>> newDealToProposes = null; //各国に対する提案候補
+//        List<Order> Orders = null;//
 
         //交渉の間, ループし続ける
         while(System.currentTimeMillis() < negotiationDeadline){
@@ -110,17 +106,19 @@ public class DDAgent extends ANACNegotiator{
             //2. 自分が相手に提案
             //2.1 各国それぞれへの提案の候補を個別に探索 (自分と相手の効用値に基づいて探索, (効用値は線形に妥協しても良いかも = \alpha \betaの値))
             // \alpha + \beta の値を線形に落としていく感じ
+            if(this.getNegotiatingPowers().size() < 2){
+                break;
+            }
             for(Power power :this.getNegotiatingPowers()){
-                if(this.getNegotiatingPowers().size() < 2){
-                    break;
-                }
-                BasicDeal newDealToPropose = searchForNewDealToPropose(power, 0.65, 0.35);
+                if(!power.equals(me)) {
+                    BasicDeal newDealToPropose = searchForNewDealToPropose(power, 0.65, 0.35);
 
-                // これまでの取引と矛盾するか調べる
+                    // これまでの取引と矛盾するか調べる
 
-                if(newDealToPropose != null){
-                    this.getLogger().logln("DDBrane.negotiate() Proposing: " + newDealToPropose, true);
-                    this.proposeDeal(newDealToPropose);
+                    if (newDealToPropose != null) {
+                        this.getLogger().logln("DDBrane.negotiate() Proposing: " + newDealToPropose, print);
+                        this.proposeDeal(newDealToPropose);
+                    }
                 }
             }
 
@@ -134,11 +132,11 @@ public class DDAgent extends ANACNegotiator{
         //accept
         if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.ACCEPT)){
             DiplomacyProposal acceptedProposal = (DiplomacyProposal)receivedMessage.getContent();
-            this.getLogger().logln("DDBrane.negotiate() Received acceptance from " + receivedMessage.getSender() + ": " + acceptedProposal, true);
+            this.getLogger().logln("DDBrane.negotiate() Received acceptance from " + receivedMessage.getSender() + ": " + acceptedProposal, print);
         }//propose
         else if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.PROPOSE)){
             DiplomacyProposal receivedProposal = (DiplomacyProposal)receivedMessage.getContent();
-            this.getLogger().logln("DDBrane.negotiate() Received proposal: " + receivedProposal, true);
+            this.getLogger().logln("DDBrane.negotiate() Received proposal: " + receivedProposal, print);
             BasicDeal deal = (BasicDeal)receivedProposal.getProposedDeal();
             boolean outDated = false;
             for(DMZ dmz : deal.getDemilitarizedZones()){
@@ -165,7 +163,7 @@ public class DDAgent extends ANACNegotiator{
                     //TODO:相手との相関を求め考慮する
                     if(this.dBraneTactics.determineBestPlan(game, me, commitments).getValue() > 0){
                         this.acceptProposal(receivedProposal.getId());
-                        this.getLogger().logln("DDBrane.negotiate()  Accepting: " + receivedProposal, true);
+                        this.getLogger().logln("DDBrane.negotiate()  Accepting: " + receivedProposal, print);
                     }
                 }
             }
@@ -177,7 +175,7 @@ public class DDAgent extends ANACNegotiator{
 
             DiplomacyProposal confirmedProposal = (DiplomacyProposal)receivedMessage.getContent();
 
-            this.getLogger().logln("DDBrane.negotiate() RECEIVED CONFIRMATION OF: " + confirmedProposal, true);
+            this.getLogger().logln("DDBrane.negotiate() RECEIVED CONFIRMATION OF: " + confirmedProposal, print);
 
             BasicDeal confirmedDeal = (BasicDeal)confirmedProposal.getProposedDeal();
 
@@ -204,7 +202,7 @@ public class DDAgent extends ANACNegotiator{
             DiplomacyProposal rejectedProposal = (DiplomacyProposal)receivedMessage.getContent();
         }else{
             //We have received any other kind of message.
-            this.getLogger().logln("Received a message of unhandled type: " + receivedMessage.getPerformative() + ". Message content: " + receivedMessage.getContent().toString(), true);
+            this.getLogger().logln("Received a message of unhandled type: " + receivedMessage.getPerformative() + ". Message content: " + receivedMessage.getContent().toString(), print);
         }
     }
 
