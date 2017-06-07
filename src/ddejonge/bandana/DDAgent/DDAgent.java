@@ -151,11 +151,11 @@ public class DDAgent extends ANACNegotiator{
     void manageMessage(){
         Message receivedMessage = removeMessageFromQueue();
 
-        //accept
+        //accepted
         if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.ACCEPT)){
             DiplomacyProposal acceptedProposal = (DiplomacyProposal)receivedMessage.getContent();
             this.getLogger().logln("DDBrane.negotiate() Received acceptance from " + receivedMessage.getSender() + ": " + acceptedProposal, print);
-        }//propose
+        }//proposed
         else if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.PROPOSE)){
             DiplomacyProposal receivedProposal = (DiplomacyProposal)receivedMessage.getContent();
             this.getLogger().logln("DDBrane.negotiate() Received proposal: " + receivedProposal, print);
@@ -182,14 +182,17 @@ public class DDAgent extends ANACNegotiator{
                 consistencyReport = Utilities.testConsistency(game, commitments);
 
                 if(consistencyReport == null){
-                    //TODO:相手との相関を求め考慮する
-                    if(this.dBraneTactics.determineBestPlan(game, me, commitments).getValue() > 0){
+                    Double relation = piasonMap.get(me.getName()).get(receivedMessage.getSender());
+                    Power power = game.getPower(receivedMessage.getSender());
+                    Double alpha = 0.75 - 0.25 * relation;
+                    Double beta = 0.25 + 0.25 * relation;
+                    if(calcPlanValue(commitments, power, alpha, beta) > 1.0){
                         this.acceptProposal(receivedProposal.getId());
                         this.getLogger().logln("DDBrane.negotiate()  Accepting: " + receivedProposal, print);
                     }
                 }
             }
-        }//confirm
+        }//confirmed
         else if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.CONFIRM)){
 
             // The protocol manager confirms that a certain proposal has been accepted by all players involved in it.
@@ -218,7 +221,7 @@ public class DDAgent extends ANACNegotiator{
                 //remove the deal again from the list, so that we can add the next standing deal to the list in the next iteration.
                 deals.remove(1);
             }
-        }//reject
+        }//rejected
         else if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.REJECT)){
 
             DiplomacyProposal rejectedProposal = (DiplomacyProposal)receivedMessage.getContent();
@@ -258,9 +261,6 @@ public class DDAgent extends ANACNegotiator{
         //commitment と dmzは別々のものとして提案
         if(!goodOrderCommitments.isEmpty()){
             goodDeals.add(new BasicDeal(goodOrderCommitments, new ArrayList<DMZ>()));
-        }
-        if(!goodDMZDeals.isEmpty()){
-//            goodDeals.add(new BasicDeal(new ArrayList<OrderCommitment>(), goodDMZDeals));
         }
 
         return goodDeals;
@@ -344,7 +344,7 @@ public class DDAgent extends ANACNegotiator{
         Plan opPlan = this.dBraneTactics.determineBestPlan(game, opponent, commitments);
 
         if (myPlan == null || opPlan == null) { //取り決めのために行動できない -> 交渉する必要なし
-            return null;
+            return 0.0;
         }
         return  (myPlan.getValue() * myParam + opPlan.getValue() * opParam);
     }
