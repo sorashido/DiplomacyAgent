@@ -4,5 +4,6 @@ lib/
 src/ddejonge/bandana/exampleAgents/
 src/ddejonge/bandana/tournament/
 log/
+out/production/
 data/
 DiplomacyGame.iml
