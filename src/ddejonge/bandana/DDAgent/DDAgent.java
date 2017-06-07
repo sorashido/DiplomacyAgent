@@ -186,7 +186,7 @@ public class DDAgent extends ANACNegotiator{
                     Power power = game.getPower(receivedMessage.getSender());
                     Double alpha = 0.75 - 0.25 * relation;
                     Double beta = 0.25 + 0.25 * relation;
-                    if(calcPlanValue(commitments, power, alpha, beta) > 1.0){
+                    if(calcPlanValue(commitments, power, 1.0, -1.0) > 0){
                         this.acceptProposal(receivedProposal.getId());
                         this.getLogger().logln("DDBrane.negotiate()  Accepting: " + receivedProposal, print);
                     }
