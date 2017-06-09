@@ -28,19 +28,35 @@ def main():
             "result": {"RUS": [], "AUS": [], "FRA": [], "TUR": [], "ENG": [], "GER": [], "ITA": []}
             }
 
-    oldyear = 0
+    year = 1901
+    count = 0
     for line in open('roundResults.log', 'r'):
         itemList = line[:-1].split('\t')
+
         if itemList[0][0:4].isdigit():
-            year = int(itemList[0][0:4])
-            # if oldyear < year and oldyear != 0:
-            #     dict["result"]=dict[oldyear] #最終結果の保存
             oldyear = year
+            year = int(itemList[0][0:4])
+            if year - oldyear != 1:
+                if year >= oldyear:
+                    for i in range(oldyear+1, year):
+                        # print(i)
+                        for con in dict["result"].keys():
+                            dict[i][con].append(dict[oldyear][con][count])
+                        # dict[i].update(dict[oldyear])
+                else:
+                    for i in range(oldyear+1, 1920):
+                        for con in dict["result"].keys():
+                            dict[i][con].append(dict[oldyear][con][count])
+
+            if oldyear > year:
+                count += 1
+                dict["result"] = dict[oldyear-1]
         else:
             con = itemList[0][0:3]
             num = int(itemList[0][5:])
-            if num > 1000:
-                num = num - 1920
+
+            if num == 0:
+                num = -10
             dict[year][con].append(num)
 
     # x, y 軸の相関係数 r と有意確率 p を求める
@@ -48,11 +64,12 @@ def main():
         for key2 in dict["result"].keys():
             if key1 == key2:
                 continue
-            for i in range(1901,1919):
-                x = dict[i][key1]
+            for i in range(1901,1920):
+                x = dict["result"][key1]
                 y = dict[i][key2]
                 r, p = pearsonr(x,y)
                 print(i, key1, key2, r, p)
 
+    print(len(dict[1901]["ITA"]), len(dict[1901]["TUR"]))
 if __name__ == '__main__':
     main()
