@@ -133,10 +133,12 @@ public class DDAgent extends ANACNegotiator{
             for(Power power :this.getNegotiatingPowers()){
                 if(!power.equals(me)) {
                     Double relation = piasonMap.get(me.getName()).get(power.getName());
-                    Double alpha = 0.75 - 0.25 * relation;
-                    Double beta = 0.25 + 0.125 * relation - 0.125 * power.getOwnedSCs().size()/numOwned;
+//                    Double alpha = 0.75 - 0.25 * relation;
+//                    Double beta = 0.25 + 0.125 * relation - 0.125 * power.getOwnedSCs().size()/numOwned;
+                    Double myParam = 0.75 - 0.25 * relation;
+                    Double opParam = 0.5 * relation - 0.5 * power.getOwnedSCs().size()/numOwned;
 
-                    List<BasicDeal> newDealToProposes = searchForNewDealToPropose(power,alpha, beta);
+                    List<BasicDeal> newDealToProposes = searchForNewDealToPropose(power,myParam, opParam);
 
                     // これまでの取引と矛盾するか調べる
                     for(BasicDeal newDealToPropose : newDealToProposes){
@@ -180,17 +182,22 @@ public class DDAgent extends ANACNegotiator{
             //If the deal is not outdated, then check that it is consistent with the deals we are already committed to.
             String consistencyReport = null;
             if(!outDated){
+                double numOwned = 0;
+                for(Power power: this.getNegotiatingPowers()){
+                    numOwned += power.getOwnedSCs().size();
+                }
+
                 List<BasicDeal> commitments = new ArrayList<BasicDeal>();
                 commitments.addAll(this.getConfirmedDeals());
                 commitments.add(deal);
                 consistencyReport = Utilities.testConsistency(game, commitments);
 
                 if(consistencyReport == null){
-                    Double relation = piasonMap.get(me.getName()).get(receivedMessage.getSender());
                     Power power = game.getPower(receivedMessage.getSender());
-                    Double alpha = 0.75 - 0.25 * relation;
-                    Double beta = 0.25 + 0.25 * relation;
-                    if(calcPlanValue(commitments, power, 1.0, -1.0) > 0){
+                    Double relation = piasonMap.get(me.getName()).get(power.getName());
+                    Double myParam = 0.75 - 0.25 * relation;
+                    Double opParam = 0.5 * relation - 0.5 * power.getOwnedSCs().size()/numOwned;
+                    if(calcPlanValue(commitments, power, myParam, opParam) > 0){
                         this.acceptProposal(receivedProposal.getId());
                         this.getLogger().logln("DDBrane.negotiate()  Accepting: " + receivedProposal, print);
                     }
