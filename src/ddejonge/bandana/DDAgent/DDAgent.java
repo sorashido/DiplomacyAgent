@@ -126,11 +126,15 @@ public class DDAgent extends ANACNegotiator{
             if(this.getNegotiatingPowers().size() < 2){
                 break;
             }
+            double numOwned = 0;
+            for(Power power: this.getNegotiatingPowers()){
+                numOwned += power.getOwnedSCs().size();
+            }
             for(Power power :this.getNegotiatingPowers()){
                 if(!power.equals(me)) {
                     Double relation = piasonMap.get(me.getName()).get(power.getName());
                     Double alpha = 0.75 - 0.25 * relation;
-                    Double beta = 0.25 + 0.25 * relation;
+                    Double beta = 0.25 + 0.125 * relation - 0.125 * power.getOwnedSCs().size()/numOwned;
 
                     List<BasicDeal> newDealToProposes = searchForNewDealToPropose(power,alpha, beta);
 
