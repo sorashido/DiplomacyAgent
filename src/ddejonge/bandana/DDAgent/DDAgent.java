@@ -132,7 +132,7 @@ public class DDAgent extends ANACNegotiator{
             for(Power power :this.getNegotiatingPowers()){
                 if(!power.equals(me)) {
 //                    Double relation  = relationParams.get(me.getName()+power.getName()).get(game.getYear());
-                    Double relation = relationParams.get(me.getName()).get(power.getName());
+                    Double relation = piasonMap.get(me.getName()).get(power.getName());
                     Double myParam = 0.75 - 0.25 * relation;
                     Double opParam = 0.5 * relation - 0.5 * power.getOwnedSCs().size()/numOwned;
 
