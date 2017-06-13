@@ -8,17 +8,80 @@ import java.util.Map;
  */
 public class Parameters {
 
-    private Map<String, HashMap<Integer, Double>> relationParams;
+//    private Map<String, HashMap<Integer, Double>> relationParams;
+    private Map<String, HashMap<String, Double>> relationParams;
 
     public Parameters() {
         relationParams = setPiasonParams();
     }
 
-    public Map<String, HashMap<Integer, Double>> getRelationParams(){
+    public Map<String, HashMap<String, Double>> getRelationParams(){
         return relationParams;
     }
 
-    public Map<String, HashMap<Integer, Double>> setPiasonParams() {
+    public Map<String, HashMap<String, Double>> setPiasonParams() {
+        Map<String, HashMap<String,Double>> map = new HashMap<String, HashMap<String,Double>>();
+        map.put("ENG", new HashMap<String, Double>());
+        map.get("ENG").put("GER", -0.125);
+        map.get("ENG").put("ITA", -0.043);
+        map.get("ENG").put("FRA", -0.279);
+        map.get("ENG").put("TUR", 0.169);
+        map.get("ENG").put("AUS", 0.124);
+        map.get("ENG").put("RUS", -0.303);
+
+        map.put("GER", new HashMap<String, Double>());
+        map.get("GER").put("ENG", -0.125);
+        map.get("GER").put("ITA", 0.175);
+        map.get("GER").put("FRA", -0.264);
+        map.get("GER").put("TUR", 0.140);
+        map.get("GER").put("AUS", 0.311);
+        map.get("GER").put("RUS", -0.537);
+
+        map.put("ITA", new HashMap<String, Double>());
+        map.get("ITA").put("ENG", -0.043);
+        map.get("ITA").put("GER", 0.175);
+        map.get("ITA").put("FRA", -0.299);
+        map.get("ITA").put("TUR", -0.194);
+        map.get("ITA").put("AUS", 0.200);
+        map.get("ITA").put("RUS", -0.125);
+
+        map.put("FRA", new HashMap<String, Double>());
+        map.get("FRA").put("ENG", -0.279);
+        map.get("FRA").put("GER", -0.264);
+        map.get("FRA").put("ITA", -0.299);
+        map.get("FRA").put("TUR", -0.075);
+        map.get("FRA").put("AUS", -0.029);
+        map.get("FRA").put("RUS", -0.125);
+
+        map.put("TUR", new HashMap<String, Double>());
+        map.get("TUR").put("ENG", 0.169);
+        map.get("TUR").put("GER", 0.140);
+        map.get("TUR").put("ITA", -0.194);
+        map.get("TUR").put("FRA", -0.075);
+        map.get("TUR").put("AUS", 0.067);
+        map.get("TUR").put("RUS", -0.579);
+
+        map.put("AUS", new HashMap<String, Double>());
+        map.get("AUS").put("ENG", 0.124);
+        map.get("AUS").put("GER", 0.311);
+        map.get("AUS").put("ITA", 0.200);
+        map.get("AUS").put("FRA", -0.029);
+        map.get("AUS").put("TUR", 0.067);
+        map.get("AUS").put("RUS", -0.550);
+
+        map.put("RUS", new HashMap<String, Double>());
+        map.get("RUS").put("ENG", -0.303);
+        map.get("RUS").put("GER", -0.537);
+        map.get("RUS").put("ITA", -0.125);
+        map.get("RUS").put("FRA", 0.044);
+        map.get("RUS").put("TUR", -0.579);
+        map.get("RUS").put("AUS", -0.550);
+
+        return  map;
+    }
+
+
+    public Map<String, HashMap<Integer, Double>> setPiasonParams2() {
         Map<String, HashMap<Integer, Double>> map = new HashMap<>();
         map.put("RUSAUS", new HashMap<Integer, Double>());
         map.get("RUSAUS").put(1901,0.0);

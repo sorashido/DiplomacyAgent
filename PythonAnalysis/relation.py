@@ -24,9 +24,9 @@ def main():
                 continue
             x = dict[key1]
             y = dict[key2]
-            print(x,y)
-            # r, p = pearsonr(x,y)
-            # print(key1, key2, r, p)
+            # print(x,y)
+            r, p = pearsonr(x,y)
+            print(key1, key2, r, p)
 
 if __name__ == '__main__':
     main()
