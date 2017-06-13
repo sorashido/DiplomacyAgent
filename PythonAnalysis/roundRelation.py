@@ -64,12 +64,14 @@ def main():
         for key2 in dict["result"].keys():
             if key1 == key2:
                 continue
+            print('map.put("' + key1 + key2 + '", new HashMap<Integer, Double>());')
             for i in range(1901,1920):
                 x = dict["result"][key1]
                 y = dict[i][key2]
                 r, p = pearsonr(x,y)
-                print(i, key1, key2, r, p)
+                if not r == r: #nanの場合は0
+                    r = 0.00
+                print('map.get'+'("'+key1+key2+'").put('+str(i)+','+str(r)+');')
 
-    print(len(dict[1901]["ITA"]), len(dict[1901]["TUR"]))
 if __name__ == '__main__':
     main()
