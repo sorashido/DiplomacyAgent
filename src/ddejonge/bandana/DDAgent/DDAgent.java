@@ -140,11 +140,13 @@ public class DDAgent extends ANACNegotiator{
 
                     List<BasicDeal> newDealToProposes = searchForNewDealToPropose(power,myParam, opParam);
 
-                    // これまでの取引と矛盾するか調べる
-                    for(BasicDeal newDealToPropose : newDealToProposes){
-                        if (newDealToPropose != null) {
-                            this.getLogger().logln("DDBrane.negotiate() Proposing: " + newDealToPropose, print);
-                            this.proposeDeal(newDealToPropose);
+                    if(calcPlanValue(newDealToProposes, power, myParam, opParam) > 1.0) {
+                        // これまでの取引と矛盾するか調べる
+                        for (BasicDeal newDealToPropose : newDealToProposes) {
+                            if (newDealToPropose != null) {
+                                this.getLogger().logln("DDBrane.negotiate() Proposing: " + newDealToPropose, print);
+                                this.proposeDeal(newDealToPropose);
+                            }
                         }
                     }
                 }
