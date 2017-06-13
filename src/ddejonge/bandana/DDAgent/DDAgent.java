@@ -140,7 +140,7 @@ public class DDAgent extends ANACNegotiator{
 
                     List<BasicDeal> newDealToProposes = searchForNewDealToPropose(power,myParam, opParam);
 
-                    if(calcPlanValue(newDealToProposes, power, myParam, opParam) > 0.5) {
+                    if(calcPlanValue(newDealToProposes, power, myParam, opParam) > 1.0) {
                         // これまでの取引と矛盾するか調べる
                         for (BasicDeal newDealToPropose : newDealToProposes) {
                             if (newDealToPropose != null) {
@@ -200,7 +200,7 @@ public class DDAgent extends ANACNegotiator{
                     Double relation  = relationParams.get(me.getName()+power.getName()).get(game.getYear());
                     Double myParam = 0.75 - 0.25 * relation;
                     Double opParam = 0.5 * relation - 0.5 * power.getOwnedSCs().size()/numOwned;
-                    if(calcPlanValue(commitments, power, myParam, opParam) > 0.7){
+                    if(calcPlanValue(commitments, power, myParam, opParam) > 1.0){
                         this.acceptProposal(receivedProposal.getId());
                         this.getLogger().logln("DDBrane.negotiate()  Accepting: " + receivedProposal, print);
                     }
