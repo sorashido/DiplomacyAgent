@@ -47,7 +47,7 @@ public class DDAgent extends ANACNegotiator{
 
     DBraneTactics dBraneTactics = new DBraneTactics();
     Parameters parameters = new Parameters();
-    public Random random = new Random();
+//    public Random random = new Random();
 
     //    Map<String, HashMap<String, Double>> piasonMap = new HashMap<>();
     Map<String, HashMap<Integer, Double>> relationParams = new HashMap<>();
@@ -198,7 +198,7 @@ public class DDAgent extends ANACNegotiator{
                     Double relation  = relationParams.get(me.getName()+power.getName()).get(game.getYear());
                     Double myParam = 0.75 - 0.25 * relation;
                     Double opParam = 0.5 * relation - 0.5 * power.getOwnedSCs().size()/numOwned;
-                    if(calcPlanValue(commitments, power, myParam, opParam) > 0.5){
+                    if(calcPlanValue(commitments, power, myParam, opParam) > 1.0){
                         this.acceptProposal(receivedProposal.getId());
                         this.getLogger().logln("DDBrane.negotiate()  Accepting: " + receivedProposal, print);
                     }
@@ -269,9 +269,9 @@ public class DDAgent extends ANACNegotiator{
         List<DMZ> goodDMZDeals = new ArrayList<DMZ>();
 //        goodDMZDeals = generateDMZ(opponent, baseLine ,myParam, opParam);
         //goodOrderCommitmentsの中から取り除くものを決める(ランダム)
-        if(goodOrderCommitments.size() > 3) {
-            goodOrderCommitments.remove(random.nextInt(goodOrderCommitments.size()));
-        }
+//        if(goodOrderCommitments.size() > 3) {
+//            goodOrderCommitments.remove(random.nextInt(goodOrderCommitments.size()));
+//        }
 
         //commitment と dmzは別々のものとして提案
         if(!goodOrderCommitments.isEmpty()){
