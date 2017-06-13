@@ -235,9 +235,7 @@ public class DDAgent extends ANACNegotiator{
             }
         }//rejected
         else if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.REJECT)){
-
             DiplomacyProposal rejectedProposal = (DiplomacyProposal)receivedMessage.getContent();
-            rejectedproposals.add((BasicDeal)rejectedProposal.getProposedDeal());
         }else{
             //We have received any other kind of message.
             this.getLogger().logln("Received a message of unhandled type: " + receivedMessage.getPerformative() + ". Message content: " + receivedMessage.getContent().toString(), print);
@@ -271,7 +269,9 @@ public class DDAgent extends ANACNegotiator{
         List<DMZ> goodDMZDeals = new ArrayList<DMZ>();
 //        goodDMZDeals = generateDMZ(opponent, baseLine ,myParam, opParam);
         //goodOrderCommitmentsの中から取り除くものを決める(ランダム)
-        goodOrderCommitments.remove(random.nextInt(goodOrderCommitments.size()));
+        if(goodOrderCommitments.size() > 3) {
+            goodOrderCommitments.remove(random.nextInt(goodOrderCommitments.size()));
+        }
 
         //commitment と dmzは別々のものとして提案
         if(!goodOrderCommitments.isEmpty()){
