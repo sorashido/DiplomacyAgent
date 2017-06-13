@@ -198,7 +198,7 @@ public class DDAgent extends ANACNegotiator{
                     Double relation  = relationParams.get(me.getName()+power.getName()).get(game.getYear());
                     Double myParam = 0.75 - 0.25 * relation;
                     Double opParam = 0.5 * relation - 0.5 * power.getOwnedSCs().size()/numOwned;
-                    if(calcPlanValue(commitments, power, myParam, opParam) > 0){
+                    if(calcPlanValue(commitments, power, myParam, opParam) > 0.5){
                         this.acceptProposal(receivedProposal.getId());
                         this.getLogger().logln("DDBrane.negotiate()  Accepting: " + receivedProposal, print);
                     }
