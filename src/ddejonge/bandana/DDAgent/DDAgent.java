@@ -47,8 +47,11 @@ public class DDAgent extends ANACNegotiator{
 
     DBraneTactics dBraneTactics = new DBraneTactics();
     Parameters parameters = new Parameters();
-//    Map<String, HashMap<String, Double>> piasonMap = new HashMap<>();
+    public Random random = new Random();
+
+    //    Map<String, HashMap<String, Double>> piasonMap = new HashMap<>();
     Map<String, HashMap<Integer, Double>> relationParams = new HashMap<>();
+    List<BasicDeal> rejectedproposals;
 
     List<MTOOrder> myMTOrders = new ArrayList<>(); //自分が移動可能なところ
     List<HLDOrder> myHLDOrders = new ArrayList<>(); //自分が移動可能なところ
@@ -234,6 +237,7 @@ public class DDAgent extends ANACNegotiator{
         else if(receivedMessage.getPerformative().equals(DiplomacyNegoClient.REJECT)){
 
             DiplomacyProposal rejectedProposal = (DiplomacyProposal)receivedMessage.getContent();
+            rejectedproposals.add((BasicDeal)rejectedProposal.getProposedDeal());
         }else{
             //We have received any other kind of message.
             this.getLogger().logln("Received a message of unhandled type: " + receivedMessage.getPerformative() + ". Message content: " + receivedMessage.getContent().toString(), print);
@@ -244,7 +248,7 @@ public class DDAgent extends ANACNegotiator{
         //提案
         List<BasicDeal> goodDeals = new ArrayList<BasicDeal>();
 
-        List<OrderCommitment> goodOrderCommitments = new ArrayList<OrderCommitment>();;
+        List<OrderCommitment> goodOrderCommitments = new ArrayList<OrderCommitment>();
         List<BasicDeal> commitments = this.getConfirmedDeals(); //現在の取り決め
         Double baseLine = calcPlanValue(commitments, opponent, myParam, opParam);
         if (baseLine == null) { //取り決めのために行動できない -> 交渉する必要なし
@@ -266,9 +270,8 @@ public class DDAgent extends ANACNegotiator{
 //      opponent毎にどんな不可侵条約を結びたいかを計算(自分の行けるところのみを探索)
         List<DMZ> goodDMZDeals = new ArrayList<DMZ>();
 //        goodDMZDeals = generateDMZ(opponent, baseLine ,myParam, opParam);
-
         //goodOrderCommitmentsの中から取り除くものを決める(ランダム)
-        //時間が経過につれて自分の効用値を下げる
+        goodOrderCommitments.remove(random.nextInt(goodOrderCommitments.size()));
 
         //commitment と dmzは別々のものとして提案
         if(!goodOrderCommitments.isEmpty()){
