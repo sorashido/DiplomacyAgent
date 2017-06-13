@@ -105,6 +105,7 @@ public class Parameters {
         map.get("RUSAUS").put(1918,-0.478875847549);
         map.get("RUSAUS").put(1919,-0.46318868327);
         map.get("RUSAUS").put(1920,-0.46318868327);
+        map.get("RUSAUS").put(1921,-0.46318868327);
         map.put("RUSFRA", new HashMap<Integer, Double>());
         map.get("RUSFRA").put(1901,0.0);
         map.get("RUSFRA").put(1902,-0.225362751637);
@@ -126,6 +127,7 @@ public class Parameters {
         map.get("RUSFRA").put(1918,0.0353753740649);
         map.get("RUSFRA").put(1919,0.0412340255689);
         map.get("RUSFRA").put(1920,0.0412340255689);
+        map.get("RUSFRA").put(1921,0.0412340255689);
         map.put("RUSTUR", new HashMap<Integer, Double>());
         map.get("RUSTUR").put(1901,0.0);
         map.get("RUSTUR").put(1902,0.0);
@@ -147,6 +149,7 @@ public class Parameters {
         map.get("RUSTUR").put(1918,-0.511959928178);
         map.get("RUSTUR").put(1919,-0.5135117702);
         map.get("RUSTUR").put(1920,-0.5135117702);
+        map.get("RUSTUR").put(1921,-0.5135117702);
         map.put("RUSENG", new HashMap<Integer, Double>());
         map.get("RUSENG").put(1901,9.57003888123e-05);
         map.get("RUSENG").put(1902,0.0691162180807);
@@ -168,6 +171,7 @@ public class Parameters {
         map.get("RUSENG").put(1918,-0.221722276225);
         map.get("RUSENG").put(1919,-0.227180238413);
         map.get("RUSENG").put(1920,-0.227180238413);
+        map.get("RUSENG").put(1921,-0.227180238413);
         map.put("RUSGER", new HashMap<Integer, Double>());
         map.get("RUSGER").put(1901,0.0);
         map.get("RUSGER").put(1902,-0.113398745916);
@@ -189,6 +193,7 @@ public class Parameters {
         map.get("RUSGER").put(1918,-0.518400168714);
         map.get("RUSGER").put(1919,-0.515786059827);
         map.get("RUSGER").put(1920,-0.515786059827);
+        map.get("RUSGER").put(1921,-0.515786059827);
         map.put("RUSITA", new HashMap<Integer, Double>());
         map.get("RUSITA").put(1901,0.0);
         map.get("RUSITA").put(1902,0.0);
@@ -210,6 +215,7 @@ public class Parameters {
         map.get("RUSITA").put(1918,-0.0812007987675);
         map.get("RUSITA").put(1919,-0.0722361097464);
         map.get("RUSITA").put(1920,-0.0722361097464);
+        map.get("RUSITA").put(1921,-0.0722361097464);
         map.put("AUSRUS", new HashMap<Integer, Double>());
         map.get("AUSRUS").put(1901,0.0);
         map.get("AUSRUS").put(1902,-0.195264352235);
@@ -231,6 +237,7 @@ public class Parameters {
         map.get("AUSRUS").put(1918,-0.49389347857);
         map.get("AUSRUS").put(1919,-0.486083354669);
         map.get("AUSRUS").put(1920,-0.486083354669);
+        map.get("AUSRUS").put(1921,-0.486083354669);
         map.put("AUSFRA", new HashMap<Integer, Double>());
         map.get("AUSFRA").put(1901,0.0);
         map.get("AUSFRA").put(1902,0.0992740501372);
@@ -252,6 +259,7 @@ public class Parameters {
         map.get("AUSFRA").put(1918,-0.03430336798);
         map.get("AUSFRA").put(1919,-0.0357334905856);
         map.get("AUSFRA").put(1920,-0.0357334905856);
+        map.get("AUSFRA").put(1921,-0.0357334905856);
         map.put("AUSTUR", new HashMap<Integer, Double>());
         map.get("AUSTUR").put(1901,0.0);
         map.get("AUSTUR").put(1902,0.0);
@@ -273,6 +281,7 @@ public class Parameters {
         map.get("AUSTUR").put(1918,0.0313372471381);
         map.get("AUSTUR").put(1919,0.0410617153723);
         map.get("AUSTUR").put(1920,0.0410617153723);
+        map.get("AUSTUR").put(1921,0.0410617153723);
         map.put("AUSENG", new HashMap<Integer, Double>());
         map.get("AUSENG").put(1901,0.205901173905);
         map.get("AUSENG").put(1902,0.133526171377);
@@ -294,6 +303,7 @@ public class Parameters {
         map.get("AUSENG").put(1918,0.0840415574086);
         map.get("AUSENG").put(1919,0.0933227348069);
         map.get("AUSENG").put(1920,0.0933227348069);
+        map.get("AUSENG").put(1921,0.0933227348069);
         map.put("AUSGER", new HashMap<Integer, Double>());
         map.get("AUSGER").put(1901,0.0);
         map.get("AUSGER").put(1902,-0.0973122577172);
@@ -315,6 +325,7 @@ public class Parameters {
         map.get("AUSGER").put(1918,0.318575393316);
         map.get("AUSGER").put(1919,0.323950933607);
         map.get("AUSGER").put(1920,0.323950933607);
+        map.get("AUSGER").put(1921,0.323950933607);
         map.put("AUSITA", new HashMap<Integer, Double>());
         map.get("AUSITA").put(1901,0.0);
         map.get("AUSITA").put(1902,0.0);
@@ -336,6 +347,7 @@ public class Parameters {
         map.get("AUSITA").put(1918,0.205907574046);
         map.get("AUSITA").put(1919,0.210128931927);
         map.get("AUSITA").put(1920,0.210128931927);
+        map.get("AUSITA").put(1921,0.210128931927);
         map.put("FRARUS", new HashMap<Integer, Double>());
         map.get("FRARUS").put(1901,0.0);
         map.get("FRARUS").put(1902,-0.188343807761);
@@ -357,6 +369,7 @@ public class Parameters {
         map.get("FRARUS").put(1918,-0.00205704785695);
         map.get("FRARUS").put(1919,-0.000175138871135);
         map.get("FRARUS").put(1920,-0.000175138871135);
+        map.get("FRARUS").put(1921,-0.000175138871135);
         map.put("FRAAUS", new HashMap<Integer, Double>());
         map.get("FRAAUS").put(1901,0.0);
         map.get("FRAAUS").put(1902,0.0);
@@ -378,6 +391,7 @@ public class Parameters {
         map.get("FRAAUS").put(1918,-0.0278639604221);
         map.get("FRAAUS").put(1919,-0.0254192771591);
         map.get("FRAAUS").put(1920,-0.0254192771591);
+        map.get("FRAAUS").put(1921,-0.0254192771591);
         map.put("FRATUR", new HashMap<Integer, Double>());
         map.get("FRATUR").put(1901,0.0);
         map.get("FRATUR").put(1902,0.0);
@@ -399,6 +413,7 @@ public class Parameters {
         map.get("FRATUR").put(1918,-0.0284806515643);
         map.get("FRATUR").put(1919,-0.0304224851616);
         map.get("FRATUR").put(1920,-0.0304224851616);
+        map.get("FRATUR").put(1921,-0.0304224851616);
         map.put("FRAENG", new HashMap<Integer, Double>());
         map.get("FRAENG").put(1901,-0.123627803882);
         map.get("FRAENG").put(1902,-0.0721611330381);
@@ -420,6 +435,7 @@ public class Parameters {
         map.get("FRAENG").put(1918,-0.262082527911);
         map.get("FRAENG").put(1919,-0.262624642144);
         map.get("FRAENG").put(1920,-0.262624642144);
+        map.get("FRAENG").put(1921,-0.262624642144);
         map.put("FRAGER", new HashMap<Integer, Double>());
         map.get("FRAGER").put(1901,0.0);
         map.get("FRAGER").put(1902,-0.0136344684);
@@ -441,6 +457,7 @@ public class Parameters {
         map.get("FRAGER").put(1918,-0.237680218252);
         map.get("FRAGER").put(1919,-0.241746336389);
         map.get("FRAGER").put(1920,-0.241746336389);
+        map.get("FRAGER").put(1921,-0.241746336389);
         map.put("FRAITA", new HashMap<Integer, Double>());
         map.get("FRAITA").put(1901,0.0);
         map.get("FRAITA").put(1902,0.0);
@@ -462,6 +479,7 @@ public class Parameters {
         map.get("FRAITA").put(1918,-0.303545123982);
         map.get("FRAITA").put(1919,-0.299976407262);
         map.get("FRAITA").put(1920,-0.299976407262);
+        map.get("FRAITA").put(1921,-0.299976407262);
         map.put("TURRUS", new HashMap<Integer, Double>());
         map.get("TURRUS").put(1901,0.0);
         map.get("TURRUS").put(1902,-0.248608841488);
@@ -483,6 +501,7 @@ public class Parameters {
         map.get("TURRUS").put(1918,-0.468548438256);
         map.get("TURRUS").put(1919,-0.460672280698);
         map.get("TURRUS").put(1920,-0.460672280698);
+        map.get("TURRUS").put(1921,-0.460672280698);
         map.put("TURAUS", new HashMap<Integer, Double>());
         map.get("TURAUS").put(1901,0.0);
         map.get("TURAUS").put(1902,0.0);
@@ -504,6 +523,7 @@ public class Parameters {
         map.get("TURAUS").put(1918,-0.0388778384933);
         map.get("TURAUS").put(1919,-0.0443554443177);
         map.get("TURAUS").put(1920,-0.0443554443177);
+        map.get("TURAUS").put(1921,-0.0443554443177);
         map.put("TURFRA", new HashMap<Integer, Double>());
         map.get("TURFRA").put(1901,0.0);
         map.get("TURFRA").put(1902,0.128569426779);
@@ -525,6 +545,7 @@ public class Parameters {
         map.get("TURFRA").put(1918,-0.0506184575966);
         map.get("TURFRA").put(1919,-0.0548165553296);
         map.get("TURFRA").put(1920,-0.0548165553296);
+        map.get("TURFRA").put(1921,-0.0548165553296);
         map.put("TURENG", new HashMap<Integer, Double>());
         map.get("TURENG").put(1901,-0.191087492141);
         map.get("TURENG").put(1902,-0.178290478043);
@@ -546,6 +567,7 @@ public class Parameters {
         map.get("TURENG").put(1918,0.113118903404);
         map.get("TURENG").put(1919,0.115861080302);
         map.get("TURENG").put(1920,0.115861080302);
+        map.get("TURENG").put(1921,0.115861080302);
         map.put("TURGER", new HashMap<Integer, Double>());
         map.get("TURGER").put(1901,0.0);
         map.get("TURGER").put(1902,0.21820142112);
@@ -567,6 +589,7 @@ public class Parameters {
         map.get("TURGER").put(1918,0.088472347399);
         map.get("TURGER").put(1919,0.0903835881226);
         map.get("TURGER").put(1920,0.0903835881226);
+        map.get("TURGER").put(1921,0.0903835881226);
         map.put("TURITA", new HashMap<Integer, Double>());
         map.get("TURITA").put(1901,0.0);
         map.get("TURITA").put(1902,0.0);
@@ -588,6 +611,7 @@ public class Parameters {
         map.get("TURITA").put(1918,-0.241867623032);
         map.get("TURITA").put(1919,-0.251580235855);
         map.get("TURITA").put(1920,-0.251580235855);
+        map.get("TURITA").put(1921,-0.251580235855);
         map.put("ENGRUS", new HashMap<Integer, Double>());
         map.get("ENGRUS").put(1901,0.0);
         map.get("ENGRUS").put(1902,-0.175111577832);
@@ -609,6 +633,7 @@ public class Parameters {
         map.get("ENGRUS").put(1918,-0.200071958939);
         map.get("ENGRUS").put(1919,-0.194704474477);
         map.get("ENGRUS").put(1920,-0.194704474477);
+        map.get("ENGRUS").put(1921,-0.194704474477);
         map.put("ENGAUS", new HashMap<Integer, Double>());
         map.get("ENGAUS").put(1901,0.0);
         map.get("ENGAUS").put(1902,0.0);
@@ -630,6 +655,7 @@ public class Parameters {
         map.get("ENGAUS").put(1918,0.056818402414);
         map.get("ENGAUS").put(1919,0.0514726598957);
         map.get("ENGAUS").put(1920,0.0514726598957);
+        map.get("ENGAUS").put(1921,0.0514726598957);
         map.put("ENGFRA", new HashMap<Integer, Double>());
         map.get("ENGFRA").put(1901,0.0);
         map.get("ENGFRA").put(1902,0.022134756871);
@@ -651,6 +677,7 @@ public class Parameters {
         map.get("ENGFRA").put(1918,-0.224728523428);
         map.get("ENGFRA").put(1919,-0.214389311152);
         map.get("ENGFRA").put(1920,-0.214389311152);
+        map.get("ENGFRA").put(1921,-0.214389311152);
         map.put("ENGTUR", new HashMap<Integer, Double>());
         map.get("ENGTUR").put(1901,0.0);
         map.get("ENGTUR").put(1902,0.0);
@@ -672,6 +699,7 @@ public class Parameters {
         map.get("ENGTUR").put(1918,0.12647357803);
         map.get("ENGTUR").put(1919,0.130478656553);
         map.get("ENGTUR").put(1920,0.130478656553);
+        map.get("ENGTUR").put(1921,0.130478656553);
         map.put("ENGGER", new HashMap<Integer, Double>());
         map.get("ENGGER").put(1901,0.0);
         map.get("ENGGER").put(1902,-0.061578465111);
@@ -693,6 +721,7 @@ public class Parameters {
         map.get("ENGGER").put(1918,-0.173311601213);
         map.get("ENGGER").put(1919,-0.172433952164);
         map.get("ENGGER").put(1920,-0.172433952164);
+        map.get("ENGGER").put(1921,-0.172433952164);
         map.put("ENGITA", new HashMap<Integer, Double>());
         map.get("ENGITA").put(1901,0.0);
         map.get("ENGITA").put(1902,0.0);
@@ -714,6 +743,7 @@ public class Parameters {
         map.get("ENGITA").put(1918,-0.0811991134276);
         map.get("ENGITA").put(1919,-0.0838107407926);
         map.get("ENGITA").put(1920,-0.0838107407926);
+        map.get("ENGITA").put(1921,-0.0838107407926);
         map.put("GERRUS", new HashMap<Integer, Double>());
         map.get("GERRUS").put(1901,0.0);
         map.get("GERRUS").put(1902,-0.00768421096711);
@@ -735,6 +765,7 @@ public class Parameters {
         map.get("GERRUS").put(1918,-0.462643412804);
         map.get("GERRUS").put(1919,-0.456907238174);
         map.get("GERRUS").put(1920,-0.456907238174);
+        map.get("GERRUS").put(1921,-0.456907238174);
         map.put("GERAUS", new HashMap<Integer, Double>());
         map.get("GERAUS").put(1901,0.0);
         map.get("GERAUS").put(1902,0.0);
@@ -756,6 +787,7 @@ public class Parameters {
         map.get("GERAUS").put(1918,0.263120034126);
         map.get("GERAUS").put(1919,0.262170732764);
         map.get("GERAUS").put(1920,0.262170732764);
+        map.get("GERAUS").put(1921,0.262170732764);
         map.put("GERFRA", new HashMap<Integer, Double>());
         map.get("GERFRA").put(1901,0.0);
         map.get("GERFRA").put(1902,-0.00333690550608);
@@ -777,6 +809,7 @@ public class Parameters {
         map.get("GERFRA").put(1918,-0.224167822782);
         map.get("GERFRA").put(1919,-0.221180280379);
         map.get("GERFRA").put(1920,-0.221180280379);
+        map.get("GERFRA").put(1921,-0.221180280379);
         map.put("GERTUR", new HashMap<Integer, Double>());
         map.get("GERTUR").put(1901,0.0);
         map.get("GERTUR").put(1902,0.0);
@@ -798,6 +831,7 @@ public class Parameters {
         map.get("GERTUR").put(1918,0.0928082701292);
         map.get("GERTUR").put(1919,0.0975058368917);
         map.get("GERTUR").put(1920,0.0975058368917);
+        map.get("GERTUR").put(1921,0.0975058368917);
         map.put("GERENG", new HashMap<Integer, Double>());
         map.get("GERENG").put(1901,-0.0193765874301);
         map.get("GERENG").put(1902,-0.1397064931);
@@ -819,6 +853,7 @@ public class Parameters {
         map.get("GERENG").put(1918,-0.0977397501211);
         map.get("GERENG").put(1919,-0.0784538921442);
         map.get("GERENG").put(1920,-0.0784538921442);
+        map.get("GERENG").put(1921,-0.0784538921442);
         map.put("GERITA", new HashMap<Integer, Double>());
         map.get("GERITA").put(1901,0.0);
         map.get("GERITA").put(1902,0.0);
@@ -840,6 +875,7 @@ public class Parameters {
         map.get("GERITA").put(1918,0.144548779382);
         map.get("GERITA").put(1919,0.146859020138);
         map.get("GERITA").put(1920,0.146859020138);
+        map.get("GERITA").put(1921,0.146859020138);
         map.put("ITARUS", new HashMap<Integer, Double>());
         map.get("ITARUS").put(1901,0.0);
         map.get("ITARUS").put(1902,-0.100633923641);
@@ -861,6 +897,7 @@ public class Parameters {
         map.get("ITARUS").put(1918,-0.0900451649968);
         map.get("ITARUS").put(1919,-0.0890894734545);
         map.get("ITARUS").put(1920,-0.0890894734545);
+        map.get("ITARUS").put(1921,-0.0890894734545);
         map.put("ITAAUS", new HashMap<Integer, Double>());
         map.get("ITAAUS").put(1901,0.0);
         map.get("ITAAUS").put(1902,0.0);
@@ -882,6 +919,7 @@ public class Parameters {
         map.get("ITAAUS").put(1918,0.173061368384);
         map.get("ITAAUS").put(1919,0.172171090206);
         map.get("ITAAUS").put(1920,0.172171090206);
+        map.get("ITAAUS").put(1921,0.172171090206);
         map.put("ITAFRA", new HashMap<Integer, Double>());
         map.get("ITAFRA").put(1901,0.0);
         map.get("ITAFRA").put(1902,0.11021938948);
@@ -903,6 +941,7 @@ public class Parameters {
         map.get("ITAFRA").put(1918,-0.255161537754);
         map.get("ITAFRA").put(1919,-0.245627557978);
         map.get("ITAFRA").put(1920,-0.245627557978);
+        map.get("ITAFRA").put(1921,-0.245627557978);
         map.put("ITATUR", new HashMap<Integer, Double>());
         map.get("ITATUR").put(1901,0.0);
         map.get("ITATUR").put(1902,0.0);
@@ -924,6 +963,7 @@ public class Parameters {
         map.get("ITATUR").put(1918,-0.167142349002);
         map.get("ITATUR").put(1919,-0.156236972024);
         map.get("ITATUR").put(1920,-0.156236972024);
+        map.get("ITATUR").put(1921,-0.156236972024);
         map.put("ITAENG", new HashMap<Integer, Double>());
         map.get("ITAENG").put(1901,0.0936943626524);
         map.get("ITAENG").put(1902,0.0505147280155);
@@ -945,6 +985,7 @@ public class Parameters {
         map.get("ITAENG").put(1918,-0.0261427844639);
         map.get("ITAENG").put(1919,-0.0174510904814);
         map.get("ITAENG").put(1920,-0.0174510904814);
+        map.get("ITAENG").put(1921,-0.0174510904814);
         map.put("ITAGER", new HashMap<Integer, Double>());
         map.get("ITAGER").put(1901,0.0);
         map.get("ITAGER").put(1902,-0.0763689985694);
@@ -966,6 +1007,7 @@ public class Parameters {
         map.get("ITAGER").put(1918,0.121928444075);
         map.get("ITAGER").put(1919,0.123851578789);
         map.get("ITAGER").put(1920,0.123851578789);
+        map.get("ITAGER").put(1921,0.123851578789);
         return map;
     }
 }
