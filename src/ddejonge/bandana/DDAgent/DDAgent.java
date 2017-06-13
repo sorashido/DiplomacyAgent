@@ -47,7 +47,7 @@ public class DDAgent extends ANACNegotiator{
 
     DBraneTactics dBraneTactics = new DBraneTactics();
     Parameters parameters = new Parameters();
-    Map<String, HashMap<String, Double>> piasonMap = new HashMap<>();
+//    Map<String, HashMap<String, Double>> piasonMap = new HashMap<>();
     Map<String, HashMap<Integer, Double>> relationParams = new HashMap<>();
 
     List<MTOOrder> myMTOrders = new ArrayList<>(); //自分が移動可能なところ
@@ -81,8 +81,8 @@ public class DDAgent extends ANACNegotiator{
         //The location of the log file can be set through the command line option -log.
         // it is not necessary to call getLogger().enable() because this is already automatically done by the ANACNegotiator class.
 
-        piasonMap = parameters.getRelationParams();//setPiasonParam();
-//        relationParams = parameters.getRelationParams();
+//        piasonMap = parameters.getRelationParams();//setPiasonParam();
+        relationParams = parameters.getRelationParams();
 
         boolean printToConsole = false; //if set to true the text will be written to file, as well as printed to the standard output stream. If set to false it will only be written to file.
         this.getLogger().logln("game is starting!", printToConsole);
@@ -131,8 +131,7 @@ public class DDAgent extends ANACNegotiator{
             }
             for(Power power :this.getNegotiatingPowers()){
                 if(!power.equals(me)) {
-//                    Double relation  = relationParams.get(me.getName()+power.getName()).get(game.getYear());
-                    Double relation = piasonMap.get(me.getName()).get(power.getName());
+                    Double relation  = relationParams.get(me.getName()+power.getName()).get(game.getYear());
                     Double myParam = 0.75 - 0.25 * relation;
                     Double opParam = 0.5 * relation - 0.5 * power.getOwnedSCs().size()/numOwned;
 
@@ -192,8 +191,8 @@ public class DDAgent extends ANACNegotiator{
 
                 if(consistencyReport == null){
                     Power power = game.getPower(receivedMessage.getSender());
-                    Double relation = piasonMap.get(me.getName()).get(power.getName());
-//                    Double relation  = relationParams.get(me.getName()+power.getName()).get(game.getYear());
+//                    Double relation = piasonMap.get(me.getName()).get(power.getName());
+                    Double relation  = relationParams.get(me.getName()+power.getName()).get(game.getYear());
                     Double myParam = 0.75 - 0.25 * relation;
                     Double opParam = 0.5 * relation - 0.5 * power.getOwnedSCs().size()/numOwned;
                     if(calcPlanValue(commitments, power, myParam, opParam) > 0){
@@ -267,6 +266,9 @@ public class DDAgent extends ANACNegotiator{
 //      opponent毎にどんな不可侵条約を結びたいかを計算(自分の行けるところのみを探索)
         List<DMZ> goodDMZDeals = new ArrayList<DMZ>();
 //        goodDMZDeals = generateDMZ(opponent, baseLine ,myParam, opParam);
+
+        //goodOrderCommitmentsの中から取り除くものを決める(ランダム)
+        //時間が経過につれて自分の効用値を下げる
 
         //commitment と dmzは別々のものとして提案
         if(!goodOrderCommitments.isEmpty()){

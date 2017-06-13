@@ -8,14 +8,15 @@ import java.util.Map;
  */
 public class Parameters {
 
-//    private Map<String, HashMap<Integer, Double>> relationParams;
-    private Map<String, HashMap<String, Double>> relationParams;
+    private Map<String, HashMap<Integer, Double>> relationParams;
+//    private Map<String, HashMap<String, Double>> relationParams;
 
     public Parameters() {
-        relationParams = setPiasonParams();
+//        relationParams = setPiasonParams();
+        relationParams = setPiasonParams2();
     }
 
-    public Map<String, HashMap<String, Double>> getRelationParams(){
+    public Map<String, HashMap<Integer, Double>> getRelationParams(){
         return relationParams;
     }
 
