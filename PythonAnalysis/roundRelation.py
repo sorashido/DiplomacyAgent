@@ -72,6 +72,8 @@ def main():
                 if not r == r: #nanの場合は0
                     r = 0.00
                 print('map.get'+'("'+key1+key2+'").put('+str(i)+','+str(r)+');')
+                if i == 1919:
+                    print('map.get' + '("' + key1 + key2 + '").put(' + str(1920) + ',' + str(r) + ');')
 
 if __name__ == '__main__':
     main()
