@@ -13,6 +13,16 @@ import es.csic.iiia.fabregues.dip.orders.*;
 
 import java.util.*;
 
+//ゲームが始まるときに自分の評価値をgetする!
+//1. 土地のログを作る (その年にunitがいる土地を保存):自分の国：相手の国：すべて
+//2. 勝ったときには, + 負けたときには-で土地の評価を作る(すべての国に対して):
+//
+//3. 盤の評価を評価値の計算に入れる:
+// 相手が取って良い土地, 駄目な土地がわかる！！
+//4. その情報に基づいて, 評価値を計算する
+// ゲームが終わるたびにログを更新する!:
+//
+
 /**
  * Created by tela on 2017/05/09.
  */
@@ -56,6 +66,9 @@ public class DDAgent extends ANACNegotiator{
     List<MTOOrder> myMTOrders = new ArrayList<>(); //自分が移動可能なところ
     List<HLDOrder> myHLDOrders = new ArrayList<>(); //自分が移動可能なところ
 
+    //土地の評価のために, unitが止まっていた場所を数える
+    Map<String, Integer> numUnit = new HashMap<>();
+
     //Constructor
     /**
      * You must implement a Constructor with exactly this signature.
@@ -83,8 +96,6 @@ public class DDAgent extends ANACNegotiator{
         //You can use the logger to write stuff to the log file.
         //The location of the log file can be set through the command line option -log.
         // it is not necessary to call getLogger().enable() because this is already automatically done by the ANACNegotiator class.
-
-//        piasonMap = parameters.getRelationParams();//setPiasonParam();
         relationParams = parameters.getRelationParams();
 
         boolean printToConsole = false; //if set to true the text will be written to file, as well as printed to the standard output stream. If set to false it will only be written to file.
@@ -113,6 +124,17 @@ public class DDAgent extends ANACNegotiator{
             }
         }
 
+        //占領している地域を保存する
+        for(Power power: this.getNegotiatingPowers()) {
+            for (Region unit : power.getControlledRegions()) {
+                if (numUnit.keySet().contains(power.getName()+unit.getName())) {
+                    numUnit.put(power.getName()+unit.getName(), numUnit.get(unit.getName()) + 1);
+                } else {
+                    numUnit.put(unit.getName(), 1);
+                }
+            }
+        }
+
         //交渉の間, ループし続ける
         while(System.currentTimeMillis() < negotiationDeadline){
 //          double restTime = (negotiationDeadline - System.currentTimeMillis())/1000; //残り時間s
@@ -124,7 +146,6 @@ public class DDAgent extends ANACNegotiator{
             }
 
             //2. 自分が相手に提案
-            //2.1 各国それぞれへの提案の候補を個別に探索 (自分と相手の効用値に基づいて探索, (効用値は線形に妥協しても良いかも = \alpha \betaの値))
             if(this.getNegotiatingPowers().size() < 2){
                 break;
             }
@@ -151,11 +172,11 @@ public class DDAgent extends ANACNegotiator{
                     }
                 }
             }
-
             //3. 引き分けを提案
         }
     }
 
+    /*メッセージを処理*/
     void manageMessage(){
         Message receivedMessage = removeMessageFromQueue();
 
@@ -244,6 +265,23 @@ public class DDAgent extends ANACNegotiator{
         }
     }
 
+
+    /**
+     * Each round, after each power has submitted its orders, this method is called several times:
+     * once for each order submitted by any other power.
+     *
+     *
+     * @param arg0 An order submitted by any of the other powers.
+     */
+    @Override
+    public void receivedOrder(Order arg0) {
+        // TODO Auto-generated method stub
+        if(game.getYear()==1920 && game.getPhase().equals("WIN")){
+            System.out.println(numUnit);
+        }
+    }
+
+    /*メッセージの探索*/
     List<BasicDeal> searchForNewDealToPropose(Power opponent, double myParam, double opParam) {
         //提案
         List<BasicDeal> goodDeals = new ArrayList<BasicDeal>();
@@ -270,7 +308,7 @@ public class DDAgent extends ANACNegotiator{
 //      opponent毎にどんな不可侵条約を結びたいかを計算(自分の行けるところのみを探索)
         List<DMZ> goodDMZDeals = new ArrayList<DMZ>();
 //        goodDMZDeals = generateDMZ(opponent, baseLine ,myParam, opParam);
-        //goodOrderCommitmentsの中から取り除くものを決める(ランダム)
+//        goodOrderCommitmentsの中から取り除くものを決める(ランダム)
 //        if(goodOrderCommitments.size() > 3) {
 //            goodOrderCommitments.remove(random.nextInt(goodOrderCommitments.size()));
 //        }
@@ -356,6 +394,7 @@ public class DDAgent extends ANACNegotiator{
         return goodDMZs;
     }
 
+    /*評価関数の設計*/
     private Double calcPlanValue(List<BasicDeal> commitments, Power opponent, double myParam, double opParam){
         Plan myPlan = this.dBraneTactics.determineBestPlan(game, me, commitments);
         Plan opPlan = this.dBraneTactics.determineBestPlan(game, opponent, commitments);
@@ -401,18 +440,4 @@ public class DDAgent extends ANACNegotiator{
         }
         return  (myPlan.getValue() * myParam + opPlan.getValue() * opParam);
     }
-
-    /**
-     * Each round, after each power has submitted its orders, this method is called several times:
-     * once for each order submitted by any other power.
-     *
-     *
-     * @param arg0 An order submitted by any of the other powers.
-     */
-    @Override
-    public void receivedOrder(Order arg0) {
-        // TODO Auto-generated method stub
-
-    }
-
 }
