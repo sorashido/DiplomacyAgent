@@ -15,7 +15,7 @@ public class DDAgent2 extends ANACNegotiator {
         myPlayer.run();
     }
 
-    public DDAgent2(String[] args) {
+    private DDAgent2(String[] args) {
         super(args);
 
         dBraneTactics = this.getTacticalModule();
@@ -28,6 +28,7 @@ public class DDAgent2 extends ANACNegotiator {
 
     @Override
     public void negotiate(long negotiationDeadline) {
+
     }
 
     @Override
