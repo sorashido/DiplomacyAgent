@@ -183,7 +183,8 @@ public class TournamentObserver extends Observer implements Runnable{
             FileIO.appendToFile(this.roundResults, String.valueOf(game.getYear()) + ":" + game.getPhase().toString());
         for(Power power : game.getPowers()){
             if(game.getPhase().toString().equals("WIN"))
-                FileIO.appendToFile(this.roundResults, power.getName() + ": " + power.getOwnedSCs().size() + ": " + power.getControlledRegions());
+//                FileIO.appendToFile(this.roundResults, power.getName() + ": " + power.getOwnedSCs().size() + ": " + power.getControlledRegions());
+                FileIO.appendToFile(this.roundResults, power.getName() + ": " + power.getOwnedSCs() + ": " + power.getControlledRegions());
         }
     }
 
