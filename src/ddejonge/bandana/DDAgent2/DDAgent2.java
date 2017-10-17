@@ -19,6 +19,8 @@ public class DDAgent2 extends ANACNegotiator {
         super(args);
 
         dBraneTactics = this.getTacticalModule();
+
+
     }
 
     @Override
@@ -33,5 +35,6 @@ public class DDAgent2 extends ANACNegotiator {
 
     @Override
     public void receivedOrder(Order arg0) {
+
     }
 }

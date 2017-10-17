@@ -2,9 +2,9 @@
 agents/
 lib/
 src/ddejonge/bandana/exampleAgents/
-src/ddejonge/bandana/tournament/
 log/
 out/production/
 data/
+Bandana 1.3 javadoc/
 DiplomacyGame.iml
 *.ooutline
