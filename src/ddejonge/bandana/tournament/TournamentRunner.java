@@ -17,7 +17,7 @@ public class TournamentRunner {
 	final static String[] dumbBot_1_4_Command = {"java", "-jar", "agents/DumbBot-1.4.jar", "-log", "log", "-name", "DumbBot", "-fy", "1920"};
 	final static String[] dbrane_1_1_Command = {"java", "-jar", "agents/D-Brane-1.1.jar", "-log", "log", "-name", "D-Brane", "-fy", "1920"};
 	final static String[] dbraneExampleBotCommand = {"java", "-jar", "agents/D-BraneExampleBot.jar", "-log", "log", "-name", "DBraneExampleBot", "-fy", "1920"};
-	final static String[] anacExampleBotCommand = {"java", "-jar", "agensts/ANACExampleNegotiator.jar", "-log", "log", "-name", "AnacExampleNegotiator", "-fy", "1920"};
+	final static String[] anacExampleBotCommand = {"java", "-jar", "out/artifacts/ANACExampleNegotiator/ANACExampleNegotiator.jar", "-log", "log", "-name", "AnacExampleNegotiator", "-fy", "1920"};
 	final static String[] DDAgent_Command = {"java", "-jar", "out/artifacts/DDAgent/DDAgent.jar", "-log", "log", "-name", "DDAgent", "-fy", "1920"};
 
 	//Main folder where all the logs are stored. For each tournament a new folder will be created inside this folder
@@ -87,8 +87,8 @@ public class TournamentRunner {
 			//4. Start the players:
 			for(int i=0; i<7; i++){
 
-				String name;
-				String[] command;
+				String name = "";
+				String[] command = {};
 
 				//make sure that each player has a different name.
 				switch (i){
@@ -100,23 +100,23 @@ public class TournamentRunner {
 						name = "D-Brane " + i;
 						command = dbrane_1_1_Command;
 						break;
-					case 2:
-						name = "AnacExampleBotCommand " + i;
-						command = anacExampleBotCommand;
-						break;
-					case 3:
-						name = "D-BraneExampleBot " + i;
-						command = dbraneExampleBotCommand;
-						break;
-					case 4:
-						name = "RandomNegotiator " + i;
-						command = randomNegotiatorCommand;
-						break;
+                    case 2:
+                        name = "ANACExampleNegotiator " + i;
+                        command = anacExampleBotCommand;
+                        break;
+                    case 3:
+                        name = "ANACExampleNegotiator " + i;
+                        command = anacExampleBotCommand;
+                        break;
+                    case 4:
+                        name = "DumbBot " + i;
+                        command = dumbBot_1_4_Command;
+                        break;
 					case 5:
-						name = "DumbBot " + i;
-						command = dumbBot_1_4_Command;
-						break;
-					default:
+                        name = "DumbBot " + i;
+                        command = dumbBot_1_4_Command;
+                        break;
+					case 6:
 						name = "RandomNegotiator " + i;
 						command = randomNegotiatorCommand;
 						break;
