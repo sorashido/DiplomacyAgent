@@ -1,0 +1,12 @@
+#!/Users/tela/.anyenv/envs/pyenv/versions/2.7.13/bin/python
+# EASY-INSTALL-ENTRY-SCRIPT: 'Parlance==1.4.1','console_scripts','parlance-config'
+__requires__ = 'Parlance==1.4.1'
+import re
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
+    sys.exit(
+        load_entry_point('Parlance==1.4.1', 'console_scripts', 'parlance-config')()
+    )

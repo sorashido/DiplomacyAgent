@@ -11,7 +11,7 @@ import ddejonge.bandana.tools.ProcessRunner;
 public class ParlanceRunner {
 
 	//Change this path to the location where you have installed parlance-server.
-	private static String PARLANCE_PATH = "/Users/tela/.anyenv/envs/pyenv/versions/2.7.13/bin/parlance-server";
+	private static String PARLANCE_PATH = "parlance/parlance-server";
 	
 	
 	//Set this path to your home folder.
