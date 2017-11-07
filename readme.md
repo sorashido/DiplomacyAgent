@@ -1,9 +1,5 @@
-# diplomacy Agent
+# diplomacy game
 http://www.iiia.csic.es/~davedejonge/bandana/
-
-## DDAgent
-### folder
-src/ddejonge/bandana/DDAgent
 
 ## Link
 - https://dl.acm.org/citation.cfm?id=1838510
