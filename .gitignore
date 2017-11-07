@@ -2,7 +2,6 @@
 lib/
 src/ddejonge/bandana/exampleAgents/
 src/ddejonge/bandana/DDAgent/
-src/ddejonge/bandana/DDAgent2/
 log/
 out/production/
 data/
