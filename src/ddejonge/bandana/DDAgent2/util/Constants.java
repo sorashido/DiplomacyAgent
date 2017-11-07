@@ -1,4 +1,4 @@
-package ddejonge.bandana.DDAgent2;
+package ddejonge.bandana.DDAgent2.util;
 
 import java.util.HashMap;
 

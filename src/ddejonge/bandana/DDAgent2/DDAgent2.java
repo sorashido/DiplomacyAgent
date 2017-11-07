@@ -1,18 +1,16 @@
 package ddejonge.bandana.DDAgent2;
 
-import ddejonge.bandana.DDAgent.Parameters;
+import ddejonge.bandana.DDAgent2.util.Constants;
 import ddejonge.bandana.anac.ANACNegotiator;
 import ddejonge.bandana.dbraneTactics.DBraneTactics;
-import ddejonge.bandana.negoProtocol.*;
-import ddejonge.bandana.tools.Utilities;
+import ddejonge.bandana.negoProtocol.BasicDeal;
+import ddejonge.bandana.negoProtocol.DiplomacyNegoClient;
+import ddejonge.bandana.negoProtocol.DiplomacyProposal;
 import ddejonge.negoServer.Message;
-import es.csic.iiia.fabregues.dip.board.Game;
 import es.csic.iiia.fabregues.dip.board.Power;
 import es.csic.iiia.fabregues.dip.board.Province;
-import es.csic.iiia.fabregues.dip.board.Region;
-import es.csic.iiia.fabregues.dip.orders.*;
+import es.csic.iiia.fabregues.dip.orders.Order;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -25,7 +23,7 @@ public class DDAgent2 extends ANACNegotiator {
     DBraneTactics dBraneTactics = new DBraneTactics();
     private Random random = new Random();
 
-    public HashMap<Long, HashMap<BasicDeal, Double>> Q = new HashMap<>();
+    public HashMap<Long, HashMap<BasicDeal, Double>> Q = new HashMap();
 
     public static void main(String[] args){
         ddejonge.bandana.DDAgent2.DDAgent2 myPlayer = new ddejonge.bandana.DDAgent2.DDAgent2(args);

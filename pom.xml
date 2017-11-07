@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.sorashido</groupId>
+    <artifactId>DDAgent2</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>DDAgent2</name>
+    <packaging>jar</packaging>
+    <description>DiplomacyGame</description>
+
+    <properties>
+        <src.dir>src</src.dir>
+        <jar.name>${project.groupId}${project.artifactId}</jar.name>
+        <!-- DL4J PROPERTIES -->
+        <nd4j.backend>nd4j-native</nd4j.backend>
+        <!-- <nd4j.backend>nd4j-cuda-7.5</nd4j.backend> -->   <!-- Uncomment to run on GPU -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <shadedClassifier>bin</shadedClassifier>
+        <nd4j.version>0.4-rc3.10</nd4j.version>
+        <dl4j.version>0.4-rc3.10</dl4j.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-core</artifactId>
+            <version>${dl4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-ui</artifactId>
+            <version>${dl4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>${nd4j.backend}</artifactId>
+        </dependency>
+        <!-- Used in the RandomForest feature selector -->
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-stable</artifactId>
+            <version>3.8.0</version>
+        </dependency>
+    </dependencies>
+</project>
