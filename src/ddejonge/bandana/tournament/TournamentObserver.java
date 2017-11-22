@@ -1,10 +1,5 @@
 package ddejonge.bandana.tournament;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.util.ArrayList;
-
 import ddejonge.bandana.tools.DiplomacyMonitor;
 import ddejonge.bandana.tools.FileIO;
 import es.csic.iiia.fabregues.dip.Observer;
@@ -13,6 +8,11 @@ import es.csic.iiia.fabregues.dip.comm.CommException;
 import es.csic.iiia.fabregues.dip.comm.IComm;
 import es.csic.iiia.fabregues.dip.comm.daide.DaideComm;
 import es.csic.iiia.fabregues.dip.orders.Order;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.ArrayList;
 
 public class TournamentObserver extends Observer implements Runnable{
 
@@ -185,7 +185,7 @@ public class TournamentObserver extends Observer implements Runnable{
             if(game.getPhase().toString().equals("WIN"))
 //                FileIO.appendToFile(this.roundResults, power.getName() + ": " + power.getOwnedSCs().size() + ": " + power.getControlledRegions());
                 FileIO.appendToFile(this.roundResults, power.getName() + ": " + power.getOwnedSCs() + ": " + power.getControlledRegions());
-        }
+		}
     }
 
 

@@ -1,4 +1,4 @@
-package ddejonge.bandana.DDAgent2.model;
+package sorashido.DDAgent2.model;
 
 import org.deeplearning4j.nn.api.OptimizationAlgorithm;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
@@ -13,11 +13,10 @@ import org.nd4j.linalg.lossfunctions.LossFunctions.LossFunction;
 
 /**
  * The Mlp configuration used in all the experiments.
- * 
- * @author sorinMD
  *
+ * @author sorinMD
  */
-public class CatanMlpConfig{
+public class CatanMlpConfig {
 
     private int inputNum;
     private int outputNum;
@@ -29,7 +28,7 @@ public class CatanMlpConfig{
     private OptimizationAlgorithm optAlg = OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT; //default
     private WeightInit weightInit = WeightInit.XAVIER;
     private MultiLayerConfiguration conf;
-    
+
     public CatanMlpConfig(int in, int out, long seed, int iterations, WeightInit wi, Updater u, double lr, LossFunctions.LossFunction lf, OptimizationAlgorithm oa) {
         this.inputNum = in;
         this.outputNum = out;
@@ -51,38 +50,38 @@ public class CatanMlpConfig{
                 .rmsDecay(0.9)
                 .list(3)
                 .layer(0, new DenseLayer.Builder()
-				                .nIn(inputNum)
-				                .nOut(256)
-				                .activation("sigmoid")
-				                .weightInit(weightInit)
-				                .updater(updater)
-				                .build())
+                        .nIn(inputNum)
+                        .nOut(256)
+                        .activation("sigmoid")
+                        .weightInit(weightInit)
+                        .updater(updater)
+                        .build())
                 .layer(1, new DenseLayer.Builder()
-				                .nIn(256)
-				                .nOut(256)
-				                .activation("relu")
-				                .weightInit(weightInit)
-				                .updater(updater)
-				                .build())
+                        .nIn(256)
+                        .nOut(256)
+                        .activation("relu")
+                        .weightInit(weightInit)
+                        .updater(updater)
+                        .build())
                 .layer(2, new CustomOutputLayer.Builder(lossFunct)
-                                .nIn(256) // # input nodes
-                                .nOut(outputNum) // # output nodes
-                                .activation("softmax")
-                                .weightInit(weightInit)
-                                .updater(updater)
-                                .build()
+                        .nIn(256) // # input nodes
+                        .nOut(outputNum) // # output nodes
+                        .activation("softmax")
+                        .weightInit(weightInit)
+                        .updater(updater)
+                        .build()
                 )
                 .backprop(true).pretrain(false)
                 .build();
 
         CatanMlp model = new CatanMlp(conf);
         model.init();
-        
+
         return model;
     }
 
-    public MultiLayerConfiguration getNNConf(){
-    	return conf;
+    public MultiLayerConfiguration getNNConf() {
+        return conf;
     }
-    
+
 }
