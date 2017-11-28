@@ -1,12 +1,12 @@
 package sorashido.DDAgent2;
 
-import sorashido.DDAgent2.util.Constants;
 import ddejonge.bandana.anac.ANACNegotiator;
 import ddejonge.bandana.dbraneTactics.DBraneTactics;
 import ddejonge.bandana.negoProtocol.DiplomacyNegoClient;
 import ddejonge.bandana.negoProtocol.DiplomacyProposal;
 import ddejonge.negoServer.Message;
 import es.csic.iiia.fabregues.dip.orders.Order;
+import sorashido.DDAgent2.util.Constants;
 
 import java.util.Random;
 
@@ -34,6 +34,7 @@ public class DDAgent2 extends ANACNegotiator {
 
     @Override
     public void start() {
+
         this.getLogger().logln("game is starting!", printToConsole);
     }
 
@@ -57,7 +58,7 @@ public class DDAgent2 extends ANACNegotiator {
         //accepted
         if (receivedMessage.getPerformative().equals(DiplomacyNegoClient.ACCEPT)) {
             DiplomacyProposal acceptedProposal = (DiplomacyProposal) receivedMessage.getContent();
-            this.getLogger().logln("DDBrane.negotiate() Received acceptance from " + receivedMessage.getSender() + ": " + acceptedProposal, printToConsole);
+            this.getLogger().logln("DDAgent2.negotiate() Received acceptance from " + receivedMessage.getSender() + ": " + acceptedProposal, printToConsole);
         }//proposed
         else if (receivedMessage.getPerformative().equals(DiplomacyNegoClient.PROPOSE)) {
             DiplomacyProposal receivedProposal = (DiplomacyProposal) receivedMessage.getContent();
