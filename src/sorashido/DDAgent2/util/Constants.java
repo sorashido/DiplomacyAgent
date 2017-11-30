@@ -3,10 +3,10 @@ package sorashido.DDAgent2.util;
 import java.util.HashMap;
 
 public class Constants {
-    public HashMap<String, Integer> regionNumber =
+    public HashMap<String, Integer> regionId =
             new HashMap<String, Integer>() {
                 {
-                    //補給地
+                    //  補給地
                     put("LVP", 0);
                     put("LON", 1);
                     put("EDI", 2);
@@ -29,7 +29,6 @@ public class Constants {
                     put("PAR", 19);
                     put("MAR", 20);
                     put("BRE", 21);
-                    //
                     put("POR", 22);
                     put("SPA", 23);
                     put("SWE", 24);
@@ -43,18 +42,178 @@ public class Constants {
                     put("NWY", 32);
                     put("TUN", 33);
 
-                    //その他
-//                put("ALB",0);put("APU",2);put("ARM",3);put("BOH",4);put("BUR",6);
-//                put("CLY",7);put("FIN",11);put("GAL",12);put("GAS",13);put("LIV",16);
-//                put("NAF",17);put("PIC",19);put("PIA",20);put("PRU",22);
-//                put("RUH",23);put("SIL",27);put("SYR",31);put("TUS",33);put("TYR",34);
-//                put("UKR",30);put("WAL",31);put("YOR",32);
-                    //海域
-//                put("ADS",33);put("AES",34);put("BAR",33);put("BAL",34);put("BLA",33);
-//                put("EMS",34);put("ENC",33);put("GOB",34);put("GOL",33);put("HEL",34);
-//                put("IOS",33);put("IRS",34);put("MAO",33);put("NAO",34);put("NTH",33);
-//                put("NWG",34);put("SKA",33);put("TYS",34);put("WMS",33);
+                    //  その他
+                    put("ALB", 34);
+                    put("APU", 35);
+                    put("ARM", 36);
+                    put("BOH", 37);
+                    put("BUR", 38);
+                    put("CLY", 39);
+                    put("FIN", 40);
+                    put("GAL", 41);
+                    put("GAS", 42);
+                    put("LIV", 43);
+                    put("NAF", 44);
+                    put("PIC", 45);
+                    put("PIA", 46);
+                    put("PRU", 47);
+                    put("RUH", 48);
+                    put("SIL", 49);
+                    put("SYR", 50);
+                    put("TUS", 51);
+                    put("TYR", 52);
+                    put("UKR", 53);
+                    put("WAL", 54);
+                    put("YOR", 55);
+
+                    //  海域
+                    put("ADS", 56);
+                    put("AES", 57);
+                    put("BAR", 58);
+                    put("BAL", 59);
+                    put("BLA", 60);
+                    put("EMS", 61);
+                    put("ENC", 62);
+                    put("GOB", 63);
+                    put("GOL", 64);
+                    put("HEL", 65);
+                    put("IOS", 66);
+                    put("IRS", 67);
+                    put("MAO", 68);
+                    put("NAO", 69);
+                    put("NTH", 70);
+                    put("NWG", 71);
+                    put("SKA", 72);
+                    put("TYS", 73);
+                    put("WMS", 74);
                 }
             };
 
+    public HashMap<String, Integer> preId =
+        new HashMap<String, Integer>() {
+            {
+                // 補給地
+                put("NAPFLT", 0);
+                put("GOBFLT", 1);
+                put("SERAMY", 2);
+                put("NWYAMY", 3);
+                put("GASAMY", 4);
+                put("AEGFLT", 5);
+                put("TUNAMY", 6);
+                put("NWYFLT", 7);
+                put("GASFLT", 8);
+                put("YORAMY", 9);
+                put("BUDAMY", 10);
+                put("ECHFLT", 11);
+                put("TUNFLT", 12);
+                put("BALFLT", 13);
+                put("YORFLT", 14);
+                put("SILAMY", 15);
+                put("SEVAMY", 16);
+                put("STPAMY", 17);
+                put("SEVFLT", 18);
+                put("PRUAMY", 19);
+                put("NTHFLT", 20);
+                put("TUSAMY", 21);
+                put("UKRAMY", 22);
+                put("PRUFLT", 23);
+                put("TUSFLT", 24);
+                put("MOSAMY", 25);
+                put("STPSCS", 26);
+                put("FINAMY", 27);
+                put("GOLFLT", 28);
+                put("WALAMY", 29);
+                put("SYRAMY", 30);
+                put("BARFLT", 31);
+                put("FINFLT", 32);
+                put("WALFLT", 33);
+                put("SYRFLT", 34);
+                put("HELFLT", 35);
+                put("SWEAMY", 36);
+                put("BULAMY", 37);
+                put("PARAMY", 38);
+                put("BELAMY", 39);
+                put("APUAMY", 40);
+                put("SWEFLT", 41);
+                put("BOHAMY", 42);
+                put("BELFLT", 43);
+                put("APUFLT", 44);
+                put("HOLAMY", 45);
+                put("BULSCS", 46);
+                put("VENAMY", 47);
+                put("STPNCS", 48);
+                put("VIEAMY", 49);
+                put("HOLFLT", 50);
+                put("WARAMY", 51);
+                put("PICAMY", 52);
+                put("TYRAMY", 53);
+                put("VENFLT", 54);
+                put("ANKAMY", 55);
+                put("PICFLT", 56);
+                put("BURAMY", 57);
+                put("PIEAMY", 58);
+                put("GREAMY", 59);
+                put("ANKFLT", 60);
+                put("TYSFLT", 61);
+                put("BERAMY", 62);
+                put("SKAFLT", 63);
+                put("PIEFLT", 64);
+                put("CLYAMY", 65);
+                put("TRIAMY", 66);
+                put("GREFLT", 67);
+                put("IONFLT", 68);
+                put("BERFLT", 69);
+                put("SPAAMY", 70);
+                put("CLYFLT", 71);
+                put("TRIFLT", 72);
+                put("ADRFLT", 73);
+                put("ALBAMY", 74);
+                put("RUHAMY", 75);
+                put("NWGFLT", 76);
+                put("SPASCS", 77);
+                put("ALBFLT", 78);
+                put("LVNAMY", 79);
+                put("CONAMY", 80);
+                put("LVNFLT", 81);
+                put("PORAMY", 82);
+                put("LVPAMY", 83);
+                put("CONFLT", 84);
+                put("KIEAMY", 85);
+                put("DENAMY", 86);
+                put("NAFAMY", 87);
+                put("BREAMY", 88);
+                put("SMYAMY", 89);
+                put("PORFLT", 90);
+                put("LVPFLT", 91);
+                put("KIEFLT", 92);
+                put("WESFLT", 93);
+                put("DENFLT", 94);
+                put("NAFFLT", 95);
+                put("BREFLT", 96);
+                put("RUMAMY", 97);
+                put("SMYFLT", 98);
+                put("ARMAMY", 99);
+                put("BLAFLT", 100);
+                put("SPANCS", 101);
+                put("RUMFLT", 102);
+                put("EASFLT", 103);
+                put("MAOAMY", 104);
+                put("ARMFLT", 105);
+                put("MAOFLT", 106);
+                put("IRIFLT", 107);
+                put("BULECS", 108);
+                put("MARAMY", 109);
+                put("ROMAMY", 110);
+                put("GALAMY", 111);
+                put("MARFLT", 112);
+                put("ROMFLT", 113);
+                put("EDIAMY", 114);
+                put("EDIFLT", 115);
+                put("LONAMY", 116);
+                put("NAPAMY", 117);
+                put("NAOFLT", 118);
+                put("MUNAMY", 119);
+                put("LONFLT", 120);
+            }
+        };
 }

@@ -16,7 +16,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions.LossFunction;
  *
  * @author sorinMD
  */
-public class CatanMlpConfig {
+public class DipMlpConfig {
 
     private int inputNum;
     private int outputNum;
@@ -29,7 +29,7 @@ public class CatanMlpConfig {
     private WeightInit weightInit = WeightInit.XAVIER;
     private MultiLayerConfiguration conf;
 
-    public CatanMlpConfig(int in, int out, long seed, int iterations, WeightInit wi, Updater u, double lr, LossFunctions.LossFunction lf, OptimizationAlgorithm oa) {
+    public DipMlpConfig(int in, int out, long seed, int iterations, WeightInit wi, Updater u, double lr, LossFunctions.LossFunction lf, OptimizationAlgorithm oa) {
         this.inputNum = in;
         this.outputNum = out;
         this.seed = seed;
