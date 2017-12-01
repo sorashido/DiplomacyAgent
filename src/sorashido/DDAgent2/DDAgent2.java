@@ -41,12 +41,10 @@ public class DDAgent2 extends ANACNegotiator {
     @Override
     public void negotiate(long negotiationDeadline) {
         while (System.currentTimeMillis() < negotiationDeadline) {
-
             //
             while (hasMessage()) {
                 manageProposedMessage();
             }
-
             //
             proposeMessage();
         }

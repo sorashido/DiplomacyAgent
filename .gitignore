@@ -1,7 +1,7 @@
 .idea/
 lib/
-src/ddejonge/bandana/exampleAgents/
-src/ddejonge/bandana/DDAgent/
+src/ddejonge/
+*.MF
 log/
 out/production/
 data/

@@ -3,7 +3,7 @@ package sorashido.DDAgent2.util;
 import java.util.HashMap;
 
 public class Constants {
-    public HashMap<String, Integer> regionId =
+    public HashMap<String, Integer> provinceId =
             new HashMap<String, Integer>() {
                 {
                     //  補給地
@@ -89,7 +89,7 @@ public class Constants {
                 }
             };
 
-    public HashMap<String, Integer> preId =
+    public HashMap<String, Integer> regionId =
         new HashMap<String, Integer>() {
             {
                 // 補給地
