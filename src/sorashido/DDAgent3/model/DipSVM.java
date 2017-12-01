@@ -1,4 +1,4 @@
-package sorashido.DDAgent2.model;
+package sorashido.DDAgent3.model;
 
 public class DipSVM {
 

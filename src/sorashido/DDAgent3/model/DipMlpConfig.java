@@ -1,4 +1,4 @@
-package sorashido.DDAgent2.model;
+package sorashido.DDAgent3.model;
 
 import org.deeplearning4j.nn.api.OptimizationAlgorithm;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
