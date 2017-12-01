@@ -3,7 +3,6 @@ lib/
 src/ddejonge/
 *.MF
 log/
-out/
 data/
 Bandana 1.3 javadoc/
 DiplomacyGame.iml
