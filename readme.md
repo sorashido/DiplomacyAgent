@@ -1,4 +1,6 @@
 # diplomacy game
+diplomacy gameのシミュレーション実験 & diplomacy agentを開発するためのリポジトリー
+
 http://www.iiia.csic.es/~davedejonge/bandana/
 
 ## Link
