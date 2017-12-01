@@ -19,10 +19,7 @@ public class DDAgent2 extends ANACNegotiator {
     private Random random = new Random();
 
     public static void main(String[] args) {
-
-
         sorashido.DDAgent2.DDAgent2 myPlayer = new sorashido.DDAgent2.DDAgent2(args);
-
         myPlayer.run();
     }
 
@@ -41,11 +38,9 @@ public class DDAgent2 extends ANACNegotiator {
     @Override
     public void negotiate(long negotiationDeadline) {
         while (System.currentTimeMillis() < negotiationDeadline) {
-            //
             while (hasMessage()) {
                 manageProposedMessage();
             }
-            //
             proposeMessage();
         }
     }
@@ -53,38 +48,27 @@ public class DDAgent2 extends ANACNegotiator {
     private void manageProposedMessage() {
         Message receivedMessage = removeMessageFromQueue();
 
-        //accepted
         if (receivedMessage.getPerformative().equals(DiplomacyNegoClient.ACCEPT)) {
             DiplomacyProposal acceptedProposal = (DiplomacyProposal) receivedMessage.getContent();
             this.getLogger().logln("DDAgent2.negotiate() Received acceptance from " + receivedMessage.getSender() + ": " + acceptedProposal, printToConsole);
-        }//proposed
+        }
         else if (receivedMessage.getPerformative().equals(DiplomacyNegoClient.PROPOSE)) {
             DiplomacyProposal receivedProposal = (DiplomacyProposal) receivedMessage.getContent();
 
-        }//confirmed
+        }
         else if (receivedMessage.getPerformative().equals(DiplomacyNegoClient.CONFIRM)) {
             DiplomacyProposal confirmedProposal = (DiplomacyProposal) receivedMessage.getContent();
 
-        }//rejected
+        }
         else if (receivedMessage.getPerformative().equals(DiplomacyNegoClient.REJECT)) {
             DiplomacyProposal rejectedProposal = (DiplomacyProposal) receivedMessage.getContent();
 
         } else {
-            //We have received any other kind of message.
             this.getLogger().logln("Received a message of unhandled type: " + receivedMessage.getPerformative() + ". Message content: " + receivedMessage.getContent().toString(), printToConsole);
         }
     }
 
     private void proposeMessage() {
-        //
-        final double eps = 0.1;
-        if (random.nextDouble() < eps) {
-            //random
-
-        } else {
-            //bestを探す
-        }
-
     }
 
     @Override
