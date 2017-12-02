@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.sorashido</groupId>
-    <artifactId>DDAgent2</artifactId>
+    <artifactId>DDAgent3</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>DDAgent2</name>
+    <name>DDAgent3</name>
     <packaging>jar</packaging>
     <description>DiplomacyGame</description>
 
@@ -18,36 +18,55 @@
         <!-- <nd4j.backend>nd4j-cuda-7.5</nd4j.backend> -->   <!-- Uncomment to run on GPU -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <shadedClassifier>bin</shadedClassifier>
-        <nd4j.version>0.4-rc3.10</nd4j.version>
-        <dl4j.version>0.4-rc3.10</dl4j.version>
+        <!--<nd4j.version>0.4-rc3.10</nd4j.version>-->
+        <!--<dl4j.version>0.4-rc3.10</dl4j.version>-->
+        <!--<jpmml.version>1.0.22</jpmml.version>-->
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.deeplearning4j</groupId>
-            <artifactId>deeplearning4j-core</artifactId>
-            <version>${dl4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.deeplearning4j</groupId>
-            <artifactId>deeplearning4j-ui</artifactId>
-            <version>${dl4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>${nd4j.backend}</artifactId>
-        </dependency>
-        <!-- Used in the RandomForest feature selector -->
-        <dependency>
-            <groupId>nz.ac.waikato.cms.weka</groupId>
-            <artifactId>weka-stable</artifactId>
-            <version>3.8.0</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.deeplearning4j</groupId>-->
+            <!--<artifactId>deeplearning4j-core</artifactId>-->
+            <!--<version>${dl4j.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.deeplearning4j</groupId>-->
+            <!--<artifactId>deeplearning4j-ui</artifactId>-->
+            <!--<version>${dl4j.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.nd4j</groupId>-->
+            <!--<artifactId>${nd4j.backend}</artifactId>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; Used in the RandomForest feature selector &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>nz.ac.waikato.cms.weka</groupId>-->
+            <!--<artifactId>weka-stable</artifactId>-->
+            <!--<version>3.8.0</version>-->
+        <!--</dependency>-->
 
+        <!--&lt;!&ndash; Class model classes &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.jpmml</groupId>-->
+            <!--<artifactId>pmml-model</artifactId>-->
+            <!--<version>${jpmml.version}</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; Class model annotations &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.jpmml</groupId>-->
+            <!--<artifactId>pmml-schema</artifactId>-->
+            <!--<version>${jpmml.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.jpmml</groupId>-->
+            <!--<artifactId>pmml-evaluator</artifactId>-->
+            <!--<version>${jpmml.version}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.jpmml</groupId>
             <artifactId>pmml-evaluator</artifactId>
             <version>1.3.10</version>
         </dependency>
+
     </dependencies>
 </project>
