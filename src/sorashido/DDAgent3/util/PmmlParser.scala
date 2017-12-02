@@ -1,8 +1,8 @@
 package sorashido.DDAgent3.util
 
 import java.io.{File, FileInputStream}
-
-import org.dmg.pmml.PMML
+import scala.collection.JavaConversions._
+import org.dmg.pmml.{FieldName, PMML}
 import org.jpmml.evaluator.{Evaluator, ModelEvaluatorFactory}
 import org.jpmml.model.{ImportFilter, JAXBUtil}
 import org.xml.sax.InputSource
@@ -11,7 +11,8 @@ object Predictable {
   def main(args: Array[String]): Unit ={
     val pmml = readPMML("/Users/tela/dev/src/github.com/sorashido/DiplomacyAgent/src/sorashido/DDAgent3/util/LogisticRegressionDip.pmml")
     val evaluator = prepModelEvaluator(pmml)
-    print(evaluator.getSummary)
+    val m = mapAsJavaMap(Map("x" -> 2.1f, "x2" -> 1.0f)).asInstanceOf[java.util.Map[FieldName, java.lang.Float]]
+    evaluator.evaluate(m)
   }
 
   def readPMML(filename: String): PMML = {
