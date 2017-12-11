@@ -9,10 +9,15 @@ import org.xml.sax.InputSource
 
 object Predictable {
   def main(args: Array[String]): Unit ={
-    val pmml = readPMML("/Users/tela/dev/src/github.com/sorashido/DiplomacyAgent/src/sorashido/DDAgent3/util/LogisticRegressionDip.pmml")
+    val pmml = readPMML("./src/sorashido/DDAgent3/util/LogisticRegressionDip.pmml")
     val evaluator = prepModelEvaluator(pmml)
-    val m = mapAsJavaMap(Map("x" -> 2.1f, "x2" -> 1.0f)).asInstanceOf[java.util.Map[FieldName, java.lang.Float]]
-    evaluator.evaluate(m)
+//    val map = Map("x1"->2.1f)
+//    val m = mapAsJavaMap(map).asInstanceOf[java.util.Map[FieldName, java.lang.Float]]
+//    evaluator.evaluate(m)
+  }
+
+  def predict(): Double = {
+
   }
 
   def readPMML(filename: String): PMML = {
@@ -21,7 +26,7 @@ object Predictable {
       val source = ImportFilter.apply(new InputSource(is))
       return JAXBUtil.unmarshalPMML(source)
     } finally {
-      is.close();
+      is.close()
     }
   }
 

@@ -7,7 +7,8 @@ import ddejonge.bandana.negoProtocol.DiplomacyProposal
 import ddejonge.negoServer.Message
 import es.csic.iiia.fabregues.dip.orders.Order
 import java.util.Random
-import sorashido.DDAgent3.util.Constants
+
+import sorashido.DDAgent3.util.{Constants, Predictable}
 
 
 object DDAgent3 {
@@ -36,6 +37,8 @@ class DDAgent3 private(val args: Array[String]) extends ANACNegotiator(args) {
         hasMessage
       }) manageProposedMessage()
       proposeMessage()
+
+      val predict = Predictable
     }
   }
 

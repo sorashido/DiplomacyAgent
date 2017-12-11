@@ -9,3 +9,5 @@ DiplomacyGame.iml
 *.ooutline
 documents/
 target/
+src/sorashido/DDAgent/
+src/sorashido/DDAgent2/
