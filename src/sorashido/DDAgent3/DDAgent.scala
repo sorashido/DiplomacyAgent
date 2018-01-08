@@ -14,6 +14,7 @@ import java.util.ArrayList
 import scala.collection.JavaConversions._
 import sorashido.DDAgent3.util.{Constants, Predictable}
 import sorashido.DDAgent3.negotiation.ProposeDeal
+import sorashido.DDAgent3.model.UtilityModel
 
 object DDAgent3 {
   def main(args: Array[String]): Unit = {
@@ -30,6 +31,7 @@ class DDAgent3 private(val args: Array[String]) extends ANACNegotiator(args) {
   private[DDAgent3] var dBraneTactics = new DBraneTactics
   private val random = new Random
   val proposedeal = new ProposeDeal()
+  val utilitymodel = new UtilityModel()
 
   override def start(): Unit = {
     this.getLogger.logln("game is starting!", printToConsole)
@@ -82,7 +84,7 @@ class DDAgent3 private(val args: Array[String]) extends ANACNegotiator(args) {
 
         if (consistencyReport == "") {
           val opponent = game.getPower(receivedMessage.getSender())
-          if (calcPlanValue(commitments) > 0.5) {
+          if (utilitymodel.calcPlanValue(game, me, dBraneTactics, commitments) > 0.5) {
             this.acceptProposal(receivedProposal.getId)
             this.getLogger.logln("DDAgent3.negotiate()  Accepting: " + receivedProposal, printToConsole)
           }
@@ -106,11 +108,11 @@ class DDAgent3 private(val args: Array[String]) extends ANACNegotiator(args) {
     val newDealToPropose = proposedeal.searchForNewDealToPropose(game, me, dBraneTactics, this.getConfirmedDeals, this.getNegotiatingPowers)
   }
 
-  def calcPlanValue(commitments: ArrayList[BasicDeal]): Double = {
-    val myPlan = this.dBraneTactics.determineBestPlan(this.game, me, commitments)
-    if (myPlan == null) { //取り決めのために行動できない -> 交渉する必要なし
-      return 0.0
-    }
-    myPlan.getValue
-  }
+//  def calcPlanValue(commitments: ArrayList[BasicDeal]): Double = {
+//    val myPlan = this.dBraneTactics.determineBestPlan(this.game, me, commitments)
+//    if (myPlan == null) { //取り決めのために行動できない -> 交渉する必要なし
+//      return 0.0
+//    }
+//    myPlan.getValue
+//  }
 }

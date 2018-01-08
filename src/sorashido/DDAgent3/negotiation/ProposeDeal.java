@@ -12,6 +12,7 @@ import es.csic.iiia.fabregues.dip.board.Region;
 import es.csic.iiia.fabregues.dip.orders.HLDOrder;
 import es.csic.iiia.fabregues.dip.orders.MTOOrder;
 import es.csic.iiia.fabregues.dip.orders.Order;
+import sorashido.DDAgent3.model.UtilityModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.Random;
 public class ProposeDeal {
 
     public  Random random = new Random();
+    public UtilityModel utilityModel = new UtilityModel();
 
     public BasicDeal searchForNewDealToPropose(Game game, Power me, DBraneTactics dBraneTactics, List<BasicDeal> commitments, List<Power> aliveNegotiatingPowers){
 
@@ -54,6 +56,8 @@ public class ProposeDeal {
             Plan plan = dBraneTactics.determineBestPlan(game, me, commitments);
 
             //Check if the returned plan is better than the best plan found so far.
+            utilityModel.calcPlanValue(game, me, dBraneTactics, (ArrayList<BasicDeal>) commitments);
+
             if(plan != null && plan.getValue() > bestPlan.getValue()){
                 bestPlan = plan;
                 bestDeal = randomDeal;
