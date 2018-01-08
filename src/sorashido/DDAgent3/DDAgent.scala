@@ -21,7 +21,8 @@ object DDAgent3 {
 class DDAgent3 private(val args: Array[String]) extends ANACNegotiator(args) {
   dBraneTactics = this.getTacticalModule
   final private[DDAgent3] val printToConsole = false
-  final private[DDAgent3] val constants = new Constants
+//  final private[DDAgent3] val constants = new Constants
+  final private[DDAgent3] val constants = Constants
   private[DDAgent3] var dBraneTactics = new DBraneTactics
   private val random = new Random
 
@@ -30,12 +31,9 @@ class DDAgent3 private(val args: Array[String]) extends ANACNegotiator(args) {
   }
 
   override def negotiate(negotiationDeadline: Long): Unit = {
-    while ( {
-      System.currentTimeMillis < negotiationDeadline
-    }) {
-      while ( {
-        hasMessage
-      }) manageProposedMessage()
+    while (System.currentTimeMillis < negotiationDeadline) {
+      while (hasMessage) manageProposedMessage()
+
       proposeMessage()
 
       val predict = Predictable
@@ -47,6 +45,7 @@ class DDAgent3 private(val args: Array[String]) extends ANACNegotiator(args) {
     }
   }
 
+  // メッセージ
   private def manageProposedMessage(): Unit = {
     val receivedMessage = removeMessageFromQueue
     if (receivedMessage.getPerformative == DiplomacyNegoClient.ACCEPT) {
@@ -65,6 +64,8 @@ class DDAgent3 private(val args: Array[String]) extends ANACNegotiator(args) {
     else this.getLogger.logln("Received a message of unhandled type: " + receivedMessage.getPerformative + ". Message content: " + receivedMessage.getContent.toString, printToConsole)
   }
 
+  // 提案
   private def proposeMessage(): Unit = {
+
   }
 }

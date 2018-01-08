@@ -16,9 +16,9 @@ object Predictable {
 //    evaluator.evaluate(m)
   }
 
-  def predict(): Double = {
-
-  }
+//  def predict(): Double = {
+//
+//  }
 
   def readPMML(filename: String): PMML = {
     val is = new FileInputStream(new File(filename))
