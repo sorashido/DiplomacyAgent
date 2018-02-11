@@ -34,7 +34,6 @@ public class DDAgent2 extends ANACNegotiator {
 
     @Override
     public void start() {
-
         this.getLogger().logln("game is starting!", printToConsole);
     }
 
@@ -93,5 +92,4 @@ public class DDAgent2 extends ANACNegotiator {
         if (game.getYear() == 1920 && game.getPhase().equals("WIN")) {
         }
     }
-
 }
