@@ -6,6 +6,18 @@
     <groupId>org.sorashido</groupId>
     <artifactId>DDAgent2</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <name>DDAgent2</name>
     <packaging>jar</packaging>
     <description>DiplomacyGame</description>
@@ -67,6 +79,11 @@
             <!--<artifactId>pmml-evaluator</artifactId>-->
             <!--<version>1.3.10</version>-->
         <!--</dependency>-->
+        <dependency>
+            <groupId>net.sf.supercsv</groupId>
+            <artifactId>super-csv</artifactId>
+            <version>2.4.0</version>
+        </dependency>
 
     </dependencies>
 </project>

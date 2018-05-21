@@ -1,7 +1,6 @@
 # diplomacy agent
 diplomacy agent
-
-http://www.iiia.csic.es/~davedejonge/bandana/
+http://staff.scem.westernsydney.edu.au/~dave/bandana/
 
 ## simulation
 - https://github.com/sorashido/DiplomacyTournament
