@@ -10,6 +10,7 @@ import es.csic.iiia.fabregues.dip.board.Power;
 import es.csic.iiia.fabregues.dip.board.Province;
 import es.csic.iiia.fabregues.dip.board.Region;
 import es.csic.iiia.fabregues.dip.orders.*;
+import sorashido.DDAgent2.model.DipModel;
 import sorashido.DDAgent2.negotiation.UtilityCalculator;
 import sorashido.DDAgent2.util.Constants;
 
@@ -31,19 +32,23 @@ public class DDAgent2 extends ANACNegotiator {
     List<MTOOrder> opMTOrders = new ArrayList<>();
     List<HLDOrder> opHLDOrders = new ArrayList<>();
 
+    UtilityCalculator utilityCalculator;
+    DipModel dipModel;
+
     public static void main(String[] args) {
-//        sorashido.DDAgent2.DDAgent2 myPlayer = new sorashido.DDAgent2.DDAgent2(args);
-//        myPlayer.run();
-        try {
-            UtilityCalculator utilityCalculator = new UtilityCalculator();
-            System.out.println(utilityCalculator.getlocation("1"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        sorashido.DDAgent2.DDAgent2 myPlayer = new sorashido.DDAgent2.DDAgent2(args);
+        myPlayer.run();
     }
 
     private DDAgent2(String[] args) {
         super(args);
+
+        try {
+            utilityCalculator = new UtilityCalculator();
+            dipModel = new DipModel();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         dBraneTactics = this.getTacticalModule();
     }

@@ -13,32 +13,46 @@ public class UtilityCalculator {
     private HashMap<String, String> out2 = new HashMap<>();
 
     public UtilityCalculator() throws Exception {
-        // read csv
         readCsv("location.csv");
     }
 
     public String getInput(String key){return input.get(key);}
 
-    public HashMap<String, Integer> getlocation(String key){
+    public HashMap<String, Integer> getlocation(int year, String season, String country){
         HashMap<String, Integer> ans = new HashMap<>();
-
+        String key = getkey(year, season, country);
         String[] temp = out1.get(key).split(":", 0);
         for(String t : temp){
-            String[] s = t.split("[0-9]", 2);
-            ans.put(s[0], Integer.valueOf(s[1]));
+            String l = t.replaceAll("[0-9]", "");
+            String c = t.replaceAll("[^0-9]", "");
+            ans.put(l, Integer.valueOf(c));
         }
         return ans;
     }
 
-    public HashMap<String, Integer> getwinlocation(String key){
+    public HashMap<String, Integer> getwinlocation(int year, String season, String country){
         HashMap<String, Integer> ans = new HashMap<>();
+        String key = getkey(year, season, country);
 
         String[] temp = out2.get(key).split(":", 0);
         for(String t : temp){
-            String[] s = t.split("[0-9]", 2);
-            ans.put(s[0], Integer.valueOf(s[1]));
+            String l = t.replaceAll("[0-9]", "");
+            String c = t.replaceAll("[^0-9]", "");
+            ans.put(l, Integer.valueOf(c));
         }
         return ans;
+    }
+
+    private String getkey(int year, String season, String country){
+        HashMap<String, Integer> seasonID = new HashMap<String, Integer>() {{ put("SPR", 0); put("FAL", 1);}};
+        HashMap<String, Integer> countryID = new HashMap<String, Integer>() {{ put("ENG", 0); put("FRA", 1); put("ITA", 2);
+                        put("GER", 3);put("AUT", 4); put("TUR", 5); put("RUS", 6);}};
+
+        int season_num = seasonID.get(season);
+        int country_num = countryID.get(country);
+
+        int ans = 14*(year - 1901) + (7*season_num) + country_num;
+        return Integer.toString(ans);
     }
 
     // read utility
@@ -54,8 +68,6 @@ public class UtilityCalculator {
                 input.put(temp[0],temp[1]);
                 out1.put(temp[0],temp[2]);
                 out2.put(temp[0],temp[3]);
-//                System.out.print(temp[0]+","+temp[1]+","+temp[2]+","+temp[3]);
-//                System.out.println("");
             }
         } catch (IOException ignored) {
         }
