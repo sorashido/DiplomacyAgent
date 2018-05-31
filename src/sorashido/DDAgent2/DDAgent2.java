@@ -158,14 +158,15 @@ public class DDAgent2 extends ANACNegotiator {
         // 敵対関数から閾値を求める, 敵対度が高いほど
         for(Power power : this.getNegotiatingPowers()){
             Double threshold  = dipModel.getThreshold(power.getName());
-            List<BasicDeal> newDealToProposes = searchForNewDealToPropose(power, 0.5);
+            List<BasicDeal> newDealToProposes = searchForNewDealToPropose(power, 0.0);
 
             // これまでの取引と矛盾するか調べる
             String consistencyReport = null;
             consistencyReport = Utilities.testConsistency(game, newDealToProposes);
             if(calcUtilityValue(newDealToProposes, power) > threshold && consistencyReport == null){
                 for (BasicDeal newDealToPropose : newDealToProposes) {
-                    if (newDealToPropose != null) {
+                    consistencyReport = Utilities.testValidity(game, newDealToPropose);
+                    if (newDealToPropose != null && consistencyReport==null) {
                         this.getLogger().logln("DDAgent2.negotiate() Proposing: " + newDealToPropose, printToConsole);
                         this.proposeDeal(newDealToPropose);
                     }
@@ -179,7 +180,7 @@ public class DDAgent2 extends ANACNegotiator {
      */
     static double START_TEMPERATURE = 1.0; // 開始温度
     static double END_TEMPERATURE = 0.001; // 終了温度
-    static double COOL = 0.5; // 冷却度
+    static double COOL = 0.9; // 冷却度
     List<BasicDeal> searchForNewDealToPropose(Power opponent, Double threshold) {
         List<BasicDeal> deals = new ArrayList<BasicDeal>();
 
@@ -266,24 +267,25 @@ public class DDAgent2 extends ANACNegotiator {
 //            System.out.println(nextDealUtil);
 
             // 更新
-            if(currenDealUtil >= threshold){
-                if(targetDeal.size() == 0){
-                    targetDeal.add(currentDeal);
-                    targetDealUtil = currenDealUtil;
-                }else {
-                    if (currenDealUtil < targetDealUtil) {
-                        targetDeal.clear();
-                        targetDeal.add(currentDeal);
-                        targetDealUtil = currenDealUtil;
-                    } else if (currenDealUtil == targetDealUtil) {
-                        targetDeal.add(currentDeal);
-                    }
-                }
-            }
+//            if(currenDealUtil >= threshold){
+//                if(targetDeal.size() == 0){
+//                    targetDeal.add(currentDeal);
+//                    targetDealUtil = currenDealUtil;
+//                }else {
+//                    if (currenDealUtil < targetDealUtil) {
+//                        targetDeal.clear();
+//                        targetDeal.add(currentDeal);
+//                        targetDealUtil = currenDealUtil;
+//                    } else if (currenDealUtil == targetDealUtil) {
+//                        targetDeal.add(currentDeal);
+//                    }
+//                }
+//            }
             currentTemperature = currentTemperature * COOL; // 温度を下げる
         }
-        if (targetDeal.size() == 0){ deals.add(currentDeal);}
-        else deals.add(targetDeal.get(random.nextInt(targetDeal.size())));
+        deals.add(currentDeal);
+//        if (targetDeal.size() == 0){ deals.add(currentDeal);}
+//        else deals.add(targetDeal.get(random.nextInt(targetDeal.size())));
         return deals;
     }
 
@@ -404,7 +406,7 @@ public class DDAgent2 extends ANACNegotiator {
             if(consistencyReport == null){
                 Power power = game.getPower(receivedMessage.getSender());
                 Double threshold = dipModel.getThreshold(power.getName());
-                if(calcUtilityValue(commitments, power) > 0.5){
+                if(calcUtilityValue(commitments, power) > 0){
                     this.acceptProposal(receivedProposal.getId());
                     this.getLogger().logln("DDAgent2.negotiate()  Accepting: " + receivedProposal, printToConsole);
                 }

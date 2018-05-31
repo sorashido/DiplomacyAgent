@@ -28,7 +28,7 @@ public class UtilityCalculator {
 
         String key = Integer.toString(year) +  season + country.substring(0,1) + Integer.toString(state);
         String[] temp;
-        if(mode == 0 || !out1.containsKey(key)) temp = out1.get(key).split(":", 0);
+        if(mode == 0 || out1.containsKey(key)) temp = out1.get(key).split(":", 0);
         else temp = out2.get(key).split(":", 0);
         for(String t : temp){
             if(t.length() > 3){
