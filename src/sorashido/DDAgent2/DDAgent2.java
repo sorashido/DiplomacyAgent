@@ -37,17 +37,15 @@ public class DDAgent2 extends ANACNegotiator {
     DipModel dipModel;
 
     public static void main(String[] args) {
-        sorashido.DDAgent2.DDAgent2 myPlayer = new sorashido.DDAgent2.DDAgent2(args);
-        myPlayer.run();
-
-//        try {
-//            UtilityCalculator utilityCalculator = new UtilityCalculator();
-//            HashMap<String, Integer> myutil  = utilityCalculator.getwinlocation(1920, "SPR", "RUS");
-//            Integer sum = myutil.values().stream().mapToInt(Integer::intValue).sum();
-//            System.out.println(sum);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+//        sorashido.DDAgent2.DDAgent2 myPlayer = new sorashido.DDAgent2.DDAgent2(args);
+//        myPlayer.run();
+        try {
+            UtilityCalculator ab = new UtilityCalculator();
+            HashMap<String, Integer> d = ab.getwinlocation(1901, "SPR", "AUS", 0, 0);
+            System.out.println(d);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private DDAgent2(String[] args) {
@@ -180,7 +178,7 @@ public class DDAgent2 extends ANACNegotiator {
      */
     static double START_TEMPERATURE = 1.0; // 開始温度
     static double END_TEMPERATURE = 0.001; // 終了温度
-    static double COOL = 0.9; // 冷却度
+    static double COOL = 0.5; // 冷却度
     List<BasicDeal> searchForNewDealToPropose(Power opponent, Double threshold) {
         List<BasicDeal> deals = new ArrayList<BasicDeal>();
 
@@ -218,7 +216,7 @@ public class DDAgent2 extends ANACNegotiator {
             BasicDeal nextDeal = currentDeal;
             List<OrderCommitment> orderCommitment = nextDeal.getOrderCommitments();
             List<DMZ> dmzs = nextDeal.getDemilitarizedZones();
-            int r = random.nextInt(8);
+            int r = random.nextInt(9);
             if((r==0 || r==1) && orderCommitment.size() > 1){
                 orderCommitment.remove(random.nextInt(orderCommitment.size()));
             }else if((r==2 || r==3) && me.getControlledRegions().size() > 0){
@@ -264,7 +262,7 @@ public class DDAgent2 extends ANACNegotiator {
                 currenDealUtil = nextDealUtil;
             }
 
-//            System.out.println(nextDealUtil);
+            System.out.println(currenDealUtil);
 
             // 更新
 //            if(currenDealUtil >= threshold){
@@ -406,7 +404,7 @@ public class DDAgent2 extends ANACNegotiator {
             if(consistencyReport == null){
                 Power power = game.getPower(receivedMessage.getSender());
                 Double threshold = dipModel.getThreshold(power.getName());
-                if(calcUtilityValue(commitments, power) > 0){
+                if(calcUtilityValue(commitments, power) > 0.1){
                     this.acceptProposal(receivedProposal.getId());
                     this.getLogger().logln("DDAgent2.negotiate()  Accepting: " + receivedProposal, printToConsole);
                 }
