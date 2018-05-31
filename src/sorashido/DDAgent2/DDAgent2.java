@@ -339,6 +339,7 @@ public class DDAgent2 extends ANACNegotiator {
         List<DMZ> dmzs = new ArrayList<DMZ>(3);
 
         ArrayList<Power> powers = new ArrayList<Power>(2);
+        powers.add(me);
         powers.add(opponent);
 
         //自分が征服したところ
@@ -438,12 +439,12 @@ public class DDAgent2 extends ANACNegotiator {
             if(p.getOwnedSCs().size()>6){
                 n = 1;
             }
-            if(p.getName().equals("ENG")){  state += 64 * n; }
-            else if(p.getName().equals("FRA")){ state += 32 * n; }
-            else if(p.getName().equals("ITA")){ state += 16 * n; }
-            else if(p.getName().equals("RUS")){ state += 8 * n; }
-            else if(p.getName().equals("TUR")){ state += 4 * n; }
-            else if(p.getName().equals("GER")){ state += 2 * n; }
+            if(p.getName().equals("ENG")){  state += (64 * n); }
+            else if(p.getName().equals("FRA")){ state += (32 * n); }
+            else if(p.getName().equals("ITA")){ state += (16 * n); }
+            else if(p.getName().equals("RUS")){ state += (8 * n); }
+            else if(p.getName().equals("TUR")){ state += (4 * n); }
+            else if(p.getName().equals("GER")){ state += (2 * n); }
             else if(p.getName().equals("AUS")){ state += n; }
         }
 
