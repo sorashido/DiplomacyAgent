@@ -14,8 +14,8 @@ public class UtilityCalculator {
     private HashMap<String, String> out4 = new HashMap<>();
 
     public UtilityCalculator() throws Exception {
-//        readCsv("location.csv");
-        readCsv2("target.csv");
+//        readCsv("old_location.csv");
+//        readCsv2("target.csv");
     }
 
     public HashMap<String, Integer> getwinlocation(int year, String season, String country, int state, int mode){
@@ -26,8 +26,6 @@ public class UtilityCalculator {
             put("GER", 3);put("AUS", 4); put("TUR", 5); put("RUS", 6);}};
 
         if(!seasonID.containsKey(season) || !countryID.containsKey(country)){ return ans; }
-
-//        if(year!= 1920) year += 1;
 
         String key = Integer.toString(year) +  season + country.substring(0,1);// + Integer.toString(state);
         System.out.println(key);
