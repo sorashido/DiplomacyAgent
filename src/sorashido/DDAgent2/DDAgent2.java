@@ -191,12 +191,12 @@ public class DDAgent2 extends ANACNegotiator {
                 baseLists.add(orderDeal);
             }
         }
-        for(Region unit: opponent.getControlledRegions()){
-            OrderCommitment orderDeal = generateOrderDeal(unit);
-            if(orderDeal != null){
-                baseLists.add(orderDeal);
-            }
-        }
+//        for(Region unit: opponent.getControlledRegions()){
+//            OrderCommitment orderDeal = generateOrderDeal(unit);
+//            if(orderDeal != null){
+//                baseLists.add(orderDeal);
+//            }
+//        }
 
         List<DMZ> baseDmzs = generateMyDMZ(opponent);
 
@@ -218,31 +218,31 @@ public class DDAgent2 extends ANACNegotiator {
             if((r==0 || r==1) && orderCommitment.size() > 1) {
                 orderCommitment.remove(random.nextInt(orderCommitment.size()));
             }
-//            }else if((r==2 || r==3) && me.getControlledRegions().size() > 0){
+//            else if((r==2 || r==3) && me.getControlledRegions().size() > 0){
 //                Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
 //                OrderCommitment orderDeal = generateOrderDeal(region);
-//                if(orderDeal != null){
+//                if(orderDeal != null && !orderCommitment.contains(orderDeal)){
 //                    orderCommitment.add(orderDeal);
 //                }
 //            }
-            else if((r==2||r==3) && opponent.getControlledRegions().size() > 0) {
+            else if((r==3) && opponent.getControlledRegions().size() > 0) {
                 // 1. basicListに相手のものを入れる
                 Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
                 OrderCommitment orderDeal = generateOrderDeal(region);
-                if(orderDeal != null){
+                if(orderDeal != null && !orderCommitment.contains(orderDeal)){
                     orderCommitment.add(orderDeal);
                 }
-            }else if((r==4 || r==5) && dmzs.size() > 1) {
+            }else if((r==4 || r== 5) && dmzs.size() > 0) {
                 // 2. basicDmzsを削る
                 dmzs.remove(random.nextInt(dmzs.size()));
             }
-//            else if(r==7 && me.getControlledRegions().size() > 0){
+//            else if(r==8 && me.getControlledRegions().size() > 0){
 //                // 4 basicDmzsに自分のものを入れる
 //                Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
 //                List<Province> units = new ArrayList<>();
 //                units.add(region.getProvince());
 //                DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
-//                dmzs.add(dmz);
+//                if(!dmzs.contains(dmz)) dmzs.add(dmz);
 //            }
             else if(r==6 && opponent.getControlledRegions().size() > 0) {
                 // 3. basicDmzsに相手のものを入れる
@@ -250,8 +250,10 @@ public class DDAgent2 extends ANACNegotiator {
                 List<Province> units = new ArrayList<>();
                 units.add(region.getProvince());
                 DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
-                dmzs.add(dmz);
+                if(!dmzs.contains(dmz)) dmzs.add(dmz);
             }
+//            if (orderCommitment.isEmpty()) orderCommitment = new ArrayList<>();
+            if (dmzs.isEmpty()) dmzs = new ArrayList<>(3);
             nextDeal = new BasicDeal(orderCommitment, dmzs);
             Double nextDealUtil = calcUtilityValue(nextDeal, opponent);
             newcost = nextDealUtil;
@@ -405,7 +407,7 @@ public class DDAgent2 extends ANACNegotiator {
             if(consistencyReport == null){
                 Power power = game.getPower(receivedMessage.getSender());
                 Double threshold = dipModel.getThreshold(power.getName());
-                if(calcUtilityValue(commitments, power) > 0.5){
+                if(calcUtilityValue(commitments, power) > 0.2){
                     this.acceptProposal(receivedProposal.getId());
                     this.getLogger().logln("DDAgent2.negotiate()  Accepting: " + receivedProposal, printToConsole);
                 }

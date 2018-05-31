@@ -32,7 +32,7 @@ public class UtilityCalculator {
         String[] temp;
 //        if(mode == 0 || out1.containsKey(key)) temp = out1.get(key).split(":", 0);
 //        else temp = out2.get(key).split(":", 0);
-        temp = out4.get(key).split(":", 0);
+        temp = out3.get(key).split(":", 0);
         for(String t : temp){
             if(t.length() > 3){
                 String l = t.replaceAll("[0-9]", "");
