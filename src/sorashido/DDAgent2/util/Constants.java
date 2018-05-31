@@ -67,7 +67,7 @@ public class Constants {
                     put("YOR", 55);
 
                     //  海域
-                    put("ADS", 56);
+                    put("ADR", 56);
                     put("AES", 57);
                     put("BAR", 58);
                     put("BAL", 59);
@@ -77,8 +77,8 @@ public class Constants {
                     put("GOB", 63);
                     put("GOL", 64);
                     put("HEL", 65);
-                    put("IOS", 66);
-                    put("IRS", 67);
+                    put("ION", 66);
+                    put("IRI", 67);
                     put("MAO", 68);
                     put("NAO", 69);
                     put("NTH", 70);
