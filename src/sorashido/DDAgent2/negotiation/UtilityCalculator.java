@@ -15,7 +15,7 @@ public class UtilityCalculator {
 
     public UtilityCalculator() throws Exception {
 //        readCsv("old_location.csv");
-//        readCsv2("target.csv");
+        readCsv2("target.csv");
     }
 
     public HashMap<String, Integer> getwinlocation(int year, String season, String country, int state, int mode){
