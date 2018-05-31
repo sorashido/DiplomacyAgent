@@ -191,6 +191,12 @@ public class DDAgent2 extends ANACNegotiator {
                 baseLists.add(orderDeal);
             }
         }
+        for(Region unit: opponent.getControlledRegions()){
+            OrderCommitment orderDeal = generateOrderDeal(unit);
+            if(orderDeal != null){
+                baseLists.add(orderDeal);
+            }
+        }
 
         List<DMZ> baseDmzs = generateMyDMZ(opponent);
 
@@ -226,7 +232,7 @@ public class DDAgent2 extends ANACNegotiator {
                 if(orderDeal != null){
                     orderCommitment.add(orderDeal);
                 }
-            }else if((r==4 || r==5) && dmzs.size() > 0) {
+            }else if((r==4 || r==5) && dmzs.size() > 1) {
                 // 2. basicDmzsを削る
                 dmzs.remove(random.nextInt(dmzs.size()));
             }
@@ -257,7 +263,7 @@ public class DDAgent2 extends ANACNegotiator {
                 currentDeal = nextDeal;
                 currenDealUtil = nextDealUtil;
             }
-            System.out.println(currenDealUtil);
+//            System.out.println(currenDealUtil);
 
             // 更新
 //            if(currenDealUtil >= threshold){
@@ -313,13 +319,13 @@ public class DDAgent2 extends ANACNegotiator {
                 }
             }
             OrderCommitment commitment = new OrderCommitment(game.getYear(), game.getPhase(), order);
-            double value = calcPlanValue(commitment, power);
+            double value = calcPlanValue(commitment, me);
             if(value > maxValue){
                 maxValue = value;
                 maxOrderCommitment = commitment;
             }
             commitment = new OrderCommitment(game.getYear(), game.getPhase(), order);
-            value = calcPlanValue(commitment, power);
+            value = calcPlanValue(commitment, me);
             if(value > maxValue){
                 maxValue = value;
                 maxOrderCommitment = commitment;
@@ -399,7 +405,7 @@ public class DDAgent2 extends ANACNegotiator {
             if(consistencyReport == null){
                 Power power = game.getPower(receivedMessage.getSender());
                 Double threshold = dipModel.getThreshold(power.getName());
-                if(calcUtilityValue(commitments, power) > 0.3){
+                if(calcUtilityValue(commitments, power) > 0.5){
                     this.acceptProposal(receivedProposal.getId());
                     this.getLogger().logln("DDAgent2.negotiate()  Accepting: " + receivedProposal, printToConsole);
                 }
