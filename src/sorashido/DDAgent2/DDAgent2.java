@@ -124,21 +124,24 @@ public class DDAgent2 extends ANACNegotiator {
         //accepted
         if (receivedMessage.getPerformative().equals(DiplomacyNegoClient.ACCEPT)) {
             DiplomacyProposal acceptedProposal = (DiplomacyProposal) receivedMessage.getContent();
-//            this.getLogger().logln("DDAgent2.negotiate() Received acceptance from " + receivedMessage.getSender() + ": " + acceptedProposal, printToConsole);
+            this.getLogger().logln("DDAgent2.negotiate() Received acceptance from " + receivedMessage.getSender() + ": " + acceptedProposal, printToConsole);
             acceptedAction(acceptedProposal);
         }
         //proposed
         else if (receivedMessage.getPerformative().equals(DiplomacyNegoClient.PROPOSE)) {
+            this.getLogger().logln("DDAgent2.negotiate() Propoced acceptance from " + receivedMessage.getSender() + ": " + receivedMessage.getContent(), printToConsole);
             proposedAction(receivedMessage);
         }
         //confirmed
         else if (receivedMessage.getPerformative().equals(DiplomacyNegoClient.CONFIRM)) {
             DiplomacyProposal confirmedProposal = (DiplomacyProposal) receivedMessage.getContent();
+            this.getLogger().logln("DDAgent2.negotiate() confirmed acceptance from " + receivedMessage.getSender() + ": " + confirmedProposal, printToConsole);
             confirmedAction(confirmedProposal);
         }
         //rejected
         else if (receivedMessage.getPerformative().equals(DiplomacyNegoClient.REJECT)) {
             DiplomacyProposal rejectedProposal = (DiplomacyProposal) receivedMessage.getContent();
+            this.getLogger().logln("DDAgent2.negotiate() rejected acceptance from " + receivedMessage.getSender() + ": " + rejectedProposal, printToConsole);
             rejectedAction(rejectedProposal);
         }
         else {
@@ -187,21 +190,21 @@ public class DDAgent2 extends ANACNegotiator {
         powers.add(opponent);
 
         // baseList
-//        List<OrderCommitment> baseLists = new ArrayList<>();
-//        for(Region unit: me.getControlledRegions()){
-//            OrderCommitment orderDeal = generateOrderDeal(unit);
-//            if(orderDeal != null){
-//                baseLists.add(orderDeal);
-//            }
-//        }
-//        for(Region unit: opponent.getControlledRegions()){
-//            OrderCommitment orderDeal = generateOrderDeal(unit);
-//            if(orderDeal != null){
-//                baseLists.add(orderDeal);
-//            }
-//        }
+        List<OrderCommitment> baseLists = new ArrayList<>();
+        for(Region unit: me.getControlledRegions()){
+            OrderCommitment orderDeal = generateOrderDeal(unit);
+            if(orderDeal != null && random.nextDouble() < 0.3){
+                baseLists.add(orderDeal);
+            }
+        }
+        for(Region unit: opponent.getControlledRegions()){
+            OrderCommitment orderDeal = generateOrderDeal(unit);
+            if(orderDeal != null && random.nextDouble() < 0.3){
+                baseLists.add(orderDeal);
+            }
+        }
 
-//        List<DMZ> baseDmzs = new ArrayList<>(3);//generateMyDMZ(opponent);
+        List<DMZ> baseDmzs = new ArrayList<>(3);//generateMyDMZ(opponent);
 //        Region myregion = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
 //        List<Province> myunits = new ArrayList<>();
 //        myunits.add(myregion.getProvince());
@@ -209,7 +212,7 @@ public class DDAgent2 extends ANACNegotiator {
 //        baseDmzs.add(mydmz);
 
 
-        BasicDeal currentDeal = generateRandomDeal();//new BasicDeal(baseLists, baseDmzs);
+        BasicDeal currentDeal = new BasicDeal(baseLists, baseDmzs);
         double currenDealUtil = calcUtilityValue(currentDeal, opponent);
 //        double targetDealUtil = 0.0;
 //
@@ -223,52 +226,50 @@ public class DDAgent2 extends ANACNegotiator {
             BasicDeal nextDeal = currentDeal;
             List<OrderCommitment> orderCommitment = nextDeal.getOrderCommitments();
             List<DMZ> dmzs = nextDeal.getDemilitarizedZones();
-            int r = random.nextInt(8);
-            if((r==0 || r==1) && orderCommitment.size() > 1) {
-                orderCommitment.remove(random.nextInt(orderCommitment.size()));
-            }
-            else if((r==2) && me.getControlledRegions().size() > 0){
+            Double r = random.nextDouble(); //random.nextInt(8);
+            if((r < 0.35) && me.getControlledRegions().size() > 0){
+                // 0. basicListに自分のものを入れる
                 Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
                 OrderCommitment orderDeal = generateOrderDeal(region);
                 if(orderDeal != null && !orderCommitment.contains(orderDeal)){
+                    if(orderCommitment.size() > 0) orderCommitment.remove(random.nextInt(orderCommitment.size()));
                     orderCommitment.add(orderDeal);
                 }
             }
-            else if((r==3) && opponent.getControlledRegions().size() > 0) {
+            else if((r < 0.70) && opponent.getControlledRegions().size() > 0) {
                 // 1. basicListに相手のものを入れる
                 Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
                 OrderCommitment orderDeal = generateOrderDeal(region);
                 if(orderDeal != null && !orderCommitment.contains(orderDeal)){
+                    if(orderCommitment.size() > 0) orderCommitment.remove(random.nextInt(orderCommitment.size()));
                     orderCommitment.add(orderDeal);
                 }
-            }else if((r==4 || r== 5) && dmzs.size() > 1) {
-                // 2. basicDmzsを削る
-                dmzs.remove(random.nextInt(dmzs.size()));
             }
-            else if(r==6 && me.getControlledRegions().size() > 0){
-                // 4 basicDmzsに自分のものを入れる
+            else if(r < 0.925&& me.getControlledRegions().size() > 0){
+                // 2 basicDmzsに自分のものを入れる
                 Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
                 List<Province> units = new ArrayList<>();
                 units.add(region.getProvince());
                 DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
+                if(dmzs.size() > 0) dmzs.remove(random.nextInt(dmzs.size()));
                 if(!dmzs.contains(dmz)) dmzs.add(dmz);
             }
-            else if(r==7 && opponent.getControlledRegions().size() > 0) {
+            else if(r < 1.0 && opponent.getControlledRegions().size() > 0) {
                 // 3. basicDmzsに相手のものを入れる
                 Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
                 List<Province> units = new ArrayList<>();
                 units.add(region.getProvince());
                 DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
+                if(dmzs.size() > 0) dmzs.remove(random.nextInt(dmzs.size()));
                 if(!dmzs.contains(dmz)) dmzs.add(dmz);
             }
-//            if (orderCommitment.isEmpty()) orderCommitment = new ArrayList<>();
             if (dmzs.isEmpty()) dmzs = new ArrayList<>(3);
             nextDeal = new BasicDeal(orderCommitment, dmzs);
             Double nextDealUtil = calcUtilityValue(nextDeal, opponent);
-//            newcost = nextDealUtil;
-//            currentCost = currenDealUtil;
-            newcost = Math.abs(threshold - nextDealUtil);
-            currentCost = Math.abs(threshold - currenDealUtil);
+            newcost = nextDealUtil;
+            currentCost = currenDealUtil;
+//            newcost = Math.abs(threshold - nextDealUtil);
+//            currentCost = Math.abs(threshold - currenDealUtil);
             p = Math.exp(-Math.abs(newcost - currentCost) / currentTemperature);
             if (newcost > currentCost || p > random.nextDouble()) {
                 currentDeal = nextDeal;
