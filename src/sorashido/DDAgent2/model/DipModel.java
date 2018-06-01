@@ -33,20 +33,6 @@ public class DipModel {
         opthreshold.put(power, value);
     }
 
-//    public Double getCorrelation(String name){
-//        return correlation.get(name) - opcorrelation.get(name);
-//    }
-
-    // nameは自国名+相手国名
-//    public void updateCorrelation(String name, Double value){
-//        correlation.put(name, value);
-//    }
-
-    // nameは自国名+相手国名
-//    public Double updateOpCorrelation(String name, Double value){
-//        return opcorrelation.put(name, value);
-//    }
-
     // read correlation
     private void readCsv(String name) {
         try {

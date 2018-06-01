@@ -30,14 +30,9 @@ public class UtilityCalculator {
         String key = Integer.toString(year) +  season + country.substring(0,1) + Integer.toString(state);
         String[] temp;
         if(out3.containsKey(key)) temp = out3.get(key).split(":", 0);
-//        else if(out4.containsKey(key))temp = out4.get(key).split(":", 0);
         else {
             key = Integer.toString(year) +  season + country.substring(0,1);
-//            if(out1.containsKey(key)){
             temp = out1.get(key).split(":", 0);
-//            }else{
-//                temp = out2.get(key).split(":", 0);
-//            }
         }
 
         for(String t : temp){
@@ -61,7 +56,6 @@ public class UtilityCalculator {
             while ((line = br.readLine()) != null) {
                 String[] temp = line.split(",",0);
                 out1.put(temp[1],temp[2]);
-//                out2.put(temp[1],temp[3]);
             }
         } catch (IOException ignored) {
         }
@@ -76,7 +70,6 @@ public class UtilityCalculator {
             while ((line = br.readLine()) != null) {
                 String[] temp = line.split(",",0);
                 out3.put(temp[1],temp[2]);
-//                out4.put(temp[1],temp[3]);
             }
         } catch (IOException ignored) {
         }
