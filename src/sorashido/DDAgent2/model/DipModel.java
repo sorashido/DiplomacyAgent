@@ -28,14 +28,9 @@ public class DipModel {
         return opthreshold.get(power);
     }
 
-    public void updateThreshold(String power, Double diff){
-        if(opthreshold.containsKey(power)) {
-            Double value = opthreshold.get(power);
-            value += diff;
-            opthreshold.put(power, value);
-        }else{
-            System.out.println("update threshold error");
-        }
+    public void updateThreshold(int year, String power, int supplynum){
+        Double value = (double)supplynum/18 - 0.12;
+        opthreshold.put(power, value);
     }
 
 //    public Double getCorrelation(String name){
