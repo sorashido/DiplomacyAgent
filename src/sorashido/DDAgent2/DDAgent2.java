@@ -89,8 +89,7 @@ public class DDAgent2 extends ANACNegotiator {
      * init method
      */
     private void initNegotiate() {
-//        utilityCalculator.updateUtility(Integer.toString(game.getYear()));
-//        dipModel.updateCorrelationfile(Integer.toString(game.getYear()));
+        dipModel.readCSV(game.getYear());
 
         myMTOrders = new ArrayList<>();
         myHLDOrders = new ArrayList<>();
@@ -239,7 +238,7 @@ public class DDAgent2 extends ANACNegotiator {
                     orderCommitment.add(orderDeal);
                 }
             }
-            else if(r < 0.925&& me.getControlledRegions().size() > 0){
+            else if(r < 0.85 && me.getControlledRegions().size() > 0){
                 // 2 basicDmzsに自分のものを入れる
                 Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
                 List<Province> units = new ArrayList<>();
@@ -260,10 +259,10 @@ public class DDAgent2 extends ANACNegotiator {
             if (dmzs.isEmpty()) dmzs = new ArrayList<>(3);
             nextDeal = new BasicDeal(orderCommitment, dmzs);
             Double nextDealUtil = calcUtilityValue(nextDeal, opponent);
-            newcost = nextDealUtil;
-            currentCost = currenDealUtil;
-//            newcost = Math.abs(threshold - nextDealUtil);
-//            currentCost = Math.abs(threshold - currenDealUtil);
+//            newcost = nextDealUtil;
+//            currentCost = currenDealUtil;
+            newcost = Math.abs(threshold - nextDealUtil);
+            currentCost = Math.abs(threshold - currenDealUtil);
             p = Math.exp(-Math.abs(newcost - currentCost) / currentTemperature);
             if (newcost > currentCost || p > random.nextDouble()) {
                 currentDeal = nextDeal;
@@ -463,7 +462,7 @@ public class DDAgent2 extends ANACNegotiator {
                 utilvalue += ((double)util.get(region)/(double)sum);
             }
         }
-        return  utilvalue; //myPlan.getValue();
+        return  utilvalue + (double)plan.getValue(); //myPlan.getValue();
     }
 
     private Double calcPlanValue(BasicDeal basicDeal, Power power){

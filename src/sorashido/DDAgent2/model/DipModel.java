@@ -28,6 +28,12 @@ public class DipModel {
         return opthreshold.get(power);
     }
 
+    public void readCSV(int year){
+        year += 1;
+        if(year > 1920)year = 1920;
+        readCsv(Integer.toString(year)+".csv");
+    }
+
     public void updateThreshold(int year, String power, int supplynum){
         Double value = (double)supplynum/18 - 0.12;
         opthreshold.put(power, value);
