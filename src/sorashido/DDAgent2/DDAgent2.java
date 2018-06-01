@@ -204,13 +204,7 @@ public class DDAgent2 extends ANACNegotiator {
             }
         }
 
-        List<DMZ> baseDmzs = new ArrayList<>(3);//generateMyDMZ(opponent);
-//        Region myregion = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
-//        List<Province> myunits = new ArrayList<>();
-//        myunits.add(myregion.getProvince());
-//        DMZ mydmz = new DMZ(game.getYear(), game.getPhase(), powers, myunits);
-//        baseDmzs.add(mydmz);
-
+        List<DMZ> baseDmzs = generateMyDMZ(opponent);
 
         BasicDeal currentDeal = new BasicDeal(baseLists, baseDmzs);
         double currenDealUtil = calcUtilityValue(currentDeal, opponent);
@@ -335,48 +329,46 @@ public class DDAgent2 extends ANACNegotiator {
             }
             OrderCommitment commitment = new OrderCommitment(game.getYear(), game.getPhase(), order);
             double value = calcPlanValue(commitment, me);
-            carray.add(commitment);
-            darray.add(value);
+            if (value > maxValue && random.nextDouble() > 0.2){
+                maxOrderCommitment = commitment;
+                maxValue = value;
+            }
         }
-
-        Double sum = darray.stream().mapToDouble(Double::doubleValue).sum();
-        Double r = random.nextDouble();
-        Double dsum = 0.0;
-        int index = 0;
-        for(Double d : darray){
-            dsum += (d/sum);
-            if(r < dsum){break;}
-            index += 1;
-        }
-        return carray.get(index);
-//            if(value > maxValue && (random.nextDouble() > 0.1 || maxOrderCommitment==null)){
-//                maxValue = value;
-//                maxOrderCommitment = commitment;
+//        Double sum = darray.stream().mapToDouble(Double::doubleValue).sum();
+//        Double r = random.nextDouble();
+//        Double dsum = 0.0;
+//        int index = 0;
+//        for(Double d : darray){
+//            dsum += (d/sum);
+//            if(r <= dsum){
+//                return carray.get(index);
 //            }
-//            commitment = new OrderCommitment(game.getYear(), game.getPhase(), order);
-//            value = calcPlanValue(commitment, me);
-//            if(value > maxValue && (random.nextDouble() > 0.1 || maxOrderCommitment==null)){
-//                maxValue = value;
-//                maxOrderCommitment = commitment;
-//            }
+//            index += 1;
 //        }
+        return maxOrderCommitment;
     }
 
     private List<DMZ> generateMyDMZ(Power opponent){
-        List<DMZ> dmzs = new ArrayList<DMZ>(3);
+        List<DMZ> dmzs = new ArrayList<>();
 
-        ArrayList<Power> powers = new ArrayList<Power>(2);
+        ArrayList<Power> powers = new ArrayList<>();
         powers.add(me);
         powers.add(opponent);
 
-        //自分が征服したところ
-        List<Region> unitsOfMe = me.getControlledRegions();
-        for(Region region: unitsOfMe){
-            List<Province> units = new ArrayList<>();
-            units.add(region.getProvince());
-            DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
-            dmzs.add(dmz);
-        }
+        Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
+        List<Province> units = new ArrayList<>();
+        units.add(region.getProvince());
+        DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
+        if(dmzs.size() > 0) dmzs.remove(random.nextInt(dmzs.size()));
+        if(!dmzs.contains(dmz)) dmzs.add(dmz);
+
+        region = opponent.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
+        units = new ArrayList<>();
+        units.add(region.getProvince());
+        dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
+        if(dmzs.size() > 0) dmzs.remove(random.nextInt(dmzs.size()));
+        if(!dmzs.contains(dmz)) dmzs.add(dmz);
+
         return dmzs;
     }
 
