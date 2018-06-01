@@ -18,7 +18,7 @@ public class UtilityCalculator {
         readCsv2("target.csv");
     }
 
-    public HashMap<String, Integer> getwinlocation(int year, String season, String country, int state, int mode){
+    public HashMap<String, Integer> getwinlocation(int year, String season, String country, int state){
         HashMap<String, Integer> ans = new HashMap<>();
 
         HashMap<String, Integer> seasonID = new HashMap<String, Integer>() {{ put("SPR", 0); put("FAL", 1);}};
@@ -29,7 +29,7 @@ public class UtilityCalculator {
 
         String key = Integer.toString(year) +  season + country.substring(0,1) + Integer.toString(state);
         String[] temp;
-        if(mode == 0 || out3.containsKey(key)) temp = out3.get(key).split(":", 0);
+        if(out3.containsKey(key)) temp = out3.get(key).split(":", 0);
 //        else if(out4.containsKey(key))temp = out4.get(key).split(":", 0);
         else {
             key = Integer.toString(year) +  season + country.substring(0,1);

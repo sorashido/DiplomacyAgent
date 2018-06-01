@@ -124,7 +124,6 @@ public class DDAgent2 extends ANACNegotiator {
         //accepted
         if (receivedMessage.getPerformative().equals(DiplomacyNegoClient.ACCEPT)) {
             DiplomacyProposal acceptedProposal = (DiplomacyProposal) receivedMessage.getContent();
-
 //            this.getLogger().logln("DDAgent2.negotiate() Received acceptance from " + receivedMessage.getSender() + ": " + acceptedProposal, printToConsole);
             acceptedAction(acceptedProposal);
         }
@@ -170,7 +169,7 @@ public class DDAgent2 extends ANACNegotiator {
     }
 
     /**
-     *
+     * simulated annealing
      */
     static double START_TEMPERATURE = 1.0; // 開始温度
     static double END_TEMPERATURE = 0.001; // 終了温度
@@ -188,7 +187,7 @@ public class DDAgent2 extends ANACNegotiator {
         powers.add(opponent);
 
         // baseList
-        List<OrderCommitment> baseLists = new ArrayList<>();
+//        List<OrderCommitment> baseLists = new ArrayList<>();
 //        for(Region unit: me.getControlledRegions()){
 //            OrderCommitment orderDeal = generateOrderDeal(unit);
 //            if(orderDeal != null){
@@ -212,9 +211,9 @@ public class DDAgent2 extends ANACNegotiator {
 
         BasicDeal currentDeal = generateRandomDeal();//new BasicDeal(baseLists, baseDmzs);
         double currenDealUtil = calcUtilityValue(currentDeal, opponent);
-        double targetDealUtil = 0.0;
-
-        List<BasicDeal> targetDeal = new ArrayList<>(); // 最適効用値BidのArrayList
+//        double targetDealUtil = 0.0;
+//
+//        List<BasicDeal> targetDeal = new ArrayList<>(); // 最適効用値BidのArrayList
 
         double currentTemperature = START_TEMPERATURE;
         double newcost = 2.0;
@@ -578,7 +577,7 @@ public class DDAgent2 extends ANACNegotiator {
             else if(p.getName().equals("AUS")){ state += n; }
         }
 
-        HashMap<String, Integer> util = utilityCalculator.getwinlocation(game.getYear(), game.getPhase().name(), power.getName(), state,0);
+        HashMap<String, Integer> util = utilityCalculator.getwinlocation(game.getYear(), game.getPhase().name(), power.getName(), state);
         Integer sum = util.values().stream().mapToInt(Integer::intValue).sum();
         double utilvalue = 0;
         for (Order order : plan.getMyOrders()){
