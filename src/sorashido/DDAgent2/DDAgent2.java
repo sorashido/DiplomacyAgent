@@ -21,7 +21,7 @@ import java.util.Random;
 
 public class DDAgent2 extends ANACNegotiator {
 
-    final boolean printToConsole = true;
+    final boolean printToConsole = false;
     final Constants constants = new Constants();
 
     DBraneTactics dBraneTactics = new DBraneTactics();
@@ -68,7 +68,7 @@ public class DDAgent2 extends ANACNegotiator {
         initNegotiate();
 
         for(Power power : game.getNonDeadPowers()){
-            dipModel.updateThreshold(game.getYear(), power.getName(), power.getOwnedSCs().size());
+            dipModel.updateThreshold(game.getYear(), me.getName(), power.getName(), power.getOwnedSCs().size());
         }
 
         while (System.currentTimeMillis() < negotiationDeadline) {
@@ -220,7 +220,7 @@ public class DDAgent2 extends ANACNegotiator {
             List<OrderCommitment> orderCommitment = nextDeal.getOrderCommitments();
             List<DMZ> dmzs = nextDeal.getDemilitarizedZones();
             Double r = random.nextDouble(); //random.nextInt(8);
-            if((r < 0.35) && me.getControlledRegions().size() > 0){
+            if((r < 0.25) && me.getControlledRegions().size() > 0){
                 // 0. basicListに自分のものを入れる
                 Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
                 OrderCommitment orderDeal = generateOrderDeal(region);
@@ -259,10 +259,10 @@ public class DDAgent2 extends ANACNegotiator {
             if (dmzs.isEmpty()) dmzs = new ArrayList<>(3);
             nextDeal = new BasicDeal(orderCommitment, dmzs);
             Double nextDealUtil = calcUtilityValue(nextDeal, opponent);
-//            newcost = nextDealUtil;
-//            currentCost = currenDealUtil;
-            newcost = Math.abs(threshold - nextDealUtil);
-            currentCost = Math.abs(threshold - currenDealUtil);
+            newcost = nextDealUtil;
+            currentCost = currenDealUtil;
+//            newcost = Math.abs(threshold - nextDealUtil);
+//            currentCost = Math.abs(threshold - currenDealUtil);
             p = Math.exp(-Math.abs(newcost - currentCost) / currentTemperature);
             if (newcost > currentCost || p > random.nextDouble()) {
                 currentDeal = nextDeal;

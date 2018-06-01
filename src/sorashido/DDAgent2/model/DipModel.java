@@ -13,8 +13,6 @@ public class DipModel {
     private HashMap<String, Double> opthreshold = new HashMap<>();;
 
     public DipModel() throws Exception {
-        readCsv("cor.csv");
-
         opthreshold.put("ENG", 0.0);
         opthreshold.put("FRA", 0.0);
         opthreshold.put("ITA", 0.0);
@@ -34,9 +32,11 @@ public class DipModel {
         readCsv(Integer.toString(year)+".csv");
     }
 
-    public void updateThreshold(int year, String power, int supplynum){
-        Double value = (double)supplynum/18 - 0.12;
-        opthreshold.put(power, value);
+    public void updateThreshold(int year, String my, String opponent, int supplynum){
+        Double cor = correlation.get(my+opponent);
+        if (my.equals("RUS") && cor < -0.15)cor = -0.15;
+        Double value = (double)supplynum/18 - cor;//
+        opthreshold.put(opponent, value);
     }
 
     // read correlation
