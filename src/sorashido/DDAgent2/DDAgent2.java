@@ -158,7 +158,7 @@ public class DDAgent2 extends ANACNegotiator {
             // これまでの取引と矛盾するか調べる
             String consistencyReport = null;
             consistencyReport = Utilities.testConsistency(game, newDealToProposes);
-            if(calcUtilityValue(newDealToProposes, power) > threshold && consistencyReport == null){
+            if(calcUtilityValue(newDealToProposes, power) > 0 && consistencyReport == null){
                 for (BasicDeal newDealToPropose : newDealToProposes) {
                     consistencyReport = Utilities.testValidity(game, newDealToPropose);
                     if (newDealToPropose != null && consistencyReport==null) {
@@ -408,8 +408,7 @@ public class DDAgent2 extends ANACNegotiator {
 
             if(consistencyReport == null){
                 Power power = game.getPower(receivedMessage.getSender());
-                Double threshold = dipModel.getThreshold(power.getName());
-                if(calcUtilityValue(commitments, power) > threshold){
+                if(calcUtilityValue(commitments, power) > 0){
                     this.acceptProposal(receivedProposal.getId());
                     this.getLogger().logln("DDAgent2.negotiate()  Accepting: " + receivedProposal, printToConsole);
                 }
@@ -425,11 +424,12 @@ public class DDAgent2 extends ANACNegotiator {
      *  Utility Calculator
      */
     private Double calcUtilityValue(List<BasicDeal> commitments, Power opponents){
-        return (calcPlanValue(commitments, me) - calcPlanValue(commitments, opponents));
+        Double threshold = dipModel.getThreshold(opponents.getName());
+        return (calcPlanValue(commitments, me) + threshold*calcPlanValue(commitments, opponents));
     }
 
     private Double calcUtilityValue(BasicDeal basicDeal, Power opponents){
-        return (calcPlanValue(basicDeal, me) - calcPlanValue(basicDeal, opponents));
+        return (calcPlanValue(basicDeal, me) + calcPlanValue(basicDeal, opponents));
     }
 
     private Double calcPlanValue(List<BasicDeal> commitments, Power power){
