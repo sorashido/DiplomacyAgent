@@ -207,9 +207,6 @@ public class DDAgent2 extends ANACNegotiator {
 
         BasicDeal currentDeal = new BasicDeal(baseLists, baseDmzs);
         double currenDealUtil = calcUtilityValue(currentDeal, opponent);
-//        double targetDealUtil = 0.0;
-//
-//        List<BasicDeal> targetDeal = new ArrayList<>(); // 最適効用値BidのArrayList
 
         double currentTemperature = START_TEMPERATURE;
         double newcost = 2.0;
@@ -268,28 +265,9 @@ public class DDAgent2 extends ANACNegotiator {
                 currentDeal = nextDeal;
                 currenDealUtil = nextDealUtil;
             }
-//            System.out.println(currenDealUtil);
-
-            // 更新
-//            if(currenDealUtil >= threshold){
-//                if(targetDeal.size() == 0){
-//                    targetDeal.add(currentDeal);
-//                    targetDealUtil = currenDealUtil;
-//                }else {
-//                    if (currenDealUtil < targetDealUtil) {
-//                        targetDeal.clear();
-//                        targetDeal.add(currentDeal);
-//                        targetDealUtil = currenDealUtil;
-//                    } else if (currenDealUtil == targetDealUtil) {
-//                        targetDeal.add(currentDeal);
-//                    }
-//                }
-//            }
             currentTemperature = currentTemperature * COOL; // 温度を下げる
         }
         deals.add(currentDeal);
-//        if (targetDeal.size() == 0){ deals.add(currentDeal);}
-//        else deals.add(targetDeal.get(random.nextInt(targetDeal.size())));
         return deals;
     }
 
