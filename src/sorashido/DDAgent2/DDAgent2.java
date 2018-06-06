@@ -343,18 +343,21 @@ public class DDAgent2 extends ANACNegotiator {
         powers.add(me);
         powers.add(opponent);
 
-        Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
-        List<Province> units = new ArrayList<>();
-        units.add(region.getProvince());
-        DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
-        dmzs.add(dmz);
+        if(me.getControlledRegions().size()>0) {
+            Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
+            List<Province> units = new ArrayList<>();
+            units.add(region.getProvince());
+            DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
+            dmzs.add(dmz);
+        }
 
-        region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
-        units = new ArrayList<>();
-        units.add(region.getProvince());
-        dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
-        dmzs.add(dmz);
-
+        if(opponent.getControlledRegions().size()>0) {
+            Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
+            List<Province> units = new ArrayList<>();
+            units.add(region.getProvince());
+            DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
+            dmzs.add(dmz);
+        }
         return dmzs;
     }
 
@@ -429,7 +432,8 @@ public class DDAgent2 extends ANACNegotiator {
     }
 
     private Double calcUtilityValue(BasicDeal basicDeal, Power opponents){
-        return (calcPlanValue(basicDeal, me) + calcPlanValue(basicDeal, opponents));
+        Double threshold = dipModel.getThreshold(opponents.getName());
+        return (calcPlanValue(basicDeal, me) + threshold*calcPlanValue(basicDeal, opponents));
     }
 
     private Double calcPlanValue(List<BasicDeal> commitments, Power power){
