@@ -12,29 +12,24 @@ import es.csic.iiia.fabregues.dip.board.Region;
 import es.csic.iiia.fabregues.dip.orders.*;
 import sorashido.DDAgent2.model.DipModel;
 import sorashido.DDAgent2.negotiation.UtilityCalculator;
-import sorashido.DDAgent2.util.Constants;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class DDAgent2 extends ANACNegotiator {
 
-    final boolean printToConsole = false;
-    final Constants constants = new Constants();
+    final boolean printToConsole = true;
 
-    DBraneTactics dBraneTactics = new DBraneTactics();
+    private DBraneTactics dBraneTactics = new DBraneTactics();
     private Random random = new Random();
 
-    List<MTOOrder> myMTOrders = new ArrayList<>();
-    List<HLDOrder> myHLDOrders = new ArrayList<>();
+//    private List<MTOOrder> myMTOrders = new ArrayList<>();
+//    private List<HLDOrder> myHLDOrders = new ArrayList<>();
 
-    List<MTOOrder> opMTOrders = new ArrayList<>();
-    List<HLDOrder> opHLDOrders = new ArrayList<>();
+    private HashMap<String, List<MTOOrder>> MTOrders = new HashMap<>();
+    private HashMap<String, List<HLDOrder>> HLDOrders = new HashMap<>();
 
-    UtilityCalculator utilityCalculator;
-    DipModel dipModel;
+    private UtilityCalculator utilityCalculator;
+    private DipModel dipModel;
 
     public static void main(String[] args) {
         sorashido.DDAgent2.DDAgent2 myPlayer = new sorashido.DDAgent2.DDAgent2(args);
@@ -81,8 +76,8 @@ public class DDAgent2 extends ANACNegotiator {
 
     @Override
     public void receivedOrder(Order arg0) {
-        if (game.getYear() == 1920 && game.getPhase().equals("WIN")) {
-        }
+//        if (game.getYear() == 1920 && game.getPhase().equals("WIN")) {
+//        }
     }
 
     /**
@@ -91,11 +86,10 @@ public class DDAgent2 extends ANACNegotiator {
     private void initNegotiate() {
         dipModel.readCSV(game.getYear());
 
-        myMTOrders = new ArrayList<>();
-        myHLDOrders = new ArrayList<>();
-
-        opMTOrders = new ArrayList<>();
-        opHLDOrders = new ArrayList<>();
+        List<MTOOrder> myMTOrders = new ArrayList<>();
+        List<HLDOrder> myHLDOrders = new ArrayList<>();
+//        myMTOrders = new ArrayList<>();
+//        myHLDOrders = new ArrayList<>();
 
         for (Power power : game.getNonDeadPowers()) {
             for (Region unit : power.getControlledRegions()) {
@@ -104,14 +98,14 @@ public class DDAgent2 extends ANACNegotiator {
 
                 for (Region adjascentRegion : adjacentRegions) {
                     if (adjascentRegion.equals(unit)) {
-                        if (power.getName().equals(me.getName())) myHLDOrders.add(new HLDOrder(power, unit));
-                        else opHLDOrders.add(new HLDOrder(power, unit));
+                        myHLDOrders.add(new HLDOrder(power, unit));
                     } else {
-                        if (power.getName().equals(me.getName())) myMTOrders.add(new MTOOrder(power, unit, adjascentRegion));
-                        else opMTOrders.add(new MTOOrder(power, unit, adjascentRegion));
+                        myMTOrders.add(new MTOOrder(power, unit, adjascentRegion));
                     }
                 }
             }
+            HLDOrders.put(power.getName(), myHLDOrders);
+            MTOrders.put(power.getName(), myMTOrders);
         }
     }
 
@@ -150,20 +144,19 @@ public class DDAgent2 extends ANACNegotiator {
     }
 
     private void proposeMessage() {
-        // 敵対関数から閾値を求める, 敵対度が高いほど
         for(Power power : this.getNegotiatingPowers()){
-            Double threshold  = dipModel.getThreshold(power.getName());
-            List<BasicDeal> newDealToProposes = searchForNewDealToPropose(power, threshold);
+            List<BasicDeal> newDealToProposes = searchForNewDealToPropose(power);
+            if(newDealToProposes==null)return;
 
             // これまでの取引と矛盾するか調べる
             String consistencyReport = null;
             consistencyReport = Utilities.testConsistency(game, newDealToProposes);
-            if(calcUtilityValue(newDealToProposes, power) > 0 && consistencyReport == null){
+            if(consistencyReport == null && calcUtilityValue(newDealToProposes, power) > 0){
                 for (BasicDeal newDealToPropose : newDealToProposes) {
                     consistencyReport = Utilities.testValidity(game, newDealToPropose);
                     if (newDealToPropose != null && consistencyReport==null) {
                         this.getLogger().logln("DDAgent2.negotiate() Proposing: " + newDealToPropose, printToConsole);
-                        this.proposeDeal(newDealToPropose);
+//                        this.proposeDeal(newDealToPropose);
                     }
                 }
             }
@@ -175,21 +168,21 @@ public class DDAgent2 extends ANACNegotiator {
      */
     static double START_TEMPERATURE = 1.0; // 開始温度
     static double END_TEMPERATURE = 0.001; // 終了温度
-    static double COOL = 0.5; // 冷却度
-    List<BasicDeal> searchForNewDealToPropose(Power opponent, Double threshold) {
-        List<BasicDeal> deals = new ArrayList<BasicDeal>();
+    static double COOL = 0.1; // 冷却度 0.5
+    List<BasicDeal> searchForNewDealToPropose(Power opponent) {
+        List<BasicDeal> deals = new ArrayList<>();
 
         List<BasicDeal> commitments = this.getConfirmedDeals(); //現在の取り決め
-        if (calcPlanValue(commitments, opponent) == -1.0) { //取り決めのために行動できない -> 交渉する必要なし
+        if (calcPlanValue(commitments, opponent) == -1.0) {
             return null;
         }
 
-        ArrayList<Power> powers = new ArrayList<Power>(2);
+        ArrayList<Power> powers = new ArrayList<>(2);
         powers.add(me);
         powers.add(opponent);
 
         // baseList
-        List<OrderCommitment> baseLists = new ArrayList<>();
+        List<OrderCommitment> baseLists = new ArrayList<>(3);
         for(Region unit: me.getControlledRegions()){
             OrderCommitment orderDeal = generateOrderDeal(unit);
             if(orderDeal != null && random.nextDouble() < 0.3){
@@ -203,7 +196,7 @@ public class DDAgent2 extends ANACNegotiator {
             }
         }
 
-        List<DMZ> baseDmzs = generateMyDMZ(opponent);
+        List<DMZ> baseDmzs = new ArrayList<>(3);//generateMyDMZ(opponent);
 
         BasicDeal currentDeal = new BasicDeal(baseLists, baseDmzs);
         double currenDealUtil = calcUtilityValue(currentDeal, opponent);
@@ -277,15 +270,12 @@ public class DDAgent2 extends ANACNegotiator {
     private OrderCommitment generateOrderDeal(Region unit){
         Power power = game.getController(unit);
 
-        ArrayList<OrderCommitment> carray = new ArrayList<>();
-        ArrayList<Double> darray = new ArrayList<>();
-
         //unitの移動可能なところ
         List<Region> adjacentRegions = new ArrayList<>(unit.getAdjacentRegions());
         adjacentRegions.add(unit);
 
         OrderCommitment maxOrderCommitment = null;
-        Double maxValue = 0.0;
+        Double maxValue = -10.0;
 
         for(Region adjascentRegion : adjacentRegions) {
             Order order;
@@ -293,20 +283,21 @@ public class DDAgent2 extends ANACNegotiator {
                 order = new HLDOrder(power, unit);
             } else {
                 order = new MTOOrder(power, unit, adjascentRegion);
-                for (HLDOrder myHLDOrder : myHLDOrders) {
+
+                for (HLDOrder myHLDOrder : HLDOrders.get(power.getName())) {
                     if (myHLDOrder.getLocation().equals(adjascentRegion)) {
                         order = new SUPOrder(power, unit, myHLDOrder);
                     }
                 }
-                for (MTOOrder myMTOOrder : myMTOrders) {
+                for (MTOOrder myMTOOrder : MTOrders.get(power.getName())) {
                     if (myMTOOrder.getDestination().equals(adjascentRegion)) {
                         order = new SUPMTOOrder(power, unit, myMTOOrder);
                     }
                 }
             }
             OrderCommitment commitment = new OrderCommitment(game.getYear(), game.getPhase(), order);
-            double value = calcPlanValue(commitment, me);
-            if (value > maxValue && random.nextDouble() > 0.1){
+            double value = calcUtilityValue(commitment, power);
+            if (maxValue < -2.0 || (value > maxValue && random.nextDouble() > 0.1)){
                 maxOrderCommitment = commitment;
                 maxValue = value;
             }
@@ -414,6 +405,11 @@ public class DDAgent2 extends ANACNegotiator {
         return (calcPlanValue(basicDeal, me) + threshold*calcPlanValue(basicDeal, opponents));
     }
 
+    private Double calcUtilityValue(OrderCommitment commitment, Power opponents){
+        Double threshold = dipModel.getThreshold(opponents.getName());
+        return (calcPlanValue(commitment, me) + threshold*calcPlanValue(commitment, opponents));
+    }
+
     private Double calcPlanValue(List<BasicDeal> commitments, Power power){
         Plan plan = this.dBraneTactics.determineBestPlan(game, power, commitments);
         if (plan == null) {
@@ -450,19 +446,6 @@ public class DDAgent2 extends ANACNegotiator {
     private Double calcPlanValue(BasicDeal basicDeal, Power power){
         List<BasicDeal> commitments = this.getConfirmedDeals();
         commitments.add(basicDeal);
-        return calcPlanValue(commitments, power);
-    }
-
-    private Double calcPlanValue(DMZ commitment, Power power){
-
-        List<OrderCommitment> orderCommitments = new ArrayList<>();
-        List<DMZ> demilitarizedZones = new ArrayList<>(3);
-        demilitarizedZones.add(commitment);
-        BasicDeal deal = new BasicDeal(orderCommitments, demilitarizedZones);
-
-        List<BasicDeal> commitments = this.getConfirmedDeals();
-        commitments.add(deal);
-
         return calcPlanValue(commitments, power);
     }
 

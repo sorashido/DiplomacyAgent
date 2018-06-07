@@ -9,7 +9,6 @@ import java.util.HashMap;
 // 自身のutil, 他の国のutil, 敵対関数を作る
 public class DipModel {
     private HashMap<String, Double> correlation = new HashMap<>();;
-
     private HashMap<String, Double> opthreshold = new HashMap<>();;
 
     public DipModel() throws Exception {
