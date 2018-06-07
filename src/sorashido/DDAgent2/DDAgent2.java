@@ -17,7 +17,7 @@ import java.util.*;
 
 public class DDAgent2 extends ANACNegotiator {
 
-    final boolean printToConsole = true;
+    final boolean printToConsole = false;
 
     private DBraneTactics dBraneTactics = new DBraneTactics();
     private Random random = new Random();
@@ -67,9 +67,9 @@ public class DDAgent2 extends ANACNegotiator {
         }
 
         while (System.currentTimeMillis() < negotiationDeadline) {
-            while (hasMessage()) {
-                manageProposedMessage();
-            }
+//            while (hasMessage()) {
+//                manageProposedMessage();
+//            }
             proposeMessage();
         }
     }
@@ -88,8 +88,6 @@ public class DDAgent2 extends ANACNegotiator {
 
         List<MTOOrder> myMTOrders = new ArrayList<>();
         List<HLDOrder> myHLDOrders = new ArrayList<>();
-//        myMTOrders = new ArrayList<>();
-//        myHLDOrders = new ArrayList<>();
 
         for (Power power : game.getNonDeadPowers()) {
             for (Region unit : power.getControlledRegions()) {
@@ -145,6 +143,10 @@ public class DDAgent2 extends ANACNegotiator {
 
     private void proposeMessage() {
         for(Power power : this.getNegotiatingPowers()){
+            while (hasMessage()) {
+                manageProposedMessage();
+            }
+
             List<BasicDeal> newDealToProposes = searchForNewDealToPropose(power);
             if(newDealToProposes==null)return;
 
@@ -156,7 +158,7 @@ public class DDAgent2 extends ANACNegotiator {
                     consistencyReport = Utilities.testValidity(game, newDealToPropose);
                     if (newDealToPropose != null && consistencyReport==null) {
                         this.getLogger().logln("DDAgent2.negotiate() Proposing: " + newDealToPropose, printToConsole);
-//                        this.proposeDeal(newDealToPropose);
+                        this.proposeDeal(newDealToPropose);
                     }
                 }
             }
@@ -168,12 +170,12 @@ public class DDAgent2 extends ANACNegotiator {
      */
     static double START_TEMPERATURE = 1.0; // 開始温度
     static double END_TEMPERATURE = 0.001; // 終了温度
-    static double COOL = 0.1; // 冷却度 0.5
+    static double COOL = 0.5; // 冷却度 0.5
     List<BasicDeal> searchForNewDealToPropose(Power opponent) {
         List<BasicDeal> deals = new ArrayList<>();
 
         List<BasicDeal> commitments = this.getConfirmedDeals(); //現在の取り決め
-        if (calcPlanValue(commitments, opponent) == -1.0) {
+        if (calcPlanValue(commitments, opponent) < -5.0 || calcPlanValue(commitments, me) < -5.0) {
             return null;
         }
 
@@ -196,7 +198,7 @@ public class DDAgent2 extends ANACNegotiator {
             }
         }
 
-        List<DMZ> baseDmzs = new ArrayList<>(3);//generateMyDMZ(opponent);
+        List<DMZ> baseDmzs = generateMyDMZ(opponent);
 
         BasicDeal currentDeal = new BasicDeal(baseLists, baseDmzs);
         double currenDealUtil = calcUtilityValue(currentDeal, opponent);
@@ -219,7 +221,7 @@ public class DDAgent2 extends ANACNegotiator {
                     orderCommitment.add(orderDeal);
                 }
             }
-            else if((r < 0.70) && opponent.getControlledRegions().size() > 0) {
+            if((r < 0.70) && opponent.getControlledRegions().size() > 0) {
                 // 1. basicListに相手のものを入れる
                 Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
                 OrderCommitment orderDeal = generateOrderDeal(region);
@@ -246,13 +248,11 @@ public class DDAgent2 extends ANACNegotiator {
                 if(dmzs.size() > 0) dmzs.remove(random.nextInt(dmzs.size()));
                 if(!dmzs.contains(dmz)) dmzs.add(dmz);
             }
-            if (dmzs.isEmpty()) dmzs = new ArrayList<>(3);
+
             nextDeal = new BasicDeal(orderCommitment, dmzs);
             Double nextDealUtil = calcUtilityValue(nextDeal, opponent);
             newcost = nextDealUtil;
             currentCost = currenDealUtil;
-//            newcost = Math.abs(threshold - nextDealUtil);
-//            currentCost = Math.abs(threshold - currenDealUtil);
             p = Math.exp(-Math.abs(newcost - currentCost) / currentTemperature);
             if (newcost > currentCost || p > random.nextDouble()) {
                 currentDeal = nextDeal;
@@ -260,6 +260,7 @@ public class DDAgent2 extends ANACNegotiator {
             }
             currentTemperature = currentTemperature * COOL; // 温度を下げる
         }
+
         deals.add(currentDeal);
         return deals;
     }
@@ -312,13 +313,13 @@ public class DDAgent2 extends ANACNegotiator {
         powers.add(me);
         powers.add(opponent);
 
-        if(me.getControlledRegions().size()>0) {
-            Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
-            List<Province> units = new ArrayList<>();
-            units.add(region.getProvince());
-            DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
-            dmzs.add(dmz);
-        }
+//        if(me.getControlledRegions().size()>0) {
+//            Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
+//            List<Province> units = new ArrayList<>();
+//            units.add(region.getProvince());
+//            DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
+//            dmzs.add(dmz);
+//        }
 
         if(opponent.getControlledRegions().size()>0) {
             Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
@@ -413,7 +414,7 @@ public class DDAgent2 extends ANACNegotiator {
     private Double calcPlanValue(List<BasicDeal> commitments, Power power){
         Plan plan = this.dBraneTactics.determineBestPlan(game, power, commitments);
         if (plan == null) {
-            return -1.0;
+            return -10.0;
         }
 
         int state = 0;
