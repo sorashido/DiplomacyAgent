@@ -170,7 +170,7 @@ public class DDAgent2 extends ANACNegotiator {
      */
     static double START_TEMPERATURE = 1.0; // 開始温度
     static double END_TEMPERATURE = 0.001; // 終了温度
-    static double COOL = 0.5; // 冷却度 0.5
+    static double COOL = 0.4; // 冷却度 0.5
     List<BasicDeal> searchForNewDealToPropose(Power opponent) {
         List<BasicDeal> deals = new ArrayList<>();
 
@@ -212,7 +212,7 @@ public class DDAgent2 extends ANACNegotiator {
             List<OrderCommitment> orderCommitment = nextDeal.getOrderCommitments();
             List<DMZ> dmzs = nextDeal.getDemilitarizedZones();
             Double r = random.nextDouble(); //random.nextInt(8);
-            if((r < 0.25) && me.getControlledRegions().size() > 0){
+            if((r < 0.15) && me.getControlledRegions().size() > 0){
                 // 0. basicListに自分のものを入れる
                 Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
                 OrderCommitment orderDeal = generateOrderDeal(region);
