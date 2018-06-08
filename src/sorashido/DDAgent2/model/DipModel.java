@@ -33,7 +33,7 @@ public class DipModel {
 
     public void updateThreshold(int year, String my, String opponent, int supplynum){
         Double cor = correlation.get(my+opponent);
-        Double value = cor - ((double)supplynum/18 - 5/18);
+        Double value = cor - ((double)supplynum/18 - 6/18);
         opthreshold.put(opponent, value);
     }
 
