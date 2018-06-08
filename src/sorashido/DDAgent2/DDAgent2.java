@@ -170,7 +170,7 @@ public class DDAgent2 extends ANACNegotiator {
      */
     static double START_TEMPERATURE = 1.0; // 開始温度
     static double END_TEMPERATURE = 0.001; // 終了温度
-    static double COOL = 0.5; // 冷却度 0.5
+    static double COOL = 0.1; // 冷却度 0.5
     List<BasicDeal> searchForNewDealToPropose(Power opponent) {
         List<BasicDeal> deals = new ArrayList<>();
 
@@ -203,63 +203,63 @@ public class DDAgent2 extends ANACNegotiator {
         BasicDeal currentDeal = new BasicDeal(baseLists, baseDmzs);
         double currenDealUtil = calcUtilityValue(currentDeal, opponent);
 
-//        double currentTemperature = START_TEMPERATURE;
-//        double newcost = 2.0;
-//        double currentCost = 2.0;
-//        double p;//
-//        while(currentTemperature > END_TEMPERATURE){
-//            BasicDeal nextDeal = currentDeal;
-//            List<OrderCommitment> orderCommitment = nextDeal.getOrderCommitments();
-//            List<DMZ> dmzs = nextDeal.getDemilitarizedZones();
-//            Double r = random.nextDouble(); //random.nextInt(8);
-//            if((r < 0.15) && me.getControlledRegions().size() > 0){
-//                // 0. basicListに自分のものを入れる
-//                Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
-//                OrderCommitment orderDeal = generateOrderDeal(region);
-//                if(orderDeal != null && !orderCommitment.contains(orderDeal)){
-//                    if(orderCommitment.size() > 0) orderCommitment.remove(random.nextInt(orderCommitment.size()));
-//                    orderCommitment.add(orderDeal);
-//                }
-//            }
-//            if((r < 0.70) && opponent.getControlledRegions().size() > 0) {
-//                // 1. basicListに相手のものを入れる
-//                Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
-//                OrderCommitment orderDeal = generateOrderDeal(region);
-//                if(orderDeal != null && !orderCommitment.contains(orderDeal)){
-//                    if(orderCommitment.size() > 0) orderCommitment.remove(random.nextInt(orderCommitment.size()));
-//                    orderCommitment.add(orderDeal);
-//                }
-//            }
-//            else if(r < 0.85 && me.getControlledRegions().size() > 0){
-//                // 2 basicDmzsに自分のものを入れる
-//                Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
-//                List<Province> units = new ArrayList<>();
-//                units.add(region.getProvince());
-//                DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
-//                if(dmzs.size() > 0) dmzs.remove(random.nextInt(dmzs.size()));
-//                if(!dmzs.contains(dmz)) dmzs.add(dmz);
-//            }
-//            else if(r < 1.0 && opponent.getControlledRegions().size() > 0) {
-//                // 3. basicDmzsに相手のものを入れる
-//                Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
-//                List<Province> units = new ArrayList<>();
-//                units.add(region.getProvince());
-//                DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
-//                if(dmzs.size() > 0) dmzs.remove(random.nextInt(dmzs.size()));
-//                if(!dmzs.contains(dmz)) dmzs.add(dmz);
-//            }
-//
-//            nextDeal = new BasicDeal(orderCommitment, dmzs);
-//            Double nextDealUtil = calcUtilityValue(nextDeal, opponent);
-//            newcost = nextDealUtil;
-//            currentCost = currenDealUtil;
-//            p = Math.exp(-Math.abs(newcost - currentCost) / currentTemperature);
-//            if (newcost > currentCost || p > random.nextDouble()) {
-//                currentDeal = nextDeal;
-//                currenDealUtil = nextDealUtil;
-//            }
-//            currentTemperature = currentTemperature * COOL; // 温度を下げる
-//        }
+        double currentTemperature = START_TEMPERATURE;
+        double newcost = 2.0;
+        double currentCost = 2.0;
+        double p;//
+        while(currentTemperature > END_TEMPERATURE){
+            BasicDeal nextDeal = currentDeal;
+            List<OrderCommitment> orderCommitment = nextDeal.getOrderCommitments();
+            List<DMZ> dmzs = nextDeal.getDemilitarizedZones();
+            Double r = random.nextDouble(); //random.nextInt(8);
+            if((r < 0.15) && me.getControlledRegions().size() > 0){
+                // 0. basicListに自分のものを入れる
+                Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
+                OrderCommitment orderDeal = generateOrderDeal(region);
+                if(orderDeal != null && !orderCommitment.contains(orderDeal)){
+                    if(orderCommitment.size() > 0) orderCommitment.remove(random.nextInt(orderCommitment.size()));
+                    orderCommitment.add(orderDeal);
+                }
+            }
+            if((r < 0.70) && opponent.getControlledRegions().size() > 0) {
+                // 1. basicListに相手のものを入れる
+                Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
+                OrderCommitment orderDeal = generateOrderDeal(region);
+                if(orderDeal != null && !orderCommitment.contains(orderDeal)){
+                    if(orderCommitment.size() > 0) orderCommitment.remove(random.nextInt(orderCommitment.size()));
+                    orderCommitment.add(orderDeal);
+                }
+            }
+            else if(r < 0.85 && me.getControlledRegions().size() > 0){
+                // 2 basicDmzsに自分のものを入れる
+                Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
+                List<Province> units = new ArrayList<>();
+                units.add(region.getProvince());
+                DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
+                if(dmzs.size() > 0) dmzs.remove(random.nextInt(dmzs.size()));
+                if(!dmzs.contains(dmz)) dmzs.add(dmz);
+            }
+            else if(r < 1.0 && opponent.getControlledRegions().size() > 0) {
+                // 3. basicDmzsに相手のものを入れる
+                Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
+                List<Province> units = new ArrayList<>();
+                units.add(region.getProvince());
+                DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
+                if(dmzs.size() > 0) dmzs.remove(random.nextInt(dmzs.size()));
+                if(!dmzs.contains(dmz)) dmzs.add(dmz);
+            }
+
+            nextDeal = new BasicDeal(orderCommitment, dmzs);
+            Double nextDealUtil = calcUtilityValue(nextDeal, opponent);
+            newcost = nextDealUtil;
+            currentCost = currenDealUtil;
+            p = Math.exp(-Math.abs(newcost - currentCost) / currentTemperature);
+            if (newcost > currentCost || p > random.nextDouble()) {
+                currentDeal = nextDeal;
+                currenDealUtil = nextDealUtil;
+            }
+            currentTemperature = currentTemperature * COOL; // 温度を下げる
+        }
 
         deals.add(currentDeal);
         return deals;
