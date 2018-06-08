@@ -170,7 +170,7 @@ public class DDAgent2 extends ANACNegotiator {
      */
     static double START_TEMPERATURE = 1.0; // 開始温度
     static double END_TEMPERATURE = 0.001; // 終了温度
-    static double COOL = 0.1; // 冷却度 0.5
+    static double COOL = 0.5; // 冷却度 0.5
     List<BasicDeal> searchForNewDealToPropose(Power opponent) {
         List<BasicDeal> deals = new ArrayList<>();
 
