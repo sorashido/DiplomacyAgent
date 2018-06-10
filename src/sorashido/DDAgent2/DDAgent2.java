@@ -149,7 +149,7 @@ public class DDAgent2 extends ANACNegotiator {
             // これまでの取引と矛盾するか調べる
             String consistencyReport = null;
             consistencyReport = Utilities.testConsistency(game, newDealToProposes);
-            if(consistencyReport == null && calcUtilityValue(newDealToProposes, power) > 1.0){
+            if(consistencyReport == null && calcUtilityValue(newDealToProposes, power) > 0.0){
                 for (BasicDeal newDealToPropose : newDealToProposes) {
                     consistencyReport = Utilities.testValidity(game, newDealToPropose);
                     if (newDealToPropose != null && consistencyReport==null) {
@@ -379,7 +379,7 @@ public class DDAgent2 extends ANACNegotiator {
                 Power power = game.getPower(receivedMessage.getSender());
                 double value = calcUtilityValue(commitments, power);
 //                System.out.println(value);
-                if(calcUtilityValue(commitments, power) > 1.0){
+                if(calcUtilityValue(commitments, power) > 0.0){
                     this.acceptProposal(receivedProposal.getId());
                     this.getLogger().logln("DDAgent2.negotiate()  Accepting: " + receivedProposal, printToConsole);
                 }
