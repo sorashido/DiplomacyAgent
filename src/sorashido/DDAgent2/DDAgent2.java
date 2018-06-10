@@ -67,9 +67,9 @@ public class DDAgent2 extends ANACNegotiator {
         }
 
         while (System.currentTimeMillis() < negotiationDeadline) {
-//            while (hasMessage()) {
-//                manageProposedMessage();
-//            }
+            while (hasMessage()) {
+                manageProposedMessage();
+            }
             proposeMessage();
         }
     }
@@ -143,10 +143,6 @@ public class DDAgent2 extends ANACNegotiator {
 
     private void proposeMessage() {
         for(Power power : this.getNegotiatingPowers()){
-            while (hasMessage()) {
-                manageProposedMessage();
-            }
-
             List<BasicDeal> newDealToProposes = searchForNewDealToPropose(power);
             if(newDealToProposes==null)return;
 
@@ -212,7 +208,7 @@ public class DDAgent2 extends ANACNegotiator {
             List<OrderCommitment> orderCommitment = nextDeal.getOrderCommitments();
             List<DMZ> dmzs = nextDeal.getDemilitarizedZones();
             Double r = random.nextDouble(); //random.nextInt(8);
-            if((r < 0.15) && me.getControlledRegions().size() > 0){
+            if((r < 0.10) && me.getControlledRegions().size() > 0){
                 // 0. basicListに自分のものを入れる
                 Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
                 OrderCommitment orderDeal = generateOrderDeal(region);
@@ -399,18 +395,24 @@ public class DDAgent2 extends ANACNegotiator {
      *  Utility Calculator
      */
     private Double calcUtilityValue(List<BasicDeal> commitments, Power opponents){
+        List<BasicDeal> old_commitments = this.getConfirmedDeals(); //現在の取り決め
+
         Double threshold = dipModel.getThreshold(opponents.getName());
-        return (calcPlanValue(commitments, me) + threshold*calcPlanValue(commitments, opponents));
+        return ((calcPlanValue(commitments, me)-calcPlanValue(old_commitments, me)) + threshold*(calcPlanValue(commitments, opponents)-calcPlanValue(old_commitments, opponents)));
     }
 
     private Double calcUtilityValue(BasicDeal basicDeal, Power opponents){
+        List<BasicDeal> old_commitments = this.getConfirmedDeals(); //現在の取り決め
+
         Double threshold = dipModel.getThreshold(opponents.getName());
-        return (calcPlanValue(basicDeal, me) + threshold*calcPlanValue(basicDeal, opponents));
+        return ((calcPlanValue(basicDeal, me)-calcPlanValue(old_commitments, me)) + threshold*(calcPlanValue(basicDeal, opponents)-calcPlanValue(old_commitments, opponents)));
     }
 
     private Double calcUtilityValue(OrderCommitment commitment, Power opponents){
+        List<BasicDeal> old_commitments = this.getConfirmedDeals(); //現在の取り決め
+
         Double threshold = dipModel.getThreshold(opponents.getName());
-        return (calcPlanValue(commitment, me) + threshold*calcPlanValue(commitment, opponents));
+        return ((calcPlanValue(commitment, me)-calcPlanValue(old_commitments, me)) + threshold*(calcPlanValue(commitment, opponents)-calcPlanValue(old_commitments, opponents)));
     }
 
     private Double calcPlanValue(List<BasicDeal> commitments, Power power){
