@@ -223,7 +223,7 @@ public class DDAgent2 extends ANACNegotiator {
                     orderCommitment.add(orderDeal);
                 }
             }
-            if((r < 0.70) && opponent.getControlledRegions().size() > 0) {
+            if((r < 0.90) && opponent.getControlledRegions().size() > 0) {
                 // 1. basicListに相手のものを入れる
                 Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
                 OrderCommitment orderDeal = generateOrderDeal(region);
@@ -232,7 +232,7 @@ public class DDAgent2 extends ANACNegotiator {
                     orderCommitment.add(orderDeal);
                 }
             }
-            else if(r < 0.85 && me.getControlledRegions().size() > 0){
+            else if(r < 1.0 && me.getControlledRegions().size() > 0){
                 // 2 basicDmzsに自分のものを入れる
                 Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
                 List<Province> units = new ArrayList<>();
@@ -241,15 +241,15 @@ public class DDAgent2 extends ANACNegotiator {
                 if(dmzs.size() > 0) dmzs.remove(random.nextInt(dmzs.size()));
                 if(!dmzs.contains(dmz)) dmzs.add(dmz);
             }
-            else if(r < 1.0 && opponent.getControlledRegions().size() > 0) {
-                // 3. basicDmzsに相手のものを入れる
-                Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
-                List<Province> units = new ArrayList<>();
-                units.add(region.getProvince());
-                DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
-                if(dmzs.size() > 0) dmzs.remove(random.nextInt(dmzs.size()));
-                if(!dmzs.contains(dmz)) dmzs.add(dmz);
-            }
+//            else if(r < 1.0 && opponent.getControlledRegions().size() > 0) {
+//                // 3. basicDmzsに相手のものを入れる
+//                Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
+//                List<Province> units = new ArrayList<>();
+//                units.add(region.getProvince());
+//                DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
+//                if(dmzs.size() > 0) dmzs.remove(random.nextInt(dmzs.size()));
+//                if(!dmzs.contains(dmz)) dmzs.add(dmz);
+//            }
 
             nextDeal = new BasicDeal(orderCommitment, dmzs);
             Double nextDealUtil = calcUtilityValue(nextDeal, opponent);
@@ -322,13 +322,13 @@ public class DDAgent2 extends ANACNegotiator {
             dmzs.add(dmz);
         }
 
-        if(opponent.getControlledRegions().size()>0) {
-            Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
-            List<Province> units = new ArrayList<>();
-            units.add(region.getProvince());
-            DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
-            dmzs.add(dmz);
-        }
+//        if(opponent.getControlledRegions().size()>0) {
+//            Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
+//            List<Province> units = new ArrayList<>();
+//            units.add(region.getProvince());
+//            DMZ dmz = new DMZ(game.getYear(), game.getPhase(), powers, units);
+//            dmzs.add(dmz);
+//        }
         return dmzs;
     }
 
