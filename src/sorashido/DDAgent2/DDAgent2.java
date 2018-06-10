@@ -17,7 +17,7 @@ import java.util.*;
 
 public class DDAgent2 extends ANACNegotiator {
 
-    final boolean printToConsole = false;
+    final boolean printToConsole = true;
 
     private DBraneTactics dBraneTactics = new DBraneTactics();
     private Random random = new Random();
@@ -256,7 +256,7 @@ public class DDAgent2 extends ANACNegotiator {
             }
             currentTemperature = currentTemperature * COOL; // 温度を下げる
         }
-
+        System.out.println(currenDealUtil);
         deals.add(currentDeal);
         return deals;
     }
