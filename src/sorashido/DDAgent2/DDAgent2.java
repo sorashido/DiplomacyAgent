@@ -66,11 +66,17 @@ public class DDAgent2 extends ANACNegotiator {
             dipModel.updateThreshold(game.getYear(), me.getName(), power.getName(), power.getOwnedSCs().size());
         }
 
+        int i =0;
+
         while (System.currentTimeMillis() < negotiationDeadline) {
             while (hasMessage()) {
                 manageProposedMessage();
             }
-            proposeMessage();
+
+            if((i % 5)== 0){
+                proposeMessage();
+            }
+            i+=1;
         }
     }
 
@@ -149,7 +155,7 @@ public class DDAgent2 extends ANACNegotiator {
             // これまでの取引と矛盾するか調べる
             String consistencyReport = null;
             consistencyReport = Utilities.testConsistency(game, newDealToProposes);
-            if(consistencyReport == null && calcUtilityValue(newDealToProposes, power) > 0.0){
+            if(consistencyReport == null && calcUtilityValue(newDealToProposes, power) > 0.5){
                 for (BasicDeal newDealToPropose : newDealToProposes) {
                     consistencyReport = Utilities.testValidity(game, newDealToPropose);
                     if (newDealToPropose != null && consistencyReport==null) {
@@ -256,7 +262,6 @@ public class DDAgent2 extends ANACNegotiator {
             }
             currentTemperature = currentTemperature * COOL; // 温度を下げる
         }
-        System.out.println(currenDealUtil);
         deals.add(currentDeal);
         return deals;
     }
@@ -379,7 +384,7 @@ public class DDAgent2 extends ANACNegotiator {
                 Power power = game.getPower(receivedMessage.getSender());
                 double value = calcUtilityValue(commitments, power);
 //                System.out.println(value);
-                if(calcUtilityValue(commitments, power) > 0.0){
+                if(calcUtilityValue(commitments, power) > 0.5){
                     this.acceptProposal(receivedProposal.getId());
                     this.getLogger().logln("DDAgent2.negotiate()  Accepting: " + receivedProposal, printToConsole);
                 }
