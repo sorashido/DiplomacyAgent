@@ -31,9 +31,9 @@ public class DipModel {
         readCsv(Integer.toString(year)+".csv");
     }
 
-    public void updateThreshold(int year, String my, String opponent, int supplynum){
+    public void updateThreshold(int year, String my, int my_supplunum, String opponent, int op_supplynum){
         Double cor = correlation.get(my+opponent);
-        Double value = cor - ((double)supplynum/18 - 6/18);
+        Double value = cor - ((double)Math.abs(op_supplynum-my_supplunum)/18 - 6/18);
         opthreshold.put(opponent, value);
     }
 

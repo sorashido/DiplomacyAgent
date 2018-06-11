@@ -63,7 +63,7 @@ public class DDAgent2 extends ANACNegotiator {
         initNegotiate();
 
         for(Power power : game.getNonDeadPowers()){
-            dipModel.updateThreshold(game.getYear(), me.getName(), power.getName(), power.getOwnedSCs().size());
+            dipModel.updateThreshold(game.getYear(), me.getName(), me.getOwnedSCs().size(), power.getName(), power.getOwnedSCs().size());
         }
 
         int i =0;
@@ -214,7 +214,7 @@ public class DDAgent2 extends ANACNegotiator {
             List<OrderCommitment> orderCommitment = nextDeal.getOrderCommitments();
             List<DMZ> dmzs = nextDeal.getDemilitarizedZones();
             Double r = random.nextDouble(); //random.nextInt(8);
-            if((r < 0.10) && me.getControlledRegions().size() > 0){
+            if((r < 0.20) && me.getControlledRegions().size() > 0){
                 // 0. basicListに自分のものを入れる
                 Region region = me.getControlledRegions().get(random.nextInt(me.getControlledRegions().size()));
                 OrderCommitment orderDeal = generateOrderDeal(region);
@@ -223,7 +223,7 @@ public class DDAgent2 extends ANACNegotiator {
                     orderCommitment.add(orderDeal);
                 }
             }
-            if((r < 0.90) && opponent.getControlledRegions().size() > 0) {
+            if((r < 0.9) && opponent.getControlledRegions().size() > 0) {
                 // 1. basicListに相手のものを入れる
                 Region region = opponent.getControlledRegions().get(random.nextInt(opponent.getControlledRegions().size()));
                 OrderCommitment orderDeal = generateOrderDeal(region);
