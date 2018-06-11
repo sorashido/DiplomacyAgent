@@ -66,14 +66,14 @@ public class DDAgent2 extends ANACNegotiator {
             dipModel.updateThreshold(game.getYear(), me.getName(), me.getOwnedSCs().size(), power.getName(), power.getOwnedSCs().size());
         }
 
-        int i =0;
+        int i =1;
 
         while (System.currentTimeMillis() < negotiationDeadline) {
             while (hasMessage()) {
                 manageProposedMessage();
             }
 
-            if((i % 5)== 0){
+            if((i % 100) == 0){
                 proposeMessage();
             }
             i+=1;
