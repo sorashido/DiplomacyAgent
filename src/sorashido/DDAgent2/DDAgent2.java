@@ -425,7 +425,7 @@ public class DDAgent2 extends ANACNegotiator {
         if (plan == null) {
             return -10.0;
         }
-
+//
         int state = 0;
         for (Power p :game.getNonDeadPowers()){
             int n = 0;
@@ -450,7 +450,7 @@ public class DDAgent2 extends ANACNegotiator {
                 utilvalue += ((double)util.get(region)/(double)sum);
             }
         }
-        return  utilvalue;// + (double)plan.getValue(); //myPlan.getValue();
+        return  (double)utilvalue; //(double)plan.getValue(); //myPlan.getValue();
     }
 
     private Double calcPlanValue(BasicDeal basicDeal, Power power){

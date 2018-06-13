@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
+import java.util.*;
 
 public class UtilityCalculator {
 
@@ -12,6 +12,8 @@ public class UtilityCalculator {
 //    private HashMap<String, String> out2 = new HashMap<>();
     private HashMap<String, String> out3 = new HashMap<>();
 //    private HashMap<String, String> out4 = new HashMap<>();
+
+    private List<String> sup = Arrays.asList("LVP","LON","EDI","BER","MUN","KIE","MOS","WAR","STP","SEV","CON","SMY","ANK","VIE","BUD","TRI","ROM","VEN","NAP","PAR","MAR","BRE","POR","SPA","SWE","BEL","HOL","SER","BUL","GRE","RUM","DEN","NWY","TUN");
 
     public UtilityCalculator() throws Exception {
         readCsv("old_target.csv");
@@ -38,8 +40,10 @@ public class UtilityCalculator {
         for(String t : temp){
             if(t.length() > 3){
                 String l = t.replaceAll("[0-9]", "");
-                String c = t.replaceAll("[^0-9]", "");
-                if(!c.isEmpty())ans.put(l, Integer.valueOf(c));
+                if(sup.contains(l)) {
+                    String c = t.replaceAll("[^0-9]", "");
+                    if (!c.isEmpty()) ans.put(l, Integer.valueOf(c));
+                }
             }
         }
         return ans;
