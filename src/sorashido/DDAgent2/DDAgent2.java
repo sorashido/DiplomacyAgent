@@ -450,7 +450,7 @@ public class DDAgent2 extends ANACNegotiator {
                 utilvalue += ((double)util.get(region)/(double)sum);
             }
         }
-        return  utilvalue + (double)plan.getValue(); //myPlan.getValue();
+        return  utilvalue;// + (double)plan.getValue(); //myPlan.getValue();
     }
 
     private Double calcPlanValue(BasicDeal basicDeal, Power power){
